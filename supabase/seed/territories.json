@@ -1,0 +1,77 @@
+{
+  "territories": [
+    {
+      "name": "Denver Metro Central",
+      "state": "CO",
+      "metro_area": "Denver",
+      "type": "metro",
+      "population_est": 95000,
+      "zip_codes": ["80202", "80203", "80204", "80205", "80206", "80207", "80209", "80210"],
+      "adjacent_territory_names": ["Denver Metro East", "Denver Metro South"]
+    },
+    {
+      "name": "Denver Metro East",
+      "state": "CO",
+      "metro_area": "Denver",
+      "type": "metro",
+      "population_est": 87000,
+      "zip_codes": ["80220", "80222", "80224", "80230", "80231", "80237", "80238", "80247"],
+      "adjacent_territory_names": ["Denver Metro Central", "Aurora North"]
+    },
+    {
+      "name": "Denver Metro South",
+      "state": "CO",
+      "metro_area": "Denver",
+      "type": "metro",
+      "population_est": 92000,
+      "zip_codes": ["80210", "80219", "80223", "80226", "80227", "80232", "80235", "80236"],
+      "adjacent_territory_names": ["Denver Metro Central", "Littleton Area"]
+    },
+    {
+      "name": "Aurora North",
+      "state": "CO",
+      "metro_area": "Aurora",
+      "type": "metro",
+      "population_est": 78000,
+      "zip_codes": ["80010", "80011", "80012", "80014", "80015", "80016", "80017", "80018"],
+      "adjacent_territory_names": ["Denver Metro East"]
+    },
+    {
+      "name": "Littleton Area",
+      "state": "CO",
+      "metro_area": "Littleton",
+      "type": "rural",
+      "population_est": 145000,
+      "zip_codes": ["80120", "80121", "80122", "80123", "80125", "80126", "80127", "80128", "80129", "80130"],
+      "adjacent_territory_names": ["Denver Metro South"]
+    },
+    {
+      "name": "Phoenix Central",
+      "state": "AZ",
+      "metro_area": "Phoenix",
+      "type": "metro",
+      "population_est": 98000,
+      "zip_codes": ["85003", "85004", "85006", "85007", "85008", "85009", "85012", "85013"],
+      "adjacent_territory_names": ["Scottsdale South"]
+    },
+    {
+      "name": "Scottsdale South",
+      "state": "AZ",
+      "metro_area": "Scottsdale",
+      "type": "metro",
+      "population_est": 85000,
+      "zip_codes": ["85250", "85251", "85252", "85253", "85254", "85255", "85256", "85257"],
+      "adjacent_territory_names": ["Phoenix Central", "Mesa West"]
+    },
+    {
+      "name": "Mesa West",
+      "state": "AZ",
+      "metro_area": "Mesa",
+      "type": "metro",
+      "population_est": 88000,
+      "zip_codes": ["85201", "85202", "85203", "85204", "85205", "85206", "85207", "85208"],
+      "adjacent_territory_names": ["Scottsdale South"]
+    }
+  ]
+}
+
