@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { CostComparison } from '@/components/marketing/CostComparison'
+import { SocialProofPopup } from '@/components/marketing/SocialProofPopup'
 import { 
   MapPin, 
   Smartphone, 
@@ -789,6 +790,9 @@ export default function HomePage() {
           </Link>
         </div>
       </section>
+
+      {/* Social Proof Popup */}
+      <SocialProofPopup />
     </div>
   )
 }

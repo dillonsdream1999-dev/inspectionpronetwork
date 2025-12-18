@@ -94,6 +94,8 @@ NEXT_PUBLIC_APP_URL=https://your-app-name.vercel.app
 - `STRIPE_WEBHOOK_SECRET`
 - `NEXT_PUBLIC_APP_URL`
 
+**📋 Quick Reference:** See `VERCEL_ENV_VARS.md` for a copy-paste ready list of your current values.
+
 ### Production vs Development
 
 **Development (local):**

@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { TerritoryCard } from '@/components/territories/TerritoryCard'
 import { TerritoryFilters } from '@/components/territories/TerritoryFilters'
+import { SocialProofPopup } from '@/components/marketing/SocialProofPopup'
 import { createClient } from '@/lib/supabase/client'
 import { MapPin, Loader2, AlertCircle, Send, CheckCircle2 } from 'lucide-react'
 import type { Tables } from '@/types/database'
@@ -438,6 +439,9 @@ export default function TerritoriesPage() {
           </div>
         </div>
       </div>
+
+      {/* Social Proof Popup */}
+      <SocialProofPopup />
     </div>
   )
 }
