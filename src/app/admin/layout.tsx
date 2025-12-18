@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
-import { Shield, MapPin, Building2, LayoutDashboard, LogOut } from 'lucide-react'
+import { Shield, MapPin, Building2, LayoutDashboard, LogOut, BarChart3 } from 'lucide-react'
 
 // Force dynamic rendering
 export const dynamic = 'force-dynamic'
@@ -66,6 +66,13 @@ export default async function AdminLayout({
             >
               <Building2 className="w-5 h-5" />
               Providers
+            </Link>
+            <Link
+              href="/admin/analytics"
+              className="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-300 hover:bg-slate-700 hover:text-white transition-colors"
+            >
+              <BarChart3 className="w-5 h-5" />
+              Analytics
             </Link>
           </nav>
         </div>

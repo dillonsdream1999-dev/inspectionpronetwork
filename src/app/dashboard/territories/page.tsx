@@ -38,7 +38,7 @@ export default async function MyTerritoriesPage() {
   const pastOwnerships = ownerships?.filter(o => o.status === 'canceled') || []
 
   const monthlyTotal = activeOwnerships.reduce((acc, o) => {
-    return acc + (o.price_type === 'adjacent' ? 220 : 250)
+    return acc + (o.price_type === 'adjacent' ? 150 : 250)
   }, 0)
 
   return (

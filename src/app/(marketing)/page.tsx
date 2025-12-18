@@ -640,7 +640,7 @@ export default function HomePage() {
                   💰 Adjacent Territory Discount
                 </p>
                 <p className="text-sm text-accent-700 mt-1">
-                  Expand your coverage for $220/mo per additional adjacent territory ($30 savings each)
+                  Expand your coverage for $150/mo per additional adjacent territory ($100 savings each)
                 </p>
               </div>
               
@@ -751,7 +751,7 @@ export default function HomePage() {
               <h3 className="font-bold text-slate-900 mb-2">Can I buy additional territories?</h3>
               <p className="text-slate-600">
                 <strong>Yes</strong> (if available). We can structure add-on territories as adjacent 
-                territories at a discount ($220/mo), radius expansion, or secondary markets you already serve.
+                territories at a discount ($150/mo), radius expansion, or secondary markets you already serve.
               </p>
             </div>
             

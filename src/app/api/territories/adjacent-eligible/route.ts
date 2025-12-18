@@ -36,19 +36,32 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ eligible: [] })
     }
 
-    // Collect all adjacent territory IDs
+    // Get owned territory IDs
+    const ownedIds = ownedTerritories.map((ot: { territory_id: string }) => ot.territory_id)
+
+    // Collect all adjacent territory IDs from owned territories
     const adjacentIds = new Set<string>()
     ownedTerritories.forEach((ot) => {
-      const territory = ot.territories
-      territory?.adjacent_ids?.forEach((id: string) => {
-        // Don't include already owned territories
-        if (!ownedTerritories.some((owned) => owned.territory_id === id)) {
-          adjacentIds.add(id)
-        }
-      })
+      const territory = ot.territories as { adjacent_ids?: string[] } | null
+      if (territory?.adjacent_ids && Array.isArray(territory.adjacent_ids)) {
+        territory.adjacent_ids.forEach((id: string) => {
+          // Only include if not already owned
+          if (id && !ownedIds.includes(id)) {
+            adjacentIds.add(id)
+          }
+        })
+      }
     })
 
-    return NextResponse.json({ eligible: Array.from(adjacentIds) })
+    const eligibleArray = Array.from(adjacentIds)
+    console.log('Adjacent eligible check:', {
+      ownedCount: ownedTerritories.length,
+      ownedIds,
+      eligibleCount: eligibleArray.length,
+      eligible: eligibleArray.slice(0, 5) // Log first 5 for debugging
+    })
+
+    return NextResponse.json({ eligible: eligibleArray })
   } catch (error) {
     console.error('Adjacent eligible error:', error)
     return NextResponse.json({ eligible: [] })

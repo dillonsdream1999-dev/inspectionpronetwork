@@ -46,7 +46,7 @@ export function TerritoryManageCard({ ownership }: TerritoryManageCardProps) {
   }
 
   const isActive = ownership.status === 'active'
-  const price = ownership.price_type === 'adjacent' ? 220 : 250
+  const price = ownership.price_type === 'adjacent' ? 150 : 250
 
   return (
     <div className={`card p-6 ${!isActive ? 'opacity-60' : ''}`}>

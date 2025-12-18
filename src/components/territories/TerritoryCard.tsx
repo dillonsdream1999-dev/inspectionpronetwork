@@ -40,7 +40,7 @@ export function TerritoryCard({
   const StatusIcon = status.icon
 
   const basePrice = 250
-  const adjacentPrice = 220
+  const adjacentPrice = 150
   const price = isAdjacentEligible ? adjacentPrice : basePrice
 
   return (
@@ -126,7 +126,7 @@ export function TerritoryCard({
             </div>
             {isAdjacentEligible && isLoggedIn && (
               <span className="text-xs text-emerald-600 font-medium">
-                Adjacent discount applied (-$30)
+                Adjacent discount applied (-$100)
               </span>
             )}
           </div>

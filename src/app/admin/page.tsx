@@ -33,7 +33,7 @@ export default async function AdminDashboard() {
     .eq('status', 'active')
 
   const mrr = activeSubscriptions?.reduce((acc, sub) => {
-    return acc + (sub.price_type === 'adjacent' ? 220 : 250)
+    return acc + (sub.price_type === 'adjacent' ? 150 : 250)
   }, 0) || 0
 
   return (
@@ -137,7 +137,7 @@ export default async function AdminDashboard() {
                 </span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-slate-400">Adjacent subscriptions ($220)</span>
+                <span className="text-slate-400">Adjacent subscriptions ($150)</span>
                 <span className="text-white font-medium">
                   {activeSubscriptions?.filter(s => s.price_type === 'adjacent').length || 0}
                 </span>

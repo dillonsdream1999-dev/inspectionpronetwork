@@ -72,8 +72,10 @@ export default function TerritoriesPage() {
     try {
       const response = await fetch('/api/territories/adjacent-eligible')
       const data = await response.json()
+      console.log('Adjacent eligible territories:', data.eligible)
       setAdjacentEligible(data.eligible || [])
-    } catch {
+    } catch (err) {
+      console.error('Failed to fetch adjacent eligible:', err)
       // Ignore errors, just means no adjacent discounts
     }
   }, [])
@@ -261,6 +263,12 @@ export default function TerritoriesPage() {
                     isLoggedIn={isLoggedIn}
                     onClaim={() => handleClaimTerritory(territory.id)}
                   />
+                  {/* Debug info - remove after testing */}
+                  {isLoggedIn && territory.status === 'available' && (
+                    <div className="text-xs text-slate-400 mt-1">
+                      {adjacentEligible.includes(territory.id) ? '✓ Adjacent eligible' : 'Not adjacent'}
+                    </div>
+                  )}
                 </div>
               ))}
             </div>

@@ -209,6 +209,35 @@ export interface Database {
           notes?: string | null
         }
       }
+      analytics_events: {
+        Row: {
+          id: string
+          event_name: string
+          properties: Json
+          device_id: string | null
+          platform: string | null
+          app_version: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          event_name: string
+          properties?: Json
+          device_id?: string | null
+          platform?: string | null
+          app_version?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          event_name?: string
+          properties?: Json
+          device_id?: string | null
+          platform?: string | null
+          app_version?: string | null
+          created_at?: string
+        }
+      }
     }
     Views: {
       [_ in never]: never
