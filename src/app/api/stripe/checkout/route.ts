@@ -68,14 +68,6 @@ export async function POST(request: NextRequest) {
 
     const priceId = isAdjacentEligible ? PRICES.ADJACENT : PRICES.BASE
 
-    // Validate price IDs are set
-    if (!PRICES.BASE || !PRICES.ADJACENT) {
-      console.error('Stripe price IDs not configured:', { BASE: PRICES.BASE, ADJACENT: PRICES.ADJACENT })
-      return NextResponse.json({ 
-        error: 'Payment configuration error. Please contact support.' 
-      }, { status: 500 })
-    }
-
     // Create a hold on the territory
     const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString() // 10 minutes
 
@@ -105,20 +97,13 @@ export async function POST(request: NextRequest) {
       .update({ status: 'held' })
       .eq('id', territoryId)
 
-    // Get or check for existing Stripe customer (skip if 'manual')
+    // Get or check for existing Stripe customer
     const { data: existingOwnership } = await supabase
       .from('territory_ownership')
       .select('stripe_customer_id')
       .eq('company_id', company.id)
-      .neq('stripe_customer_id', 'manual') // Exclude manually assigned territories
       .limit(1)
       .single()
-
-    // Only use existing customer ID if it's a real Stripe customer (not 'manual')
-    const stripeCustomerId = existingOwnership?.stripe_customer_id && 
-                             existingOwnership.stripe_customer_id !== 'manual'
-      ? existingOwnership.stripe_customer_id
-      : undefined
 
     // Create Stripe checkout session
     const session = await createCheckoutSession({
@@ -126,7 +111,7 @@ export async function POST(request: NextRequest) {
       territoryId,
       priceId,
       customerEmail: company.billing_email || user.email!,
-      stripeCustomerId,
+      stripeCustomerId: existingOwnership?.stripe_customer_id,
     })
 
     // Update hold with checkout session ID

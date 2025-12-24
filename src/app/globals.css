@@ -270,9 +270,25 @@ h1, h2, h3, h4, h5, h6 {
 .animate-scale-in {
   animation: scale-in 0.3s ease-out forwards;
 }
-
 .animation-delay-100 { animation-delay: 100ms; }
 .animation-delay-200 { animation-delay: 200ms; }
 .animation-delay-300 { animation-delay: 300ms; }
 .animation-delay-400 { animation-delay: 400ms; }
 .animation-delay-500 { animation-delay: 500ms; }
+
+/* Leaflet map styles */
+.leaflet-container {
+  height: 100%;
+  width: 100%;
+  z-index: 0;
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: 8px;
+}
+
+.custom-marker {
+  background: transparent !important;
+  border: none !important;
+}
+

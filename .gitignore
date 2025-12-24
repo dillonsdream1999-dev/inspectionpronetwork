@@ -32,8 +32,6 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
-ENV_SETUP.txt
-STRIPE_CONFIG.txt
 
 # vercel
 .vercel

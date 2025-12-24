@@ -64,6 +64,8 @@ export default async function DashboardPage() {
 
   const territoryCount = territories?.length || 0
   const monthlySpend = territories?.reduce((acc, t) => {
+    const territory = t.territories as { is_dma?: boolean } | null
+    if (territory?.is_dma) return acc + 3000
     return acc + (t.price_type === 'adjacent' ? 150 : 250)
   }, 0) || 0
 
@@ -238,7 +240,9 @@ export default async function DashboardPage() {
                         </div>
                         <div className="text-right">
                           <p className="font-medium text-slate-900">
-                            ${ownership.price_type === 'adjacent' ? 150 : 250}/mo
+                            ${(ownership.territories as { is_dma?: boolean } | null)?.is_dma 
+                              ? 3000 
+                              : (ownership.price_type === 'adjacent' ? 150 : 250)}/mo
                           </p>
                           {ownership.price_type === 'adjacent' && (
                             <span className="text-xs text-emerald-600">Adjacent discount</span>

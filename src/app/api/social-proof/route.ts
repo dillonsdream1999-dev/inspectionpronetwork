@@ -1,60 +1,57 @@
 import { NextResponse } from 'next/server'
-import { createServiceClient } from '@/lib/supabase/server'
+import { createClient } from '@/lib/supabase/server'
 
 export async function GET() {
   try {
-    const supabase = await createServiceClient()
+    const supabase = await createClient()
 
-    // Get recent territory signups (last 30 days, limit to 10 most recent)
-    const { data: recentSignups, error } = await supabase
-      .from('territory_ownership')
-      .select(`
-        id,
-        started_at,
-        territories (
-          name,
-          state
-        ),
-        companies (
-          name
-        )
-      `)
-      .eq('status', 'active')
-      .order('started_at', { ascending: false })
-      .limit(10)
-
-    if (error) {
-      console.error('Error fetching social proof:', error)
-      return NextResponse.json({ error: 'Failed to fetch signups' }, { status: 500 })
-    }
-
-    // Get total count of active territories
+    // Get total active territories
     const { count: totalCount } = await supabase
       .from('territory_ownership')
       .select('*', { count: 'exact', head: true })
       .eq('status', 'active')
 
-    // Get signups in last 24 hours
+    // Get recent signups (last 24 hours)
     const yesterday = new Date()
     yesterday.setDate(yesterday.getDate() - 1)
-    
-    const { count: todayCount } = await supabase
+
+    const { data: recentSignups } = await supabase
+      .from('territory_ownership')
+      .select(`
+        id,
+        created_at,
+        territories (name, state)
+      `)
+      .eq('status', 'active')
+      .gte('created_at', yesterday.toISOString())
+      .order('created_at', { ascending: false })
+      .limit(5)
+
+    // Get signups in last 24 hours count
+    const { count: signups24h } = await supabase
       .from('territory_ownership')
       .select('*', { count: 'exact', head: true })
       .eq('status', 'active')
-      .gte('started_at', yesterday.toISOString())
+      .gte('created_at', yesterday.toISOString())
 
     return NextResponse.json({
-      recentSignups: recentSignups || [],
       totalCount: totalCount || 0,
-      todayCount: todayCount || 0,
+      recentSignups: recentSignups?.map(s => ({
+        id: s.id,
+        territoryName: (s.territories as { name: string; state: string } | null)?.name || 'Unknown',
+        state: (s.territories as { name: string; state: string } | null)?.state || '',
+        createdAt: s.created_at
+      })) || [],
+      signups24h: signups24h || 0
     })
   } catch (error) {
     console.error('Social proof API error:', error)
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
+    return NextResponse.json({ 
+      totalCount: 0, 
+      recentSignups: [], 
+      signups24h: 0 
+    })
   }
 }
+
 

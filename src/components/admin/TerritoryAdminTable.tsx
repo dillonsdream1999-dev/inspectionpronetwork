@@ -13,7 +13,7 @@ interface TerritoryWithOwnership extends Tables<'territories'> {
     status: string
     price_type: string
     companies: { name: string } | null
-  }[] | null | undefined
+  }[]
 }
 
 interface TerritoryAdminTableProps {
@@ -86,14 +86,7 @@ export function TerritoryAdminTable({ territories }: TerritoryAdminTableProps) {
         </thead>
         <tbody className="divide-y divide-slate-700">
           {territories.map((territory) => {
-            // Handle case where territory_ownership might be null, undefined, or not an array
-            const ownership = territory.territory_ownership
-            const ownershipArray = Array.isArray(ownership) 
-              ? ownership 
-              : ownership && typeof ownership === 'object'
-                ? [ownership]
-                : []
-            const activeOwnership = ownershipArray.find((o: any) => o?.status === 'active')
+            const activeOwnership = territory.territory_ownership?.find(o => o.status === 'active')
             const owner = activeOwnership?.companies?.name
 
             return (

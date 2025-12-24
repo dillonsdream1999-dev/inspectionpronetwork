@@ -38,6 +38,8 @@ export default async function MyTerritoriesPage() {
   const pastOwnerships = ownerships?.filter(o => o.status === 'canceled') || []
 
   const monthlyTotal = activeOwnerships.reduce((acc, o) => {
+    const territory = o.territories as { is_dma?: boolean } | null
+    if (territory?.is_dma) return acc + 3000
     return acc + (o.price_type === 'adjacent' ? 150 : 250)
   }, 0)
 

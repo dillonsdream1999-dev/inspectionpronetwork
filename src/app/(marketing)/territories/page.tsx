@@ -17,6 +17,7 @@ export default function TerritoriesPage() {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [adjacentEligible, setAdjacentEligible] = useState<string[]>([])
   const [isClaimingTerritory, setIsClaimingTerritory] = useState<string | null>(null)
+  const [viewMode, setViewMode] = useState<'individual' | 'dma'>('individual') // Default to individual territories
 
   // Filters
   const [selectedState, setSelectedState] = useState('')
@@ -43,13 +44,23 @@ export default function TerritoriesPage() {
   // Get unique states
   const states = [...new Set(territories.map((t) => t.state))].sort()
 
-  // Filter territories
+  // Filter territories - separate DMAs from regular territories
+  // Handle case where is_dma might not exist yet (migration not run)
   const filteredTerritories = territories.filter((territory) => {
     if (selectedState && territory.state !== selectedState) return false
     if (metroSearch && !territory.metro_area?.toLowerCase().includes(metroSearch.toLowerCase())) return false
     if (zipSearch && !territory.zip_codes?.some(zip => zip.includes(zipSearch))) return false
     if (statusFilter && territory.status !== statusFilter) return false
-    return true
+    // Exclude DMAs from regular territory list (is_dma might be undefined if migration not run)
+    return !(territory as any).is_dma // Exclude DMAs from regular territory list
+  })
+  
+  const filteredDMAs = territories.filter((territory) => {
+    if (selectedState && territory.state !== selectedState) return false
+    if (metroSearch && !territory.metro_area?.toLowerCase().includes(metroSearch.toLowerCase())) return false
+    if (statusFilter && territory.status !== statusFilter) return false
+    // Only show DMAs (is_dma might be undefined if migration not run)
+    return !!(territory as any).is_dma // Only show DMAs
   })
 
   const fetchTerritories = useCallback(async () => {
@@ -61,7 +72,12 @@ export default function TerritoriesPage() {
         throw new Error(data.error)
       }
       
-      setTerritories(data.territories || [])
+      const territoriesData = data.territories || []
+      setTerritories(territoriesData)
+      
+      // Debug: Log DMA count
+      const dmaCount = territoriesData.filter((t: any) => t.is_dma).length
+      console.log('Total territories:', territoriesData.length, 'DMAs:', dmaCount)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load territories')
     } finally {
@@ -182,10 +198,24 @@ export default function TerritoriesPage() {
           <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
             Find Your Territory
           </h1>
-          <p className="text-lg text-slate-600 max-w-2xl mx-auto mb-6">
-            Search for available territories in your area. Each territory provides 
-            exclusive access to inspection-driven demand from Bed Bug Inspection Pro users.
+          <p className="text-lg text-slate-600 max-w-2xl mx-auto mb-4">
+            Exclusive access to inspection-driven demand from Bed Bug Inspection Pro users.
           </p>
+          
+          {/* Pricing Highlight */}
+          <div className="flex flex-wrap items-center justify-center gap-4 mb-6 text-sm">
+            <div className="bg-white border-2 border-brand-200 rounded-lg px-4 py-2">
+              <span className="text-slate-600">Individual Territory:</span>
+              <span className="ml-2 text-2xl font-bold text-brand-600">$250</span>
+              <span className="text-slate-500">/mo</span>
+            </div>
+            <div className="bg-emerald-50 border-2 border-emerald-200 rounded-lg px-4 py-2">
+              <span className="text-slate-700">Adjacent Territory:</span>
+              <span className="ml-2 text-2xl font-bold text-emerald-600">$150</span>
+              <span className="text-slate-500">/mo</span>
+              <span className="ml-2 text-xs text-emerald-700 font-medium">($100 savings)</span>
+            </div>
+          </div>
           <a 
             href="#request-territory" 
             className="inline-flex items-center gap-2 text-brand-600 hover:text-brand-700 font-medium text-sm border border-brand-200 hover:border-brand-300 bg-brand-50 hover:bg-brand-100 px-4 py-2 rounded-full transition-colors"
@@ -194,6 +224,49 @@ export default function TerritoriesPage() {
             Don't see your territory? Request it
           </a>
         </div>
+
+        {/* View Mode Toggle - Prominent */}
+        {filteredDMAs.length > 0 && (
+          <div className="mb-8 flex items-center justify-center">
+            <div className="bg-gradient-to-r from-brand-50 to-accent-50 border-2 border-brand-200 rounded-xl p-3 shadow-lg max-w-xl w-full">
+              <div className="flex items-center justify-center gap-2 mb-2">
+                <span className="text-sm font-semibold text-slate-700">View Options:</span>
+              </div>
+              <div className="flex rounded-lg border-2 border-brand-300 bg-white p-1 shadow-inner">
+                <button
+                  onClick={() => setViewMode('individual')}
+                  className={`flex-1 px-6 py-3 rounded-md text-sm font-bold transition-all ${
+                    viewMode === 'individual'
+                      ? 'bg-gradient-to-r from-brand-600 to-brand-700 text-white shadow-md scale-[1.02]'
+                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                  }`}
+                >
+                  <div className="flex flex-col items-center gap-0.5">
+                    <span>Individual Territories</span>
+                    <span className={`text-xs font-normal ${viewMode === 'individual' ? 'text-brand-100' : 'text-slate-500'}`}>
+                      $250/mo • $150/mo adjacent
+                    </span>
+                  </div>
+                </button>
+                <button
+                  onClick={() => setViewMode('dma')}
+                  className={`flex-1 px-6 py-3 rounded-md text-sm font-bold transition-all ${
+                    viewMode === 'dma'
+                      ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow-md scale-[1.02]'
+                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                  }`}
+                >
+                  <div className="flex flex-col items-center gap-0.5">
+                    <span>🏆 Full DMAs</span>
+                    <span className={`text-xs font-normal ${viewMode === 'dma' ? 'text-amber-100' : 'text-slate-500'}`}>
+                      $3,000/mo • Entire Market
+                    </span>
+                  </div>
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Filters */}
         <TerritoryFilters
@@ -228,51 +301,130 @@ export default function TerritoriesPage() {
               Try Again
             </button>
           </div>
-        ) : filteredTerritories.length === 0 ? (
+        ) : (viewMode === 'individual' && filteredTerritories.length === 0) || (viewMode === 'dma' && filteredDMAs.length === 0) ? (
           <div className="text-center py-24">
             <MapPin className="w-12 h-12 text-slate-300 mx-auto mb-4" />
-            <p className="text-lg text-slate-600">No territories found matching your criteria.</p>
-            <p className="text-slate-500 mt-2">Try adjusting your filters or check back later.</p>
+            <p className="text-lg text-slate-600">No {viewMode === 'individual' ? 'territories' : 'DMAs'} found matching your criteria.</p>
+            <p className="text-slate-500 mt-2">Try adjusting your filters or {viewMode === 'individual' ? 'check Full DMAs' : 'check Individual Territories'}.</p>
+            {filteredDMAs.length > 0 && viewMode === 'individual' && (
+              <button
+                onClick={() => setViewMode('dma')}
+                className="mt-4 text-brand-600 hover:text-brand-700 font-medium"
+              >
+                View Full DMAs instead →
+              </button>
+            )}
+            {filteredTerritories.length > 0 && viewMode === 'dma' && (
+              <button
+                onClick={() => setViewMode('individual')}
+                className="mt-4 text-brand-600 hover:text-brand-700 font-medium"
+              >
+                View Individual Territories instead →
+              </button>
+            )}
           </div>
         ) : (
           <>
-            <div className="flex items-center justify-between mb-6">
-              <p className="text-sm text-slate-500">
-                Showing {filteredTerritories.length} of {territories.length} territories
-              </p>
-              {isLoggedIn && adjacentEligible.length > 0 && (
-                <p className="text-sm text-emerald-600 font-medium">
-                  {adjacentEligible.length} adjacent discount{adjacentEligible.length > 1 ? 's' : ''} available
-                </p>
-              )}
-            </div>
-
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredTerritories.map((territory) => (
-                <div key={territory.id} className="relative">
-                  {isClaimingTerritory === territory.id && (
-                    <div className="absolute inset-0 bg-white/80 backdrop-blur-sm z-10 flex items-center justify-center rounded-xl">
-                      <div className="flex items-center gap-2 text-brand-600">
-                        <Loader2 className="w-5 h-5 animate-spin" />
-                        <span>Starting checkout...</span>
-                      </div>
-                    </div>
-                  )}
-                  <TerritoryCard
-                    territory={territory}
-                    isAdjacentEligible={adjacentEligible.includes(territory.id)}
-                    isLoggedIn={isLoggedIn}
-                    onClaim={() => handleClaimTerritory(territory.id)}
-                  />
-                  {/* Debug info - remove after testing */}
-                  {isLoggedIn && territory.status === 'available' && (
-                    <div className="text-xs text-slate-400 mt-1">
-                      {adjacentEligible.includes(territory.id) ? '✓ Adjacent eligible' : 'Not adjacent'}
+            {/* Individual Territories Section (Default View) */}
+            {viewMode === 'individual' && (
+              <div>
+                <div className="flex items-center justify-between mb-6">
+                  <div>
+                    <h2 className="text-2xl font-bold text-slate-900 mb-2">
+                      Individual Territories
+                    </h2>
+                    <p className="text-sm text-slate-500">
+                      Showing {filteredTerritories.length} of {territories.filter(t => !(t as any).is_dma).length} territories
+                    </p>
+                  </div>
+                  {isLoggedIn && adjacentEligible.length > 0 && (
+                    <div className="bg-emerald-50 border border-emerald-200 rounded-lg px-4 py-2">
+                      <p className="text-sm text-emerald-700 font-medium">
+                        {adjacentEligible.length} adjacent discount{adjacentEligible.length > 1 ? 's' : ''} available
+                      </p>
+                      <p className="text-xs text-emerald-600 mt-1">Save $100/month on each</p>
                     </div>
                   )}
                 </div>
-              ))}
-            </div>
+
+                {filteredTerritories.length === 0 ? (
+                  <div className="text-center py-12 bg-slate-50 rounded-xl border border-slate-200">
+                    <MapPin className="w-12 h-12 text-slate-300 mx-auto mb-4" />
+                    <p className="text-lg text-slate-600 mb-2">No individual territories found</p>
+                    <p className="text-slate-500 text-sm">Try adjusting your filters or check Full DMAs</p>
+                  </div>
+                ) : (
+                  <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {filteredTerritories.map((territory) => (
+                      <div key={territory.id} id={`territory-${territory.id}`} className="relative">
+                        {isClaimingTerritory === territory.id && (
+                          <div className="absolute inset-0 bg-white/80 backdrop-blur-sm z-10 flex items-center justify-center rounded-xl">
+                            <div className="flex items-center gap-2 text-brand-600">
+                              <Loader2 className="w-5 h-5 animate-spin" />
+                              <span>Starting checkout...</span>
+                            </div>
+                          </div>
+                        )}
+                        <TerritoryCard
+                          territory={territory}
+                          isAdjacentEligible={adjacentEligible.includes(territory.id)}
+                          isLoggedIn={isLoggedIn}
+                          onClaim={() => handleClaimTerritory(territory.id)}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* DMA Section (Toggle View) */}
+            {viewMode === 'dma' && filteredDMAs.length > 0 && (
+              <div>
+                <div className="mb-6">
+                  <h2 className="text-2xl font-bold text-slate-900 mb-2">
+                    🏆 Full DMA Ownership
+                  </h2>
+                  <p className="text-slate-600 mb-2">
+                    Exclusive control of entire Designated Market Areas
+                  </p>
+                  <div className="bg-brand-50 border border-brand-200 rounded-lg px-4 py-3 inline-block">
+                    <span className="text-sm text-slate-700">Pricing:</span>
+                    <span className="ml-2 text-xl font-bold text-brand-600">$3,000</span>
+                    <span className="text-slate-500">/month</span>
+                  </div>
+                </div>
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {filteredDMAs.map((territory) => (
+                    <div key={territory.id} className="relative">
+                      {isClaimingTerritory === territory.id && (
+                        <div className="absolute inset-0 bg-white/80 backdrop-blur-sm z-10 flex items-center justify-center rounded-xl">
+                          <div className="flex items-center gap-2 text-brand-600">
+                            <Loader2 className="w-5 h-5 animate-spin" />
+                            <span>Starting checkout...</span>
+                          </div>
+                        </div>
+                      )}
+                      <TerritoryCard
+                        territory={territory}
+                        isAdjacentEligible={false}
+                        isLoggedIn={isLoggedIn}
+                        onClaim={() => handleClaimTerritory(territory.id)}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* No DMAs message */}
+            {viewMode === 'dma' && filteredDMAs.length === 0 && (
+              <div className="text-center py-12 bg-slate-50 rounded-xl border border-slate-200">
+                <MapPin className="w-12 h-12 text-slate-300 mx-auto mb-4" />
+                <p className="text-lg text-slate-600 mb-2">No DMAs found</p>
+                <p className="text-slate-500 text-sm">Try adjusting your filters or check Individual Territories</p>
+              </div>
+            )}
           </>
         )}
 

@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import { CostComparison } from '@/components/marketing/CostComparison'
-import { SocialProofPopup } from '@/components/marketing/SocialProofPopup'
 import { 
   MapPin, 
   Smartphone, 
@@ -45,15 +44,15 @@ export default function HomePage() {
             </div>
             
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight mb-6 animate-slide-up">
-              Bed Bug Pros:{' '}
+              Own Your Entire Metro Area for Bed Bug Inspections{' '}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-accent-400">
-                Get Exclusive Access to High-Intent Homeowners
+                — Before Your Competitors Figure This Out
               </span>
             </h1>
             
             <p className="text-lg sm:text-xl text-slate-300 mb-8 max-w-2xl mx-auto animate-slide-up animation-delay-100">
-              Homeowners complete guided bed bug inspections in our app—then request professional help. 
-              Claim your territory and be the only treatment company who receives those requests.
+              Stop competing for clicks. Control the inspection demand in your market. 
+              One operator per territory gets exclusive access to high-intent homeowners who already believe they may have bed bugs—before treatment is even discussed.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center animate-slide-up animation-delay-200 relative z-10">
@@ -602,58 +601,119 @@ export default function HomePage() {
             </p>
           </div>
           
-          <div className="max-w-lg mx-auto">
-            <div className="bg-white rounded-2xl p-8 border-2 border-brand-500 relative shadow-lg">
-              <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                <span className="bg-brand-600 text-white text-sm font-medium px-4 py-1 rounded-full">
-                  Exclusive Territory
-                </span>
-              </div>
-              
-              <div className="text-center mb-8">
-                <div className="text-5xl font-bold text-slate-900 mb-2">
-                  $250<span className="text-2xl font-normal text-slate-500">/mo</span>
+          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            {/* Individual Territory */}
+            <div className="bg-white rounded-2xl p-8 border-2 border-brand-200 relative shadow-lg">
+              <div className="text-center mb-6">
+                <div className="text-4xl font-bold text-slate-900 mb-2">
+                  $250<span className="text-xl font-normal text-slate-500">/mo</span>
                 </div>
-                <p className="text-slate-500">per territory • month-to-month</p>
+                <p className="text-sm text-slate-600 font-medium">Individual Territory</p>
               </div>
               
-              <ul className="space-y-4 mb-8">
-                <li className="flex items-center gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0" />
+              <ul className="space-y-3 mb-6 text-sm">
+                <li className="flex items-start gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
                   <span className="text-slate-700">Territory exclusivity—no competing operators</span>
                 </li>
-                <li className="flex items-center gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0" />
+                <li className="flex items-start gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
                   <span className="text-slate-700">All inbound inspection requests routed to you</span>
                 </li>
-                <li className="flex items-center gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0" />
-                  <span className="text-slate-700">Lead management dashboard</span>
+                <li className="flex items-start gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
+                  <span className="text-slate-700">Increased marketing push in active territories</span>
                 </li>
-                <li className="flex items-center gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0" />
+                <li className="flex items-start gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
+                  <span className="text-slate-700">Email or phone support</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
                   <span className="text-slate-700">Cancel anytime—no long-term commitment</span>
                 </li>
               </ul>
-              
-              <div className="bg-accent-50 rounded-lg p-4 mb-6 border border-accent-200">
-                <p className="text-sm text-accent-900 font-medium">
-                  💰 Adjacent Territory Discount
-                </p>
-                <p className="text-sm text-accent-700 mt-1">
-                  Expand your coverage for $150/mo per additional adjacent territory ($100 savings each)
-                </p>
+            </div>
+
+            {/* Adjacent Territory */}
+            <div className="bg-emerald-50 rounded-2xl p-8 border-2 border-emerald-300 relative shadow-lg">
+              <div className="text-center mb-6">
+                <div className="text-4xl font-bold text-slate-900 mb-2">
+                  $150<span className="text-xl font-normal text-slate-500">/mo</span>
+                </div>
+                <p className="text-sm text-slate-600 font-medium">Adjacent Territory</p>
+                <p className="text-xs text-emerald-700 mt-1 font-medium">$100 savings per month</p>
               </div>
               
-              <Link href="/territories" className="flex items-center justify-center gap-2 w-full bg-brand-600 hover:bg-brand-700 text-white text-lg py-3 rounded-lg font-semibold transition-colors">
-                Browse Territories
-                <ArrowRight className="w-5 h-5" />
-              </Link>
-              
-              <p className="text-center text-sm text-slate-500 mt-4">
-                Designed so one inspection/treatment covers the month.
-              </p>
+              <ul className="space-y-3 mb-6 text-sm">
+                <li className="flex items-start gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                  <span className="text-slate-700">All Individual Territory benefits</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                  <span className="text-slate-700">Available when you own adjacent territory</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                  <span className="text-slate-700">Increased marketing push in active territories</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                  <span className="text-slate-700">Email or phone support</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                  <span className="text-slate-700">Perfect for market expansion</span>
+                </li>
+              </ul>
             </div>
+
+            {/* Full DMA */}
+            <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl p-8 border-2 border-amber-400 relative shadow-lg">
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                <span className="bg-amber-600 text-white text-xs font-medium px-3 py-1 rounded-full">
+                  🏆 Premium
+                </span>
+              </div>
+              
+              <div className="text-center mb-6">
+                <div className="text-4xl font-bold text-slate-900 mb-2">
+                  $3,000<span className="text-xl font-normal text-slate-500">/mo</span>
+                </div>
+                <p className="text-sm text-slate-600 font-medium">Full DMA Ownership</p>
+                <p className="text-xs text-amber-700 mt-1 font-medium">Entire Market Coverage</p>
+              </div>
+              
+              <ul className="space-y-3 mb-6 text-sm">
+                <li className="flex items-start gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                  <span className="text-slate-700"><strong>Direct Phone Support</strong> - Priority access to our team</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                  <span className="text-slate-700"><strong>Marketing Spend Included</strong> - We drive users to the inspection app in your DMA via Facebook, Instagram, TikTok, and more</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                  <span className="text-slate-700"><strong>More Leads</strong> - Increased app usage = more inspection requests routed to you</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                  <span className="text-slate-700">Exclusive control of entire Designated Market Area</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+          
+          <div className="text-center mt-8">
+            <Link href="/territories" className="inline-flex items-center justify-center gap-2 bg-brand-600 hover:bg-brand-700 text-white text-lg px-8 py-3 rounded-lg font-semibold transition-colors">
+              Browse Territories
+              <ArrowRight className="w-5 h-5" />
+            </Link>
+            <p className="text-center text-sm text-slate-500 mt-4">
+              Designed so one inspection/treatment covers the month.
+            </p>
           </div>
         </div>
       </section>
@@ -790,9 +850,6 @@ export default function HomePage() {
           </Link>
         </div>
       </section>
-
-      {/* Social Proof Popup */}
-      <SocialProofPopup />
     </div>
   )
 }

@@ -18,16 +18,14 @@
    - Name: `Territory Subscription - Adjacent`
    - Description: `Adjacent territory discount for existing operators`
    - Pricing:
-     - Price: `$150.00`
+     - Price: `$220.00`
      - Billing period: `Monthly`
      - Price ID: Copy this (starts with `price_`)
 
 4. Add Price IDs to your `.env.local`:
    ```
    STRIPE_PRICE_BASE_250=price_xxx
-   STRIPE_PRICE_ADJACENT_150=price_xxx
-   # Or keep old variable name for backwards compatibility:
-   # STRIPE_PRICE_ADJACENT_220=price_xxx
+   STRIPE_PRICE_ADJACENT_220=price_xxx
    ```
 
 ## 2. Configure Webhooks

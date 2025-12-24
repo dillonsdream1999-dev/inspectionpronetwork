@@ -1,36 +1,28 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { X, Users, TrendingUp, MapPin, Clock } from 'lucide-react'
-
-interface RecentSignup {
-  id: string
-  started_at: string
-  territories: {
-    name: string
-    state: string
-  } | null
-  companies: {
-    name: string
-  } | null
-}
+import { X, MapPin, TrendingUp } from 'lucide-react'
 
 interface SocialProofData {
-  recentSignups: RecentSignup[]
   totalCount: number
-  todayCount: number
+  recentSignups: Array<{
+    id: string
+    territoryName: string
+    state: string
+    createdAt: string
+  }>
+  signups24h: number
 }
 
 export function SocialProofPopup() {
   const [isVisible, setIsVisible] = useState(false)
-  const [isDismissed, setIsDismissed] = useState(false)
   const [data, setData] = useState<SocialProofData | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
+  const [isDismissed, setIsDismissed] = useState(false)
 
   useEffect(() => {
-    // Check if user has dismissed the popup (stored in localStorage)
-    const dismissed = localStorage.getItem('social-proof-dismissed')
-    if (dismissed) {
+    // Check if already dismissed in this session
+    const dismissed = sessionStorage.getItem('socialProofDismissed')
+    if (dismissed === 'true') {
       setIsDismissed(true)
       return
     }
@@ -40,22 +32,17 @@ export function SocialProofPopup() {
       try {
         const response = await fetch('/api/social-proof')
         const result = await response.json()
-        if (result.error) {
-          console.error('Failed to fetch social proof:', result.error)
-          return
-        }
         setData(result)
-        
-        // Show popup after 3 seconds delay if we have at least 20 active territories
+
+        // Only show if there are at least 20 active territories
         if (result.totalCount >= 20) {
+          // Show after a delay
           setTimeout(() => {
             setIsVisible(true)
-          }, 3000)
+          }, 3000) // 3 second delay
         }
       } catch (error) {
-        console.error('Error fetching social proof:', error)
-      } finally {
-        setIsLoading(false)
+        console.error('Failed to fetch social proof:', error)
       }
     }
 
@@ -65,111 +52,59 @@ export function SocialProofPopup() {
   const handleDismiss = () => {
     setIsVisible(false)
     setIsDismissed(true)
-    localStorage.setItem('social-proof-dismissed', 'true')
+    sessionStorage.setItem('socialProofDismissed', 'true')
   }
 
-  if (isDismissed || isLoading || !data || data.totalCount < 20) {
+  if (isDismissed || !isVisible || !data || data.totalCount < 20) {
     return null
   }
-
-  if (!isVisible) {
-    return null
-  }
-
-  // Get the most recent signup
-  const latestSignup = data.recentSignups[0]
 
   return (
     <div className="fixed bottom-4 right-4 z-50 animate-slide-up max-w-sm">
-      <div className="bg-white rounded-xl shadow-2xl border border-slate-200 overflow-hidden">
-        {/* Header */}
-        <div className="bg-gradient-to-r from-brand-600 to-brand-700 px-4 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
-              <Users className="w-4 h-4 text-white" />
-            </div>
-            <div>
-              <p className="text-white font-semibold text-sm">Join {data.totalCount}+ Companies</p>
-              {data.todayCount > 0 && (
-                <p className="text-white/80 text-xs">
-                  {data.todayCount} signed up today!
-                </p>
-              )}
-            </div>
+      <div className="bg-white rounded-xl shadow-2xl border-2 border-brand-200 p-6 relative">
+        <button
+          onClick={handleDismiss}
+          className="absolute top-3 right-3 text-slate-400 hover:text-slate-600 transition-colors"
+          aria-label="Close"
+        >
+          <X className="w-5 h-5" />
+        </button>
+
+        <div className="flex items-start gap-3 mb-4">
+          <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center flex-shrink-0">
+            <TrendingUp className="w-5 h-5 text-emerald-600" />
           </div>
-          <button
-            onClick={handleDismiss}
-            className="text-white/80 hover:text-white transition-colors"
-            aria-label="Close"
-          >
-            <X className="w-4 h-4" />
-          </button>
-        </div>
-
-        {/* Content */}
-        <div className="p-4 space-y-3">
-          {latestSignup && (
-            <div className="flex items-start gap-3">
-              <div className="w-10 h-10 bg-brand-100 rounded-full flex items-center justify-center flex-shrink-0">
-                <MapPin className="w-5 h-5 text-brand-600" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-slate-900">
-                  {latestSignup.companies?.name || 'A company'} just claimed
-                </p>
-                <p className="text-sm text-slate-600">
-                  {latestSignup.territories?.name}, {latestSignup.territories?.state}
-                </p>
-                <div className="flex items-center gap-1 mt-1">
-                  <Clock className="w-3 h-3 text-slate-400" />
-                  <span className="text-xs text-slate-500">
-                    {getTimeAgo(latestSignup.started_at)}
-                  </span>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Stats */}
-          <div className="pt-3 border-t border-slate-200">
-            <div className="flex items-center justify-between text-sm">
-              <div className="flex items-center gap-2">
-                <TrendingUp className="w-4 h-4 text-brand-600" />
-                <span className="text-slate-700 font-medium">
-                  {data.totalCount} Active Territories
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* CTA */}
-          <div className="pt-2">
-            <p className="text-xs text-slate-600 text-center">
-              Don't miss out on exclusive leads in your area
+          <div className="flex-1">
+            <h3 className="font-bold text-slate-900 text-sm mb-1">
+              {data.signups24h > 0 
+                ? `${data.signups24h} territory${data.signups24h > 1 ? 'ies' : ''} claimed in the last 24 hours!`
+                : 'Territories are being claimed!'
+              }
+            </h3>
+            <p className="text-xs text-slate-600">
+              Join {data.totalCount}+ operators who have secured their markets
             </p>
           </div>
         </div>
+
+        {data.recentSignups.length > 0 && (
+          <div className="border-t border-slate-200 pt-3 mt-3">
+            <p className="text-xs font-semibold text-slate-700 mb-2">Recent signups:</p>
+            <div className="space-y-1.5">
+              {data.recentSignups.slice(0, 3).map((signup) => (
+                <div key={signup.id} className="flex items-center gap-2 text-xs text-slate-600">
+                  <MapPin className="w-3 h-3 text-brand-500" />
+                  <span className="truncate">
+                    {signup.territoryName}, {signup.state}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )
 }
 
-function getTimeAgo(dateString: string): string {
-  const date = new Date(dateString)
-  const now = new Date()
-  const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000)
-
-  if (diffInSeconds < 60) {
-    return 'just now'
-  } else if (diffInSeconds < 3600) {
-    const minutes = Math.floor(diffInSeconds / 60)
-    return `${minutes} minute${minutes > 1 ? 's' : ''} ago`
-  } else if (diffInSeconds < 86400) {
-    const hours = Math.floor(diffInSeconds / 3600)
-    return `${hours} hour${hours > 1 ? 's' : ''} ago`
-  } else {
-    const days = Math.floor(diffInSeconds / 86400)
-    return `${days} day${days > 1 ? 's' : ''} ago`
-  }
-}
 

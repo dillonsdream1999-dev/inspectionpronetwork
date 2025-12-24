@@ -33,7 +33,7 @@ export const stripe = {
 
 export const PRICES = {
   BASE: process.env.STRIPE_PRICE_BASE_250!,
-  ADJACENT: process.env.STRIPE_PRICE_ADJACENT_150 || process.env.STRIPE_PRICE_ADJACENT_220!, // Support both old and new variable names
+  ADJACENT: process.env.STRIPE_PRICE_ADJACENT_220!,
 }
 
 export async function createCheckoutSession({

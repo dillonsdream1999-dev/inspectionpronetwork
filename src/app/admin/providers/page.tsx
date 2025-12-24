@@ -1,7 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { Building2, MapPin, CreditCard, AlertCircle } from 'lucide-react'
 import { AddProviderForm } from '@/components/admin/AddProviderForm'
-import { AssignTerritoryButton } from '@/components/admin/AssignTerritoryModal'
 
 // Force dynamic rendering
 export const dynamic = 'force-dynamic'
@@ -17,7 +16,6 @@ export default async function AdminProvidersPage() {
         profiles (email),
         territory_ownership (
           id,
-          territory_id,
           status,
           price_type,
           stripe_subscription_id,
@@ -54,12 +52,14 @@ export default async function AdminProvidersPage() {
         </div>
       ) : (
         <div className="space-y-6">
-          {companies.map((company: { id: string; name: string; phone?: string; website?: string; billing_email?: string; created_at: string; profiles?: { email: string }; territory_ownership?: { id: string; territory_id: string; status: string; price_type: string; stripe_subscription_id: string; territories?: { name: string } }[] }) => {
+          {companies.map((company: { id: string; name: string; phone?: string; website?: string; billing_email?: string; created_at: string; profiles?: { email: string }; territory_ownership?: { id: string; status: string; price_type: string; territories?: { name: string } }[] }) => {
             const profile = company.profiles
             const ownerships = company.territory_ownership || []
 
             const activeSubscriptions = ownerships.filter((o: { status: string }) => o.status === 'active')
-            const monthlySpend = activeSubscriptions.reduce((acc: number, sub: { price_type: string }) => {
+            const monthlySpend = activeSubscriptions.reduce((acc: number, sub: { price_type: string; territories?: { is_dma?: boolean } }) => {
+              const territory = sub.territories as { is_dma?: boolean } | null
+              if (territory?.is_dma) return acc + 3000
               return acc + (sub.price_type === 'adjacent' ? 150 : 250)
             }, 0)
 
@@ -112,15 +112,7 @@ export default async function AdminProvidersPage() {
                     )}
                   </div>
 
-                  <div className="flex items-center justify-between mb-3">
-                    <h3 className="text-sm font-semibold text-white">Territories</h3>
-                    <AssignTerritoryButton
-                      companyId={company.id}
-                      companyName={company.name}
-                      currentOwnerships={ownerships}
-                      availableTerritories={availableTerritories}
-                    />
-                  </div>
+                  <h3 className="text-sm font-semibold text-white mb-3">Subscriptions</h3>
 
                   {ownerships?.length === 0 ? (
                     <div className="flex items-center gap-2 text-sm text-slate-500">
@@ -150,7 +142,9 @@ export default async function AdminProvidersPage() {
                           <div className="flex items-center gap-4">
                             <div className="flex items-center gap-1 text-sm text-slate-400">
                               <CreditCard className="w-4 h-4" />
-                              ${ownership.price_type === 'adjacent' ? 150 : 250}/mo
+                              ${(ownership.territories as { is_dma?: boolean } | null)?.is_dma 
+                                ? 3000 
+                                : (ownership.price_type === 'adjacent' ? 150 : 250)}/mo
                             </div>
                           </div>
                         </div>
