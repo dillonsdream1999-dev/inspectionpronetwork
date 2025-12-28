@@ -44,18 +44,17 @@ export function DashboardNav({ user, company }: DashboardNavProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href="/dashboard" className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-brand-600 rounded-lg flex items-center justify-center">
-              <Building2 className="w-6 h-6 text-white" />
-            </div>
-            <div className="hidden sm:block">
-              <span className="text-sm font-bold text-slate-900 block leading-tight">
-                {company?.name || 'Dashboard'}
+          <Link href="/" className="flex items-center gap-3">
+            <img 
+              src="/inspection-pro-network-logo.png" 
+              alt="Inspection Pro Network" 
+              className="h-8 w-auto"
+            />
+            {company?.name && (
+              <span className="hidden sm:block text-sm font-bold text-slate-900">
+                {company.name}
               </span>
-              <span className="text-[10px] text-slate-500">
-                Inspection Pro Network
-              </span>
-            </div>
+            )}
           </Link>
 
           {/* Desktop Nav */}

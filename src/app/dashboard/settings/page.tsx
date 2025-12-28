@@ -21,7 +21,8 @@ function SettingsContent() {
     name: '',
     phone: '',
     website: '',
-    billing_email: ''
+    billing_email: '',
+    description: ''
   })
 
   const supabase = createClient()
@@ -47,7 +48,8 @@ function SettingsContent() {
           name: existingCompany.name || '',
           phone: existingCompany.phone || '',
           website: existingCompany.website || '',
-          billing_email: existingCompany.billing_email || user.email || ''
+          billing_email: existingCompany.billing_email || user.email || '',
+          description: existingCompany.description || ''
         })
       } else {
         setFormData(prev => ({
@@ -83,7 +85,8 @@ function SettingsContent() {
             name: formData.name,
             phone: formData.phone || null,
             website: formData.website || null,
-            billing_email: formData.billing_email || null
+            billing_email: formData.billing_email || null,
+            description: formData.description || null
           })
           .eq('id', company.id)
 
@@ -97,7 +100,8 @@ function SettingsContent() {
             name: formData.name,
             phone: formData.phone || null,
             website: formData.website || null,
-            billing_email: formData.billing_email || null
+            billing_email: formData.billing_email || null,
+            description: formData.description || null
           })
 
         if (insertError) throw insertError
@@ -212,6 +216,23 @@ function SettingsContent() {
                 className="input"
                 placeholder="https://yourcompany.com"
               />
+            </div>
+
+            <div>
+              <label htmlFor="description" className="label">
+                Company Description
+              </label>
+              <textarea
+                id="description"
+                value={formData.description}
+                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                className="input min-h-[120px] resize-y"
+                placeholder="Tell us about your company, services, and expertise..."
+                rows={5}
+              />
+              <p className="text-xs text-slate-500 mt-1">
+                Provide a brief description of your company and services
+              </p>
             </div>
 
             <div>

@@ -39,9 +39,15 @@ export default async function AdminLayout({
             <div className="w-10 h-10 bg-red-600 rounded-lg flex items-center justify-center">
               <Shield className="w-6 h-6 text-white" />
             </div>
-            <div>
-              <span className="text-sm font-bold text-white block">Admin Panel</span>
-              <span className="text-[10px] text-slate-400">Inspection Pro Network</span>
+            <div className="flex-1">
+              <span className="text-sm font-bold text-white block mb-1">Admin Panel</span>
+              <Link href="/">
+                <img 
+                  src="/inspection-pro-network-logo.png" 
+                  alt="Inspection Pro Network" 
+                  className="h-5 w-auto brightness-0 invert opacity-80 hover:opacity-100 transition-opacity"
+                />
+              </Link>
             </div>
           </div>
 

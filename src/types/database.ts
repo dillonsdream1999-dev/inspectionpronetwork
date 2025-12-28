@@ -45,6 +45,7 @@ export interface Database {
           phone: string | null
           website: string | null
           billing_email: string | null
+          description: string | null
           created_at: string
         }
         Insert: {
@@ -54,6 +55,7 @@ export interface Database {
           phone?: string | null
           website?: string | null
           billing_email?: string | null
+          description?: string | null
           created_at?: string
         }
         Update: {
@@ -63,6 +65,7 @@ export interface Database {
           phone?: string | null
           website?: string | null
           billing_email?: string | null
+          description?: string | null
           created_at?: string
         }
       }

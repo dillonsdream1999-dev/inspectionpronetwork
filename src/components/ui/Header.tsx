@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import { Menu, X, User, LogOut } from 'lucide-react'
+import { Menu, X, User, LogOut, Phone } from 'lucide-react'
 import type { User as SupabaseUser } from '@supabase/supabase-js'
 
 export function Header() {
@@ -39,19 +39,26 @@ export function Header() {
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href="/" className="flex flex-col">
-            <span className="text-lg font-bold text-slate-900 leading-tight">
-              Inspection Pro Network
-            </span>
-            <span className="text-[10px] text-slate-500 tracking-wide">
-              Powered by Bed Bug Inspection Pro
-            </span>
+          <Link href="/" className="flex items-center">
+            <img 
+              src="/inspection-pro-network-logo.png" 
+              alt="Inspection Pro Network" 
+              className="h-10 w-auto"
+            />
           </Link>
           
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-6">
             <Link href="/territories" className="text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors">
               Territories
+            </Link>
+            
+            <Link 
+              href="/#contact" 
+              className="flex items-center gap-2 text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors"
+            >
+              <Phone className="w-4 h-4" />
+              Contact
             </Link>
             
             {!isLoading && (
@@ -107,6 +114,15 @@ export function Header() {
                 onClick={() => setIsMenuOpen(false)}
               >
                 Territories
+              </Link>
+              
+              <Link
+                href="/#contact"
+                className="flex items-center gap-2 text-sm font-medium text-slate-600"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <Phone className="w-4 h-4" />
+                Contact
               </Link>
               
               {!isLoading && (

@@ -14,7 +14,6 @@ interface TerritoryManageCardProps {
 export function TerritoryManageCard({ ownership }: TerritoryManageCardProps) {
   const router = useRouter()
   const [isCanceling, setIsCanceling] = useState(false)
-  const territory = ownership.territories
 
   const handleCancel = async () => {
     if (!confirm('Are you sure you want to cancel this territory subscription? This action cannot be undone.')) {
@@ -46,7 +45,7 @@ export function TerritoryManageCard({ ownership }: TerritoryManageCardProps) {
   }
 
   const isActive = ownership.status === 'active'
-  const territory = ownership.territories as { is_dma?: boolean } | null
+  const territory = ownership.territories as (Tables<'territories'> & { is_dma?: boolean }) | null
   const price = territory?.is_dma ? 3000 : (ownership.price_type === 'adjacent' ? 150 : 250)
 
   return (

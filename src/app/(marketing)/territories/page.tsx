@@ -6,7 +6,7 @@ import { TerritoryCard } from '@/components/territories/TerritoryCard'
 import { TerritoryFilters } from '@/components/territories/TerritoryFilters'
 import { SocialProofPopup } from '@/components/marketing/SocialProofPopup'
 import { createClient } from '@/lib/supabase/client'
-import { MapPin, Loader2, AlertCircle, Send, CheckCircle2 } from 'lucide-react'
+import { MapPin, Loader2, AlertCircle, Send, CheckCircle2, PhoneCall, MessageSquare } from 'lucide-react'
 import type { Tables } from '@/types/database'
 
 export default function TerritoriesPage() {
@@ -588,6 +588,33 @@ export default function TerritoriesPage() {
                 </button>
               </form>
             )}
+
+            {/* Contact Section */}
+            <div id="contact" className="mt-16 pt-16 border-t border-slate-200 scroll-mt-20">
+              <div className="bg-gradient-to-br from-brand-600 to-brand-700 rounded-xl p-8 text-white text-center">
+                <PhoneCall className="w-12 h-12 mx-auto mb-4 opacity-90" />
+                <h3 className="text-2xl font-bold mb-3">Questions About Territories?</h3>
+                <p className="text-brand-100 mb-6 max-w-xl mx-auto">
+                  We're here to help! Call or text us to discuss territory availability, pricing, or any questions about the platform.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                  <a 
+                    href="tel:8169262111" 
+                    className="inline-flex items-center justify-center gap-2 bg-white text-brand-600 hover:bg-brand-50 text-base px-6 py-2.5 rounded-lg font-semibold transition-colors"
+                  >
+                    <PhoneCall className="w-5 h-5" />
+                    Call (816) 926-2111
+                  </a>
+                  <a 
+                    href="sms:8169262111" 
+                    className="inline-flex items-center justify-center gap-2 bg-brand-500 hover:bg-brand-400 text-white text-base px-6 py-2.5 rounded-lg font-semibold transition-colors border border-white/20"
+                  >
+                    <MessageSquare className="w-5 h-5" />
+                    Text Us
+                  </a>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

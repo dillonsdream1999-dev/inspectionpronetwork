@@ -11,13 +11,12 @@ export default function AuthLayout({
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-brand-900 flex flex-col">
       <header className="p-6">
-        <Link href="/" className="flex flex-col w-fit">
-          <span className="text-lg font-bold text-white leading-tight">
-            Inspection Pro Network
-          </span>
-          <span className="text-[10px] text-slate-400 tracking-wide">
-            Powered by Bed Bug Inspection Pro
-          </span>
+        <Link href="/" className="flex items-center">
+          <img 
+            src="/inspection-pro-network-logo.png" 
+            alt="Inspection Pro Network" 
+            className="h-10 w-auto brightness-0 invert"
+          />
         </Link>
       </header>
       

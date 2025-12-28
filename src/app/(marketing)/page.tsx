@@ -776,7 +776,46 @@ export default function HomePage() {
                 depends on whether you sell inspection as a service.
               </p>
             </div>
-            
+          </div>
+        </div>
+      </section>
+
+      {/* Contact Section */}
+      <section id="contact" className="py-24 bg-gradient-to-br from-brand-600 to-brand-700 text-white scroll-mt-20">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <PhoneCall className="w-12 h-12 mx-auto mb-6 opacity-90" />
+          <h2 className="text-3xl sm:text-4xl font-bold mb-4">
+            Questions? We're Here to Help
+          </h2>
+          <p className="text-xl text-brand-100 mb-8 max-w-2xl mx-auto">
+            Investing in a territory is a big decision. We're available to answer any questions about territories, pricing, or how the platform works.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <a 
+              href="tel:8169262111" 
+              className="inline-flex items-center justify-center gap-2 bg-white text-brand-600 hover:bg-brand-50 text-lg px-8 py-3 rounded-lg font-semibold transition-colors"
+            >
+              <PhoneCall className="w-5 h-5" />
+              Call (816) 926-2111
+            </a>
+            <a 
+              href="sms:8169262111" 
+              className="inline-flex items-center justify-center gap-2 bg-brand-500 hover:bg-brand-400 text-white text-lg px-8 py-3 rounded-lg font-semibold transition-colors border border-white/20"
+            >
+              <MessageSquare className="w-5 h-5" />
+              Text Us
+            </a>
+          </div>
+          <p className="text-sm text-brand-100 mt-6 opacity-90">
+            Available Monday - Friday, 9am - 5pm CT
+          </p>
+        </div>
+      </section>
+
+      {/* FAQ Section - Continued */}
+      <section className="py-24 bg-white">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="space-y-6">
             <div className="bg-slate-50 rounded-xl p-6">
               <h3 className="font-bold text-slate-900 mb-2">Will you list multiple operators in my territory?</h3>
               <p className="text-slate-600">
