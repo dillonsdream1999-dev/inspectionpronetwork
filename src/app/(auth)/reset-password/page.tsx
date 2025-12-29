@@ -1,13 +1,11 @@
 'use client'
 
 import { useState, useEffect, Suspense } from 'react'
-import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 import { Key, Loader2, AlertCircle, CheckCircle2, Mail } from 'lucide-react'
 
 function ResetPasswordForm() {
-  const searchParams = useSearchParams()
   const [hasSession, setHasSession] = useState(false)
 
   const [email, setEmail] = useState('')
@@ -30,7 +28,7 @@ function ResetPasswordForm() {
             setEmail(user.email)
           }
         }
-      } catch (err) {
+      } catch {
         // No session, user needs to request reset
         setHasSession(false)
       }
