@@ -24,20 +24,28 @@ This document lists all required environment variables that must be set in your 
    - Example: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...`
    - **Warning**: Keep this secret! Never expose this in client-side code
 
+### App Configuration
+
+4. **NEXT_PUBLIC_APP_URL**
+   - Description: The public URL of your application (used for email redirects and links)
+   - Example: `https://your-app.vercel.app` or `https://yourdomain.com`
+   - **Important**: Must be prefixed with `NEXT_PUBLIC_` to be available in the browser
+   - **Note**: This should match your production domain
+
 ### Stripe Variables
 
-4. **STRIPE_SECRET_KEY**
+5. **STRIPE_SECRET_KEY**
    - Description: Your Stripe secret key
    - How to find: Go to Stripe Dashboard → Developers → API keys → Secret key
    - Example: `sk_test_...` (test) or `sk_live_...` (production)
 
-5. **NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY**
+6. **NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY**
    - Description: Your Stripe publishable key
    - How to find: Go to Stripe Dashboard → Developers → API keys → Publishable key
    - Example: `pk_test_...` (test) or `pk_live_...` (production)
    - **Important**: Must be prefixed with `NEXT_PUBLIC_` to be available in the browser
 
-6. **STRIPE_WEBHOOK_SECRET**
+7. **STRIPE_WEBHOOK_SECRET**
    - Description: Your Stripe webhook signing secret
    - How to find: 
      - Go to Stripe Dashboard → Developers → Webhooks
