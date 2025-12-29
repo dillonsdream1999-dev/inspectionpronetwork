@@ -98,3 +98,4 @@ STRIPE_PRICE_ADJACENT_220=price_xxx
 NEXT_PUBLIC_APP_URL=https://your-production-domain.com
 ```
 
+

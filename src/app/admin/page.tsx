@@ -42,8 +42,14 @@ export default async function AdminDashboard() {
   // Get all active DMA IDs
   const activeDmaIds = new Set(
     activeSubscriptions
-      ?.filter(sub => (sub.territories as { is_dma?: boolean })?.is_dma)
-      .map(sub => (sub.territories as { id: string })?.id)
+      ?.filter(sub => {
+        const territory = sub.territories as { id: string; is_dma?: boolean } | null | undefined
+        return territory?.is_dma === true
+      })
+      .map(sub => {
+        const territory = sub.territories as { id: string } | null | undefined
+        return territory?.id
+      })
       .filter((id): id is string => !!id) || []
   )
 
