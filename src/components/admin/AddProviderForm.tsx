@@ -245,22 +245,35 @@ export function AddProviderForm({
               value={territorySearch}
               onChange={(e) => setTerritorySearch(e.target.value)}
               className="w-full px-4 py-2.5 bg-slate-900 border border-slate-700 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent"
-              placeholder="Search territories to add..."
+              placeholder="Search by territory name or state..."
             />
             {territorySearch && filteredTerritories.length > 0 && (
-              <div className="absolute z-10 top-full left-0 right-0 mt-1 bg-slate-800 border border-slate-700 rounded-lg shadow-lg max-h-48 overflow-y-auto">
-                {filteredTerritories.slice(0, 10).map((territory) => (
+              <div className="absolute z-10 top-full left-0 right-0 mt-1 bg-slate-800 border border-slate-700 rounded-lg shadow-lg max-h-96 overflow-y-auto">
+                {filteredTerritories.map((territory) => (
                   <button
                     key={territory.id}
                     type="button"
                     onClick={() => addTerritory(territory)}
-                    className="w-full px-4 py-2.5 text-left text-sm text-slate-300 hover:bg-slate-700 hover:text-white transition-colors flex items-center gap-2"
+                    className="w-full px-4 py-2.5 text-left text-sm text-slate-300 hover:bg-slate-700 hover:text-white transition-colors flex items-center gap-2 border-b border-slate-700 last:border-b-0"
                   >
-                    <MapPin className="w-4 h-4 text-slate-500" />
-                    {territory.name}, {territory.state}
+                    <MapPin className="w-4 h-4 text-slate-500 shrink-0" />
+                    <span>{territory.name}, {territory.state}</span>
                   </button>
                 ))}
+                <div className="px-4 py-2 text-xs text-slate-500 bg-slate-900 border-t border-slate-700">
+                  Showing {filteredTerritories.length} of {availableTerritories.length} available territories
+                </div>
               </div>
+            )}
+            {territorySearch && filteredTerritories.length === 0 && (
+              <div className="absolute z-10 top-full left-0 right-0 mt-1 bg-slate-800 border border-slate-700 rounded-lg shadow-lg p-4">
+                <p className="text-sm text-slate-400">No territories found matching "{territorySearch}"</p>
+              </div>
+            )}
+            {!territorySearch && (
+              <p className="mt-2 text-xs text-slate-500">
+                {availableTerritories.length} available territories. Type to search by name or state.
+              </p>
             )}
           </div>
         </div>

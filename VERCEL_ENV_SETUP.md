@@ -28,7 +28,7 @@ This document lists all required environment variables that must be set in your 
 
 4. **NEXT_PUBLIC_APP_URL**
    - Description: The public URL of your application (used for email redirects and links)
-   - Example: `https://your-app.vercel.app` or `https://yourdomain.com`
+   - **For this project**: `https://www.inspectionpronetwork.com`
    - **Important**: Must be prefixed with `NEXT_PUBLIC_` to be available in the browser
    - **Note**: This should match your production domain
 
