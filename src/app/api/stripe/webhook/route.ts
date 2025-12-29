@@ -129,7 +129,7 @@ export async function POST(request: NextRequest) {
           .eq('id', ownership.territory_id)
 
         // Check if any remaining territories lose their adjacency discount
-        await handleAdjacentDiscountRevocation(supabase, ownership.company_id, ownership.territory_id)
+        await handleAdjacentDiscountRevocation(supabase, ownership.company_id)
 
         console.log(`Subscription ${subscriptionId} canceled, territory released`)
         break
@@ -145,8 +145,8 @@ export async function POST(request: NextRequest) {
 
 async function handleAdjacentDiscountRevocation(
   supabase: Awaited<ReturnType<typeof createServiceClient>>,
-  companyId: string,
-  _canceledTerritoryId: string
+  companyId: string
+  // canceledTerritoryId is not currently used but kept for future reference
 ) {
   // Get all active territories for this company with adjacent discount
   const { data: adjacentOwnerships } = await supabase

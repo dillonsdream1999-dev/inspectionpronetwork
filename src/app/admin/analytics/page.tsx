@@ -317,7 +317,15 @@ export default async function AnalyticsPage() {
             </thead>
             <tbody className="divide-y divide-slate-700">
               {recentLeads && recentLeads.length > 0 ? (
-                recentLeads.map((lead: any) => {
+                recentLeads.map((lead: {
+                  id: string
+                  created_at: string
+                  status: string
+                  zip: string
+                  contact_pref: string
+                  territories: { name: string; state: string } | null
+                  companies: { name: string } | null
+                }) => {
                   const territory = lead.territories as { name: string; state: string } | null
                   const company = lead.companies as { name: string } | null
                   
