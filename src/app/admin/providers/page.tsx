@@ -136,7 +136,12 @@ export default async function AdminProvidersPage() {
                           <div className="flex items-center gap-3">
                             <MapPin className="w-4 h-4 text-slate-400" />
                             <span className="text-sm text-slate-300">
-                              {ownership.territories?.name}
+                              {(() => {
+                                const territory = Array.isArray(ownership.territories) 
+                                  ? ownership.territories[0] 
+                                  : ownership.territories
+                                return territory?.name || 'Unknown'
+                              })()}
                             </span>
                             <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${
                               ownership.status === 'active' 
@@ -149,9 +154,14 @@ export default async function AdminProvidersPage() {
                           <div className="flex items-center gap-4">
                             <div className="flex items-center gap-1 text-sm text-slate-400">
                               <CreditCard className="w-4 h-4" />
-                              ${(ownership.territories as { is_dma?: boolean } | null)?.is_dma 
-                                ? 3000 
-                                : (ownership.price_type === 'adjacent' ? 150 : 250)}/mo
+                              ${(() => {
+                                const territory = Array.isArray(ownership.territories) 
+                                  ? ownership.territories[0] 
+                                  : ownership.territories
+                                return (territory as { is_dma?: boolean } | null)?.is_dma 
+                                  ? 3000 
+                                  : (ownership.price_type === 'adjacent' ? 150 : 250)
+                              })()}/mo
                             </div>
                           </div>
                         </div>
