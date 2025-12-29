@@ -259,7 +259,10 @@ export function AddProviderForm({
                     className="w-full px-4 py-2.5 text-left text-sm text-slate-300 hover:bg-slate-700 hover:text-white transition-colors flex items-center gap-2 border-b border-slate-700 last:border-b-0"
                   >
                     <MapPin className="w-4 h-4 text-slate-500 shrink-0" />
-                    <span>{territory.name}, {territory.state}</span>
+                    <span>
+                      {territory.name}, {territory.state}
+                      {territory.metro_area && ` • ${territory.metro_area}`}
+                    </span>
                   </button>
                 ))}
                 <div className="px-4 py-2 text-xs text-slate-500 bg-slate-900 border-t border-slate-700">
