@@ -19,7 +19,7 @@ export default async function AdminProvidersPage() {
           status,
           price_type,
           stripe_subscription_id,
-          territories (name)
+          territories (name, is_dma)
         )
       `)
       .order('created_at', { ascending: false }),
@@ -52,13 +52,20 @@ export default async function AdminProvidersPage() {
         </div>
       ) : (
         <div className="space-y-6">
-          {companies.map((company: { id: string; name: string; phone?: string; website?: string; billing_email?: string; created_at: string; profiles?: { email: string }; territory_ownership?: { id: string; status: string; price_type: string; territories?: { name: string } }[] }) => {
-            const profile = company.profiles
+          {companies.map((company: { id: string; name: string; phone?: string; website?: string; billing_email?: string; created_at: string; profiles?: { email: string } | { email: string }[]; territory_ownership?: { id: string; status: string; price_type: string; territories?: { name: string; is_dma?: boolean } | { name: string; is_dma?: boolean }[] }[] }) => {
+            // Handle profiles as potentially array or object
+            const profile = Array.isArray(company.profiles) ? company.profiles[0] : company.profiles
             const ownerships = company.territory_ownership || []
 
             const activeSubscriptions = ownerships.filter((o: { status: string }) => o.status === 'active')
-            const monthlySpend = activeSubscriptions.reduce((acc: number, sub: { price_type: string; territories?: { is_dma?: boolean } }) => {
-              const territory = sub.territories as { is_dma?: boolean } | null
+            const monthlySpend = activeSubscriptions.reduce((acc: number, sub: { price_type: string; territories?: { name: string; is_dma?: boolean } | { name: string; is_dma?: boolean }[] }) => {
+              // Handle territories as potentially array or object
+              let territory: { is_dma?: boolean } | null = null
+              if (Array.isArray(sub.territories)) {
+                territory = sub.territories[0] || null
+              } else {
+                territory = sub.territories || null
+              }
               if (territory?.is_dma) return acc + 3000
               return acc + (sub.price_type === 'adjacent' ? 150 : 250)
             }, 0)
