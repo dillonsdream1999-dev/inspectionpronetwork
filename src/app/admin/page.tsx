@@ -43,12 +43,23 @@ export default async function AdminDashboard() {
   const activeDmaIds = new Set(
     activeSubscriptions
       ?.filter(sub => {
-        const territory = sub.territories as { id: string; is_dma?: boolean } | null | undefined
+        // Handle territories as potentially array or object
+        const territories = sub.territories as unknown
+        if (Array.isArray(territories)) {
+          return territories.some((t: { is_dma?: boolean }) => t?.is_dma === true)
+        }
+        const territory = territories as { is_dma?: boolean } | null | undefined
         return territory?.is_dma === true
       })
       .map(sub => {
-        const territory = sub.territories as { id: string } | null | undefined
-        return territory?.id
+        // Handle territories as potentially array or object
+        const territories = sub.territories as unknown
+        if (Array.isArray(territories)) {
+          const dmaTerritory = territories.find((t: { is_dma?: boolean }) => t?.is_dma === true)
+          return dmaTerritory?.id
+        }
+        const territory = territories as { id: string; is_dma?: boolean } | null | undefined
+        return territory?.is_dma === true ? territory.id : undefined
       })
       .filter((id): id is string => !!id) || []
   )
@@ -70,7 +81,16 @@ export default async function AdminDashboard() {
   let dmaCoveredIndividualTerritoriesCount = 0
 
   activeSubscriptions?.forEach(sub => {
-    const territory = sub.territories as { id: string; is_dma?: boolean } | null
+    // Handle territories as potentially array or object
+    const territories = sub.territories as unknown
+    let territory: { id: string; is_dma?: boolean } | null = null
+    
+    if (Array.isArray(territories)) {
+      territory = territories[0] as { id: string; is_dma?: boolean } | null
+    } else {
+      territory = territories as { id: string; is_dma?: boolean } | null
+    }
+    
     if (!territory) return
 
     const isDMA = territory.is_dma || false
