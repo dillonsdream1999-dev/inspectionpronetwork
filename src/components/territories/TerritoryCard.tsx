@@ -27,6 +27,8 @@ export function TerritoryCard({
   onClaim,
   isLoggedIn = false
 }: TerritoryCardProps) {
+  // Type assertion for is_dma which may not be in the database types yet
+  const territoryWithDma = territory as Tables<'territories'> & { is_dma?: boolean }
   const [showZips, setShowZips] = useState(false)
   const [showTerritories, setShowTerritories] = useState(false)
   const [dmaTerritories, setDmaTerritories] = useState<TerritoryInDMA[]>([])
@@ -55,16 +57,16 @@ export function TerritoryCard({
   const basePrice = 250
   const adjacentPrice = 150
   const dmaPrice = 3000
-  const price = territory.is_dma ? dmaPrice : (isAdjacentEligible ? adjacentPrice : basePrice)
+  const price = territoryWithDma.is_dma ? dmaPrice : (isAdjacentEligible ? adjacentPrice : basePrice)
 
   // Calculate accurate DMA population from individual territories
-  const dmaPopulation = territory.is_dma && dmaTerritories.length > 0
+  const dmaPopulation = territoryWithDma.is_dma && dmaTerritories.length > 0
     ? dmaTerritories.reduce((sum, terr) => sum + terr.population_est, 0)
     : territory.population_est
 
   // Fetch territories for DMA when dropdown is opened or when component mounts (to get accurate population)
   useEffect(() => {
-    if (territory.is_dma && dmaTerritories.length === 0) {
+    if (territoryWithDma.is_dma && dmaTerritories.length === 0) {
       setIsLoadingTerritories(true)
       fetch(`/api/territories/by-dma?dmaId=${territory.id}`)
         .then(res => res.json())
@@ -79,7 +81,7 @@ export function TerritoryCard({
           setIsLoadingTerritories(false)
         })
     }
-  }, [territory.is_dma, territory.id, dmaTerritories.length])
+  }, [territoryWithDma.is_dma, territory.id, dmaTerritories.length])
 
   return (
     <div className="card p-6 hover:shadow-lg transition-all duration-200 group">
@@ -107,12 +109,12 @@ export function TerritoryCard({
           <Users className="w-4 h-4 text-slate-400" />
           <span className="text-slate-600">
             ~{dmaPopulation.toLocaleString()} pop.
-            {territory.is_dma && dmaTerritories.length > 0 && (
+            {territoryWithDma.is_dma && dmaTerritories.length > 0 && (
               <span className="text-xs text-slate-500 ml-1">(calculated)</span>
             )}
           </span>
         </div>
-        {!territory.is_dma && (
+        {!territoryWithDma.is_dma && (
           <div className="flex items-center gap-2 text-sm">
             <Hash className="w-4 h-4 text-slate-400" />
             <span className="text-slate-600">
@@ -120,7 +122,7 @@ export function TerritoryCard({
             </span>
           </div>
         )}
-        {territory.is_dma && (
+        {territoryWithDma.is_dma && (
           <div className="flex items-center gap-2 text-sm">
             <Hash className="w-4 h-4 text-slate-400" />
             <span className="text-slate-600">
@@ -131,7 +133,7 @@ export function TerritoryCard({
       </div>
 
       {/* ZIP Codes Expandable Section - Only show for non-DMA territories */}
-      {!territory.is_dma && territory.zip_codes && territory.zip_codes.length > 0 && (
+      {!territoryWithDma.is_dma && territory.zip_codes && territory.zip_codes.length > 0 && (
         <div className="mb-4">
           <button
             onClick={() => setShowZips(!showZips)}
@@ -169,7 +171,7 @@ export function TerritoryCard({
       )}
 
       {/* Territories Expandable Section - Only show for DMA territories */}
-      {territory.is_dma && (
+      {territoryWithDma.is_dma && (
         <div className="mb-4">
           <button
             onClick={() => setShowTerritories(!showTerritories)}
@@ -240,7 +242,7 @@ export function TerritoryCard({
       )}
 
       {/* DMA Exclusive Benefits */}
-      {territory.is_dma && territory.status === 'available' && (
+      {territoryWithDma.is_dma && territory.status === 'available' && (
         <div className="mb-4 p-4 bg-gradient-to-br from-amber-50 to-orange-50 border-2 border-amber-200 rounded-lg">
           <div className="flex items-center gap-2 mb-3">
             <Megaphone className="w-5 h-5 text-amber-600" />
@@ -272,7 +274,7 @@ export function TerritoryCard({
               <span className="text-2xl font-bold text-slate-900">${price}</span>
               <span className="text-slate-500">/mo</span>
             </div>
-            {isAdjacentEligible && isLoggedIn && !territory.is_dma && (
+            {isAdjacentEligible && isLoggedIn && !territoryWithDma.is_dma && (
               <span className="text-xs text-emerald-600 font-medium">
                 Adjacent discount applied (-$100)
               </span>
@@ -284,7 +286,7 @@ export function TerritoryCard({
               onClick={onClaim}
               className="btn-primary text-sm"
             >
-              {territory.is_dma ? 'Claim DMA' : 'Claim Territory'}
+              {territoryWithDma.is_dma ? 'Claim DMA' : 'Claim Territory'}
             </button>
           )}
           
