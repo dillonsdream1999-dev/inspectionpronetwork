@@ -25,7 +25,7 @@ export default async function AdminProvidersPage() {
       .order('created_at', { ascending: false }),
     supabase
       .from('territories')
-      .select('id, name, state, status')
+      .select('id, name, state, status, metro_area')
       .eq('status', 'available')
       .order('state')
       .order('name')

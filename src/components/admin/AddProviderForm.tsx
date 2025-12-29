@@ -9,6 +9,7 @@ interface Territory {
   name: string
   state: string
   status: string
+  metro_area: string | null
 }
 
 interface SelectedTerritory {
@@ -38,7 +39,8 @@ export function AddProviderForm({
     t.status === 'available' &&
     !selectedTerritories.some(st => st.territoryId === t.id) &&
     (t.name.toLowerCase().includes(territorySearch.toLowerCase()) ||
-     t.state.toLowerCase().includes(territorySearch.toLowerCase()))
+     t.state.toLowerCase().includes(territorySearch.toLowerCase()) ||
+     (t.metro_area && t.metro_area.toLowerCase().includes(territorySearch.toLowerCase())))
   )
 
   const addTerritory = (territory: Territory) => {
