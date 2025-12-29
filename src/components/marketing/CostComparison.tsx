@@ -1,6 +1,6 @@
 'use client'
 
-import { DollarSign, TrendingDown, Calculator, Target, Zap, CheckCircle2 } from 'lucide-react'
+import { TrendingDown, Calculator, Target, Zap, CheckCircle2 } from 'lucide-react'
 
 export function CostComparison() {
   const monthlyPrice = 250

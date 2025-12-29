@@ -10,8 +10,7 @@ import {
   Settings, 
   LogOut,
   Menu,
-  X,
-  Building2
+  X
 } from 'lucide-react'
 import { useState } from 'react'
 import type { User } from '@supabase/supabase-js'

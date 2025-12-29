@@ -2,10 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { 
   TrendingUp, 
   Users, 
-  MapPin, 
   Phone, 
-  Calendar,
-  AlertCircle,
   CheckCircle2,
   Clock
 } from 'lucide-react'
@@ -71,23 +68,23 @@ export default async function AnalyticsPage() {
     .order('created_at', { ascending: false })
     .limit(10)
 
-  // Territory statistics
-  const { count: totalTerritories } = await supabase
-    .from('territories')
-    .select('*', { count: 'exact', head: true })
-    .eq('is_dma', false)
+  // Territory statistics (commented out - not currently used in UI)
+  // const { count: totalTerritories } = await supabase
+  //   .from('territories')
+  //   .select('*', { count: 'exact', head: true })
+  //   .eq('is_dma', false)
 
-  const { count: availableTerritories } = await supabase
-    .from('territories')
-    .select('*', { count: 'exact', head: true })
-    .eq('status', 'available')
-    .eq('is_dma', false)
+  // const { count: availableTerritories } = await supabase
+  //   .from('territories')
+  //   .select('*', { count: 'exact', head: true })
+  //   .eq('status', 'available')
+  //   .eq('is_dma', false)
 
-  const { count: takenTerritories } = await supabase
-    .from('territories')
-    .select('*', { count: 'exact', head: true })
-    .eq('status', 'taken')
-    .eq('is_dma', false)
+  // const { count: takenTerritories } = await supabase
+  //   .from('territories')
+  //   .select('*', { count: 'exact', head: true })
+  //   .eq('status', 'taken')
+  //   .eq('is_dma', false)
 
   // Active subscriptions
   const { count: activeSubscriptions } = await supabase

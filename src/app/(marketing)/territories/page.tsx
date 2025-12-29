@@ -52,6 +52,7 @@ export default function TerritoriesPage() {
     if (zipSearch && !territory.zip_codes?.some(zip => zip.includes(zipSearch))) return false
     if (statusFilter && territory.status !== statusFilter) return false
     // Exclude DMAs from regular territory list (is_dma might be undefined if migration not run)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return !(territory as any).is_dma // Exclude DMAs from regular territory list
   })
   
@@ -60,6 +61,7 @@ export default function TerritoriesPage() {
     if (metroSearch && !territory.metro_area?.toLowerCase().includes(metroSearch.toLowerCase())) return false
     if (statusFilter && territory.status !== statusFilter) return false
     // Only show DMAs (is_dma might be undefined if migration not run)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return !!(territory as any).is_dma // Only show DMAs
   })
 
@@ -76,6 +78,7 @@ export default function TerritoriesPage() {
       setTerritories(territoriesData)
       
       // Debug: Log DMA count
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const dmaCount = territoriesData.filter((t: any) => t.is_dma).length
       console.log('Total territories:', territoriesData.length, 'DMAs:', dmaCount)
     } catch (err) {
@@ -334,7 +337,10 @@ export default function TerritoriesPage() {
                       Individual Territories
                     </h2>
                     <p className="text-sm text-slate-500">
-                      Showing {filteredTerritories.length} of {territories.filter(t => !(t as any).is_dma).length} territories
+                      Showing {filteredTerritories.length} of {territories.filter(t => {
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        return !(t as any).is_dma
+                      }).length} territories
                     </p>
                   </div>
                   {isLoggedIn && adjacentEligible.length > 0 && (

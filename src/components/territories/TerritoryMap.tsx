@@ -2,12 +2,12 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import dynamic from 'next/dynamic'
-import { MapPin, Lock, Clock } from 'lucide-react'
 import type { Tables } from '@/types/database'
 import L from 'leaflet' // Import Leaflet directly for icon fix
 
 // Fix for default Leaflet icons with Webpack/Next.js
 if (typeof window !== 'undefined') {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   delete (L.Icon.Default.prototype as any)._getIconUrl;
   L.Icon.Default.mergeOptions({
     iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png',
@@ -27,6 +27,7 @@ import { useMap } from 'react-leaflet'
 
 // Import Leaflet CSS
 if (typeof window !== 'undefined') {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   require('leaflet/dist/leaflet.css')
 }
 
@@ -42,7 +43,7 @@ function MapController({ selectedState, territories }: { selectedState?: string;
 
   useEffect(() => {
     if (selectedState) {
-      const stateTerritories = territories.filter(t => t.state === selectedState && !(t as any).is_dma)
+      const stateTerritories = territories.filter(t => t.state === selectedState && !(t as Tables<'territories'> & { is_dma?: boolean }).is_dma)
       if (stateTerritories.length > 0) {
         // Calculate center from available territory coordinates
         const coords = stateTerritories
@@ -180,7 +181,7 @@ export function TerritoryMap({ territories, selectedState, onTerritoryClick }: T
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       <MapController selectedState={selectedState} territories={territories} />
-      {territories.filter(t => !(t as any).is_dma).map(territory => {
+      {territories.filter(t => !(t as Tables<'territories'> & { is_dma?: boolean }).is_dma).map(territory => {
         const center = getTerritoryApproxCenter(territory)
         if (!center) return null
 
@@ -220,7 +221,7 @@ export function TerritoryMap({ territories, selectedState, onTerritoryClick }: T
                 {territory.metro_area || territory.state} • ~{territory.population_est.toLocaleString()} pop.
               </div>
               <div className="text-xs text-slate-500 mt-1">
-                {(territory as any).is_dma ? 'Full DMA Coverage' : `${territory.zip_codes?.length || 0} ZIP codes`}
+                {(territory as Tables<'territories'> & { is_dma?: boolean }).is_dma ? 'Full DMA Coverage' : `${territory.zip_codes?.length || 0} ZIP codes`}
               </div>
               <div className={`mt-2 px-2 py-0.5 rounded text-xs font-medium inline-flex items-center ${
                 territory.status === 'available' ? 'bg-emerald-100 text-emerald-700' :

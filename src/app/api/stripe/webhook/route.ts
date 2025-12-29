@@ -146,7 +146,7 @@ export async function POST(request: NextRequest) {
 async function handleAdjacentDiscountRevocation(
   supabase: Awaited<ReturnType<typeof createServiceClient>>,
   companyId: string,
-  canceledTerritoryId: string
+  _canceledTerritoryId: string
 ) {
   // Get all active territories for this company with adjacent discount
   const { data: adjacentOwnerships } = await supabase
