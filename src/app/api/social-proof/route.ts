@@ -36,12 +36,20 @@ export async function GET() {
 
     return NextResponse.json({
       totalCount: totalCount || 0,
-      recentSignups: recentSignups?.map(s => ({
-        id: s.id,
-        territoryName: (s.territories as { name: string; state: string } | null)?.name || 'Unknown',
-        state: (s.territories as { name: string; state: string } | null)?.state || '',
-        createdAt: s.created_at
-      })) || [],
+      recentSignups: recentSignups?.map(s => {
+        // Handle territories as potentially array or object
+        const territories = s.territories as { name: string; state: string }[] | { name: string; state: string } | null | undefined
+        const territory = Array.isArray(territories) 
+          ? (territories.length > 0 ? territories[0] : null)
+          : territories
+        
+        return {
+          id: s.id,
+          territoryName: territory?.name || 'Unknown',
+          state: territory?.state || '',
+          createdAt: s.created_at
+        }
+      }) || [],
       signups24h: signups24h || 0
     })
   } catch (error) {
