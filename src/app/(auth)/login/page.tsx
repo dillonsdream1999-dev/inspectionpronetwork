@@ -15,8 +15,6 @@ function LoginForm() {
   const redirect = searchParams.get('redirect') || '/dashboard'
   const authError = searchParams.get('error')
 
-  const supabase = createClient()
-
   useEffect(() => {
     if (authError === 'auth' || authError === 'auth_callback_error') {
       setError('Authentication failed. Please try again.')
@@ -24,13 +22,19 @@ function LoginForm() {
 
     // Check if user is already logged in
     const checkUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (user) {
-        window.location.href = redirect
+      try {
+        const supabase = createClient()
+        const { data: { user } } = await supabase.auth.getUser()
+        if (user) {
+          window.location.href = redirect
+        }
+      } catch (err) {
+        console.error('Failed to check user:', err)
+        // Continue - user can still login
       }
     }
     checkUser()
-  }, [authError, supabase.auth, redirect])
+  }, [authError, redirect])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -38,6 +42,7 @@ function LoginForm() {
     setIsLoading(true)
 
     try {
+      const supabase = createClient()
       const { error: signInError } = await supabase.auth.signInWithOtp({
         email,
         options: {

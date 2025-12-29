@@ -23,7 +23,6 @@ interface TerritoryAdminTableProps {
 export function TerritoryAdminTable({ territories }: TerritoryAdminTableProps) {
   const router = useRouter()
   const [deletingId, setDeletingId] = useState<string | null>(null)
-  const supabase = createClient()
 
   const handleDelete = async (territoryId: string) => {
     if (!confirm('Are you sure you want to delete this territory? This action cannot be undone.')) {
@@ -33,6 +32,7 @@ export function TerritoryAdminTable({ territories }: TerritoryAdminTableProps) {
     setDeletingId(territoryId)
 
     try {
+      const supabase = createClient()
       const { error } = await supabase
         .from('territories')
         .delete()

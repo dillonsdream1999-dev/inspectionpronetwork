@@ -14,12 +14,12 @@ interface LeadActionsProps {
 export function LeadActions({ leadId, currentStatus }: LeadActionsProps) {
   const router = useRouter()
   const [isUpdating, setIsUpdating] = useState<string | null>(null)
-  const supabase = createClient()
 
   const handleUpdateStatus = async (newStatus: LeadStatus) => {
     setIsUpdating(newStatus)
 
     try {
+      const supabase = createClient()
       const { error } = await supabase
         .from('leads')
         .update({ status: newStatus })

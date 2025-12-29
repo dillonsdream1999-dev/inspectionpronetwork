@@ -24,11 +24,16 @@ interface DashboardNavProps {
 export function DashboardNav({ user, company }: DashboardNavProps) {
   const pathname = usePathname()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const supabase = createClient()
 
   const handleSignOut = async () => {
-    await supabase.auth.signOut()
-    window.location.href = '/'
+    try {
+      const supabase = createClient()
+      await supabase.auth.signOut()
+    } catch (error) {
+      console.error('Failed to sign out:', error)
+    } finally {
+      window.location.href = '/'
+    }
   }
 
   const navItems = [

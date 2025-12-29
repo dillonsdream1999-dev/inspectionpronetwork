@@ -39,8 +39,6 @@ export default function TerritoriesPage() {
   const [submitSuccess, setSubmitSuccess] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
 
-  const supabase = createClient()
-
   // Get unique states
   const states = [...new Set(territories.map((t) => t.state))].sort()
 
@@ -102,16 +100,22 @@ export default function TerritoriesPage() {
 
   useEffect(() => {
     const checkAuth = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      setIsLoggedIn(!!user)
-      if (user) {
-        fetchAdjacentEligible()
+      try {
+        const supabase = createClient()
+        const { data: { user } } = await supabase.auth.getUser()
+        setIsLoggedIn(!!user)
+        if (user) {
+          fetchAdjacentEligible()
+        }
+      } catch (error) {
+        console.error('Failed to check auth:', error)
+        // Continue without auth - user can still browse territories
       }
     }
 
     checkAuth()
     fetchTerritories()
-  }, [supabase.auth, fetchTerritories, fetchAdjacentEligible])
+  }, [fetchTerritories, fetchAdjacentEligible])
 
   const handleClaimTerritory = async (territoryId: string) => {
     if (!isLoggedIn) {

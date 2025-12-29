@@ -10,28 +10,51 @@ export function Header() {
   const [user, setUser] = useState<SupabaseUser | null>(null)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
-  
-  const supabase = createClient()
 
   useEffect(() => {
-    const getUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      setUser(user)
+    let supabase
+    try {
+      supabase = createClient()
+    } catch (error) {
+      console.error('Failed to initialize Supabase client:', error)
       setIsLoading(false)
+      return
+    }
+
+    const getUser = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser()
+        setUser(user)
+      } catch (error) {
+        console.error('Failed to get user:', error)
+      } finally {
+        setIsLoading(false)
+      }
     }
     
     getUser()
     
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_, session) => {
-      setUser(session?.user ?? null)
-    })
-    
-    return () => subscription.unsubscribe()
-  }, [supabase.auth])
+    try {
+      const { data: { subscription } } = supabase.auth.onAuthStateChange((_, session) => {
+        setUser(session?.user ?? null)
+      })
+      
+      return () => subscription.unsubscribe()
+    } catch (error) {
+      console.error('Failed to set up auth state listener:', error)
+    }
+  }, [])
 
   const handleSignOut = async () => {
-    await supabase.auth.signOut()
-    window.location.href = '/'
+    try {
+      const supabase = createClient()
+      await supabase.auth.signOut()
+      window.location.href = '/'
+    } catch (error) {
+      console.error('Failed to sign out:', error)
+      // Still redirect even if sign out fails
+      window.location.href = '/'
+    }
   }
 
   return (
