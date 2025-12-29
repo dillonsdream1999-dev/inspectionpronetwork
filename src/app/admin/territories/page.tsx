@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { TerritoryAdminTable } from '@/components/admin/TerritoryAdminTable'
 import { TerritoryUploader } from '@/components/admin/TerritoryUploader'
+import { MakeAllAvailableButton } from '@/components/admin/MakeAllAvailableButton'
 import { MapPin, Plus, Upload } from 'lucide-react'
 import Link from 'next/link'
 
@@ -40,13 +41,19 @@ export default async function AdminTerritoriesPage() {
         </div>
       </div>
 
-      {/* Uploader */}
-      <div className="bg-slate-800 rounded-xl border border-slate-700 p-6 mb-8">
-        <div className="flex items-center gap-3 mb-4">
-          <Upload className="w-5 h-5 text-slate-400" />
-          <h2 className="text-lg font-semibold text-white">Bulk Import</h2>
+      {/* Bulk Operations */}
+      <div className="grid md:grid-cols-2 gap-6 mb-8">
+        {/* Uploader */}
+        <div className="bg-slate-800 rounded-xl border border-slate-700 p-6">
+          <div className="flex items-center gap-3 mb-4">
+            <Upload className="w-5 h-5 text-slate-400" />
+            <h2 className="text-lg font-semibold text-white">Bulk Import</h2>
+          </div>
+          <TerritoryUploader />
         </div>
-        <TerritoryUploader />
+
+        {/* Make All Available */}
+        <MakeAllAvailableButton />
       </div>
 
       {/* Territories Table */}
