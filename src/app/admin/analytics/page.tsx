@@ -322,12 +322,18 @@ export default async function AnalyticsPage() {
                   created_at: string
                   status: string
                   zip: string
+                  room_type: string | null
                   contact_pref: string
-                  territories: { name: string; state: string } | null
-                  companies: { name: string } | null
+                  territories: { name: string; state: string }[] | null
+                  companies: { name: string }[] | null
                 }) => {
-                  const territory = lead.territories as { name: string; state: string } | null
-                  const company = lead.companies as { name: string } | null
+                  // Handle territories and companies as arrays (Supabase returns arrays for relations)
+                  const territory = Array.isArray(lead.territories) && lead.territories.length > 0 
+                    ? lead.territories[0] 
+                    : null
+                  const company = Array.isArray(lead.companies) && lead.companies.length > 0 
+                    ? lead.companies[0] 
+                    : null
                   
                   const statusColors = {
                     new: 'bg-blue-500/20 text-blue-400',
