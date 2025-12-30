@@ -86,25 +86,37 @@ export default async function AdminTerritoriesPage() {
       const companyName = company?.name || 'Unknown'
       ownedDMAIds.add(ownership.territory_id)
       dmaOwnerMap.set(ownership.territory_id, companyName)
+      console.log('Admin: Found owned DMA:', ownership.territory_id, 'by', companyName)
     }
   })
+
+  console.log('Admin: Owned DMA IDs:', Array.from(ownedDMAIds))
 
   // Update territories to show "taken" if they're linked to an owned DMA
   const territories: TerritoryWithOwnership[] = allTerritories.map((territory) => {
     // If territory has dma_id and that DMA is owned, mark as taken
-    if (territory.dma_id && ownedDMAIds.has(territory.dma_id)) {
-      const dmaOwnerName = dmaOwnerMap.get(territory.dma_id)
-      return {
-        ...territory,
-        status: 'taken' as TerritoryStatus,
-        // Add a virtual ownership record to show the DMA owner
-        territory_ownership: dmaOwnerName ? [{
-          id: `dma-${territory.dma_id}`,
-          company_id: '',
-          status: 'active',
-          price_type: 'base',
-          companies: { name: dmaOwnerName }
-        }] : (territory.territory_ownership || [])
+    const territoryWithDMA = territory as TerritoryWithOwnership & { dma_id?: string | null }
+    
+    if (territoryWithDMA.dma_id) {
+      // Convert both to strings for comparison (UUIDs might be different types)
+      const dmaIdStr = String(territoryWithDMA.dma_id)
+      const isLinkedToOwnedDMA = Array.from(ownedDMAIds).some(ownedId => String(ownedId) === dmaIdStr)
+      
+      if (isLinkedToOwnedDMA) {
+        const dmaOwnerName = dmaOwnerMap.get(dmaIdStr) || dmaOwnerMap.get(Array.from(ownedDMAIds).find(ownedId => String(ownedId) === dmaIdStr) || '')
+        console.log(`Admin: Marking territory ${territory.id} (${territory.name}) as taken - linked to DMA ${dmaIdStr}`)
+        return {
+          ...territory,
+          status: 'taken' as TerritoryStatus,
+          // Add a virtual ownership record to show the DMA owner
+          territory_ownership: dmaOwnerName ? [{
+            id: `dma-${territoryWithDMA.dma_id}`,
+            company_id: '',
+            status: 'active',
+            price_type: 'base',
+            companies: { name: dmaOwnerName }
+          }] : (territory.territory_ownership || [])
+        }
       }
     }
     return territory
