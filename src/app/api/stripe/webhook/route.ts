@@ -66,11 +66,33 @@ export async function POST(request: NextRequest) {
           throw ownershipError
         }
 
+        // Get territory details to check if it's a DMA
+        const { data: territory } = await supabase
+          .from('territories')
+          .select('is_dma')
+          .eq('id', territoryId)
+          .single()
+
         // Update territory status to taken
         await supabase
           .from('territories')
           .update({ status: 'taken' })
           .eq('id', territoryId)
+
+        // If this is a DMA purchase, mark all linked individual territories as taken
+        if (territory?.is_dma) {
+          const { error: dmaError } = await supabase
+            .from('territories')
+            .update({ status: 'taken' })
+            .eq('dma_id', territoryId)
+            .neq('is_dma', true) // Only update individual territories, not other DMAs
+
+          if (dmaError) {
+            console.error('Failed to update DMA-linked territories:', dmaError)
+          } else {
+            console.log(`DMA ${territoryId} claimed, linked individual territories marked as taken`)
+          }
+        }
 
         // Delete the hold
         await supabase
@@ -122,11 +144,30 @@ export async function POST(request: NextRequest) {
           })
           .eq('stripe_subscription_id', subscriptionId)
 
+        // Get territory details to check if it's a DMA
+        const territory = ownership.territories as { id: string; is_dma?: boolean } | null
+        const isDMA = territory?.is_dma === true
+
         // Update territory to available
         await supabase
           .from('territories')
           .update({ status: 'available' })
           .eq('id', ownership.territory_id)
+
+        // If this was a DMA subscription, mark all linked individual territories as available
+        if (isDMA) {
+          const { error: dmaError } = await supabase
+            .from('territories')
+            .update({ status: 'available' })
+            .eq('dma_id', ownership.territory_id)
+            .neq('is_dma', true) // Only update individual territories, not other DMAs
+
+          if (dmaError) {
+            console.error('Failed to update DMA-linked territories:', dmaError)
+          } else {
+            console.log(`DMA ${ownership.territory_id} canceled, linked individual territories marked as available`)
+          }
+        }
 
         // Check if any remaining territories lose their adjacency discount
         await handleAdjacentDiscountRevocation(supabase, ownership.company_id)
