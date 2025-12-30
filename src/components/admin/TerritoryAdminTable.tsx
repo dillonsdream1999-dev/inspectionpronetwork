@@ -65,7 +65,15 @@ export function TerritoryAdminTable({ territories }: TerritoryAdminTableProps) {
       const name = territory.name?.toLowerCase() || ''
       const state = territory.state?.toLowerCase() || ''
       const metro = territory.metro_area?.toLowerCase() || ''
-      const owner = territory.territory_ownership?.find(o => o.status === 'active')?.companies?.name?.toLowerCase() || ''
+      
+      // Ensure territory_ownership is an array
+      const ownershipArray = Array.isArray(territory.territory_ownership) 
+        ? territory.territory_ownership 
+        : territory.territory_ownership 
+          ? [territory.territory_ownership] 
+          : []
+      
+      const owner = ownershipArray.find(o => o.status === 'active')?.companies?.name?.toLowerCase() || ''
       const zipCodes = territory.zip_codes?.join(' ') || ''
 
       return (
@@ -127,7 +135,14 @@ export function TerritoryAdminTable({ territories }: TerritoryAdminTableProps) {
         </thead>
         <tbody className="divide-y divide-slate-700">
           {filteredTerritories.map((territory) => {
-            const activeOwnership = territory.territory_ownership?.find(o => o.status === 'active')
+            // Ensure territory_ownership is an array
+            const ownershipArray = Array.isArray(territory.territory_ownership) 
+              ? territory.territory_ownership 
+              : territory.territory_ownership 
+                ? [territory.territory_ownership] 
+                : []
+            
+            const activeOwnership = ownershipArray.find(o => o.status === 'active')
             const owner = activeOwnership?.companies?.name
 
             return (
