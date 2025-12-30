@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import type { Tables } from '@/types/database'
 
 export async function GET(request: NextRequest) {
   try {
@@ -13,21 +14,7 @@ export async function GET(request: NextRequest) {
 
     // Use range query to fetch all territories in batches if needed
     // Supabase has a max limit, so we'll fetch in chunks if necessary
-    type Territory = {
-      id: string
-      name: string
-      state: string
-      metro_area: string | null
-      type: string
-      population_est: number
-      zip_codes: string[]
-      adjacent_ids: string[]
-      status: string
-      is_dma?: boolean
-      dma_id?: string | null
-      created_at: string
-    }
-    let allTerritories: Territory[] = []
+    let allTerritories: Tables<'territories'>[] = []
     let offset = 0
     const batchSize = 1000
     let hasMore = true
