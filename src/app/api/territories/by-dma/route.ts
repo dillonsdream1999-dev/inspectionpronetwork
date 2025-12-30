@@ -40,7 +40,7 @@ export async function GET(request: NextRequest) {
       status: isDMAOwned ? 'taken' as const : territory.status
     })) || []
 
-    console.log(`[by-dma API] DMA ${dmaId} is ${isDMAOwned ? 'owned' : 'not owned'}, marking ${territoriesWithStatus.length} territories as ${isDMAOwned ? 'taken' : territory.status}`)
+    console.log(`[by-dma API] DMA ${dmaId} is ${isDMAOwned ? 'owned' : 'not owned'}, marking ${territoriesWithStatus.length} territories as ${isDMAOwned ? 'taken' : 'their original status'}`)
 
     return NextResponse.json({ territories: territoriesWithStatus })
   } catch (error) {
