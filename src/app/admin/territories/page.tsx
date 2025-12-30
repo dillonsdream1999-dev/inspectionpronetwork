@@ -5,6 +5,7 @@ import { MakeAllAvailableButton } from '@/components/admin/MakeAllAvailableButto
 import { MapPin, Plus, Upload } from 'lucide-react'
 import Link from 'next/link'
 import type { Tables } from '@/types/database'
+import type { TerritoryStatus } from '@/types/database'
 
 interface TerritoryWithOwnership extends Tables<'territories'> {
   dma_id?: string | null
@@ -89,13 +90,13 @@ export default async function AdminTerritoriesPage() {
   })
 
   // Update territories to show "taken" if they're linked to an owned DMA
-  const territories = allTerritories.map((territory) => {
+  const territories: TerritoryWithOwnership[] = allTerritories.map((territory) => {
     // If territory has dma_id and that DMA is owned, mark as taken
     if (territory.dma_id && ownedDMAIds.has(territory.dma_id)) {
       const dmaOwnerName = dmaOwnerMap.get(territory.dma_id)
       return {
         ...territory,
-        status: 'taken',
+        status: 'taken' as TerritoryStatus,
         // Add a virtual ownership record to show the DMA owner
         territory_ownership: dmaOwnerName ? [{
           id: `dma-${territory.dma_id}`,
