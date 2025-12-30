@@ -8,20 +8,90 @@ import Link from 'next/link'
 export default async function AdminTerritoriesPage() {
   const supabase = await createClient()
 
-  const { data: territories } = await supabase
-    .from('territories')
+  // Fetch all territories in batches to avoid Supabase limit
+  let allTerritories: any[] = []
+  let offset = 0
+  const batchSize = 1000
+  let hasMore = true
+
+  while (hasMore) {
+    const { data: batch, error } = await supabase
+      .from('territories')
+      .select(`
+        *,
+        territory_ownership (
+          id,
+          company_id,
+          status,
+          price_type,
+          companies (name)
+        )
+      `)
+      .order('state', { ascending: true })
+      .order('name', { ascending: true })
+      .range(offset, offset + batchSize - 1)
+
+    if (error) {
+      console.error('Error fetching territories:', error)
+      break
+    }
+
+    if (batch && batch.length > 0) {
+      allTerritories = [...allTerritories, ...batch]
+      offset += batchSize
+      hasMore = batch.length === batchSize
+    } else {
+      hasMore = false
+    }
+  }
+
+  // Get all active DMA ownerships with company info to check for linked territories
+  const { data: activeDMAOwnerships } = await supabase
+    .from('territory_ownership')
     .select(`
-      *,
-      territory_ownership (
-        id,
-        company_id,
-        status,
-        price_type,
-        companies (name)
-      )
+      territory_id,
+      company_id,
+      companies (name)
     `)
-    .order('state', { ascending: true })
-    .order('name', { ascending: true })
+    .eq('status', 'active')
+
+  // Get all DMA territories that are actively owned
+  const { data: ownedDMAs } = await supabase
+    .from('territories')
+    .select('id')
+    .eq('is_dma', true)
+
+  const ownedDMAIds = new Set(ownedDMAs?.map(d => d.id) || [])
+  
+  // Create a map of DMA ID to owner company name
+  const dmaOwnerMap = new Map<string, string>()
+  activeDMAOwnerships?.forEach((ownership: any) => {
+    if (ownedDMAIds.has(ownership.territory_id)) {
+      const companyName = ownership.companies?.name || 'Unknown'
+      dmaOwnerMap.set(ownership.territory_id, companyName)
+    }
+  })
+
+  // Update territories to show "taken" if they're linked to an owned DMA
+  const territories = allTerritories.map((territory: any) => {
+    // If territory has dma_id and that DMA is owned, mark as taken
+    if (territory.dma_id && ownedDMAIds.has(territory.dma_id)) {
+      const dmaOwnerName = dmaOwnerMap.get(territory.dma_id)
+      return {
+        ...territory,
+        status: 'taken',
+        // Add a virtual ownership record to show the DMA owner
+        territory_ownership: dmaOwnerName ? [{
+          id: `dma-${territory.dma_id}`,
+          company_id: '',
+          status: 'active',
+          price_type: 'base',
+          companies: { name: dmaOwnerName }
+        }] : (territory.territory_ownership || [])
+      }
+    }
+    return territory
+  })
 
   return (
     <div className="p-8">

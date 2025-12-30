@@ -1,9 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import { Edit2, Trash2, Lock, Loader2 } from 'lucide-react'
+import { Edit2, Trash2, Lock, Loader2, Search } from 'lucide-react'
 import type { Tables } from '@/types/database'
 
 interface TerritoryWithOwnership extends Tables<'territories'> {
@@ -23,6 +23,7 @@ interface TerritoryAdminTableProps {
 export function TerritoryAdminTable({ territories }: TerritoryAdminTableProps) {
   const router = useRouter()
   const [deletingId, setDeletingId] = useState<string | null>(null)
+  const [searchQuery, setSearchQuery] = useState('')
 
   const handleDelete = async (territoryId: string) => {
     if (!confirm('Are you sure you want to delete this territory? This action cannot be undone.')) {
@@ -55,9 +56,49 @@ export function TerritoryAdminTable({ territories }: TerritoryAdminTableProps) {
     taken: 'bg-red-500/20 text-red-400'
   }
 
+  // Filter territories based on search query
+  const filteredTerritories = useMemo(() => {
+    if (!searchQuery.trim()) return territories
+
+    const query = searchQuery.toLowerCase()
+    return territories.filter((territory) => {
+      const name = territory.name?.toLowerCase() || ''
+      const state = territory.state?.toLowerCase() || ''
+      const metro = territory.metro_area?.toLowerCase() || ''
+      const owner = territory.territory_ownership?.find(o => o.status === 'active')?.companies?.name?.toLowerCase() || ''
+      const zipCodes = territory.zip_codes?.join(' ') || ''
+
+      return (
+        name.includes(query) ||
+        state.includes(query) ||
+        metro.includes(query) ||
+        owner.includes(query) ||
+        zipCodes.includes(query)
+      )
+    })
+  }, [territories, searchQuery])
+
   return (
-    <div className="overflow-x-auto">
-      <table className="w-full">
+    <div>
+      {/* Search Bar */}
+      <div className="p-4 border-b border-slate-700">
+        <div className="relative max-w-md">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
+          <input
+            type="text"
+            placeholder="Search territories by name, state, metro, owner, or ZIP..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full pl-10 pr-4 py-2 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent"
+          />
+        </div>
+        <p className="text-sm text-slate-400 mt-2">
+          Showing {filteredTerritories.length} of {territories.length} territories
+        </p>
+      </div>
+
+      <div className="overflow-x-auto">
+        <table className="w-full">
         <thead className="bg-slate-700/50">
           <tr>
             <th className="px-6 py-3 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider">
@@ -85,7 +126,7 @@ export function TerritoryAdminTable({ territories }: TerritoryAdminTableProps) {
           </tr>
         </thead>
         <tbody className="divide-y divide-slate-700">
-          {territories.map((territory) => {
+          {filteredTerritories.map((territory) => {
             const activeOwnership = territory.territory_ownership?.find(o => o.status === 'active')
             const owner = activeOwnership?.companies?.name
 
@@ -142,6 +183,7 @@ export function TerritoryAdminTable({ territories }: TerritoryAdminTableProps) {
           })}
         </tbody>
       </table>
+      </div>
     </div>
   )
 }
