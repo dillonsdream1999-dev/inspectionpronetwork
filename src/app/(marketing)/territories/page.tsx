@@ -232,48 +232,52 @@ export default function TerritoriesPage() {
           </a>
         </div>
 
-        {/* View Mode Toggle - Prominent */}
-        {filteredDMAs.length > 0 && (
-          <div className="mb-8 flex items-center justify-center">
-            <div className="bg-gradient-to-r from-brand-50 to-accent-50 border-2 border-brand-200 rounded-xl p-3 shadow-lg max-w-xl w-full">
-              <div className="flex items-center justify-center gap-2 mb-2">
-                <span className="text-sm font-semibold text-slate-700">View Options:</span>
-              </div>
-              <div className="flex rounded-lg border-2 border-brand-300 bg-white p-1 shadow-inner">
-                <button
-                  onClick={() => setViewMode('individual')}
-                  className={`flex-1 px-6 py-3 rounded-md text-sm font-bold transition-all ${
-                    viewMode === 'individual'
-                      ? 'bg-gradient-to-r from-brand-600 to-brand-700 text-white shadow-md scale-[1.02]'
-                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
-                  }`}
-                >
-                  <div className="flex flex-col items-center gap-0.5">
-                    <span>Individual Territories</span>
-                    <span className={`text-xs font-normal ${viewMode === 'individual' ? 'text-brand-100' : 'text-slate-500'}`}>
-                      $250/mo • $150/mo adjacent
-                    </span>
-                  </div>
-                </button>
-                <button
-                  onClick={() => setViewMode('dma')}
-                  className={`flex-1 px-6 py-3 rounded-md text-sm font-bold transition-all ${
-                    viewMode === 'dma'
-                      ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow-md scale-[1.02]'
-                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
-                  }`}
-                >
-                  <div className="flex flex-col items-center gap-0.5">
-                    <span>🏆 Full DMAs</span>
-                    <span className={`text-xs font-normal ${viewMode === 'dma' ? 'text-amber-100' : 'text-slate-500'}`}>
-                      $3,000/mo • Entire Market
-                    </span>
-                  </div>
-                </button>
+        {/* View Mode Toggle - Always Visible */}
+        {(() => {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const hasDMAs = territories.some((t: any) => t.is_dma)
+          return hasDMAs ? (
+            <div className="mb-8 flex items-center justify-center">
+              <div className="bg-gradient-to-r from-brand-50 to-accent-50 border-2 border-brand-200 rounded-xl p-3 shadow-lg max-w-xl w-full">
+                <div className="flex items-center justify-center gap-2 mb-2">
+                  <span className="text-sm font-semibold text-slate-700">View Options:</span>
+                </div>
+                <div className="flex rounded-lg border-2 border-brand-300 bg-white p-1 shadow-inner">
+                  <button
+                    onClick={() => setViewMode('individual')}
+                    className={`flex-1 px-6 py-3 rounded-md text-sm font-bold transition-all ${
+                      viewMode === 'individual'
+                        ? 'bg-gradient-to-r from-brand-600 to-brand-700 text-white shadow-md scale-[1.02]'
+                        : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                    }`}
+                  >
+                    <div className="flex flex-col items-center gap-0.5">
+                      <span>Individual Territories</span>
+                      <span className={`text-xs font-normal ${viewMode === 'individual' ? 'text-brand-100' : 'text-slate-500'}`}>
+                        $250/mo • $150/mo adjacent
+                      </span>
+                    </div>
+                  </button>
+                  <button
+                    onClick={() => setViewMode('dma')}
+                    className={`flex-1 px-6 py-3 rounded-md text-sm font-bold transition-all ${
+                      viewMode === 'dma'
+                        ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow-md scale-[1.02]'
+                        : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                    }`}
+                  >
+                    <div className="flex flex-col items-center gap-0.5">
+                      <span>🏆 Full DMAs</span>
+                      <span className={`text-xs font-normal ${viewMode === 'dma' ? 'text-amber-100' : 'text-slate-500'}`}>
+                        $3,000/mo • Entire Market
+                      </span>
+                    </div>
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          ) : null
+        })()}
 
         {/* Filters */}
         <TerritoryFilters
