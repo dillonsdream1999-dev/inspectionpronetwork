@@ -2,41 +2,27 @@
 
 This guide will help you import the `territories_final_unique.csv` file into Supabase.
 
-## Step 1: Import CSV into Supabase
+## Step 1: Run the SQL Script (Creates the Temp Table)
 
 1. Open your Supabase project dashboard
-2. Go to **Table Editor** → **New Table**
-3. Create a temporary table with the following SQL:
+2. Go to **SQL Editor**
+3. Open the file `sql/import_territories_from_csv.sql`
+4. Copy and paste the **first part** of the script (up to the comment that says "IMPORTANT: At this point...")
+5. Click **Run** to create the `temp_territories_import` table
 
-```sql
-CREATE TABLE temp_territories_import (
-  id UUID,
-  name TEXT,
-  state TEXT,
-  metro_area TEXT,
-  status TEXT,
-  type TEXT,
-  population_est NUMERIC,
-  zip_codes TEXT,
-  is_dma TEXT,
-  dma_id UUID,
-  zip_list TEXT,
-  actual_pop NUMERIC,
-  zip_count_child INTEGER
-);
-```
+## Step 2: Import CSV Data
 
-4. In the Supabase dashboard, go to **Table Editor** → Select `temp_territories_import`
-5. Click **Insert** → **Import data from CSV**
-6. Upload your `territories_final_unique.csv` file
-7. Map the columns correctly (Supabase should auto-detect them)
+1. In the Supabase dashboard, go to **Table Editor** → Select `temp_territories_import`
+2. Click **Insert** → **Import data from CSV**
+3. Upload your `territories_final_unique.csv` file
+4. Map the columns correctly (Supabase should auto-detect them)
+5. Verify the import was successful (check row count)
 
-## Step 2: Run the Import SQL
+## Step 3: Run the Rest of the Import SQL
 
-1. Go to **SQL Editor** in Supabase
-2. Open the file `sql/import_territories_from_csv.sql`
-3. Copy and paste the entire SQL script into the SQL Editor
-4. Click **Run** to execute the script
+1. Go back to **SQL Editor** in Supabase
+2. In the same SQL file, copy and paste the **remaining part** of the script (from "Step 2: Verify CSV data..." onwards)
+3. Click **Run** to execute the import script
 
 The script will:
 - Parse zip codes from strings into arrays

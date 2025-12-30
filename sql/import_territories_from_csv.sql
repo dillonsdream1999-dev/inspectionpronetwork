@@ -1,15 +1,16 @@
 -- SQL Script to Import/Update Territories from CSV
 -- This script handles both DMAs and individual territories with their relationships
 -- 
--- IMPORTANT: Before running this, you need to:
--- 1. Import the CSV into a temporary table in Supabase
--- 2. Run this script to process and update the territories table
---
--- Step 1: Create a temporary table to import the CSV
--- In Supabase SQL Editor, run this first:
+-- IMPORTANT: Before running this script:
+-- 1. Create the temp table (this script will do it)
+-- 2. Import your CSV into the temp_territories_import table using Supabase Table Editor
+-- 3. Run this script to process and update the territories table
 
-/*
-CREATE TEMP TABLE temp_territories_import (
+-- Step 1: Create the temporary table to import the CSV
+-- Drop it first if it exists (in case you need to re-run)
+DROP TABLE IF EXISTS temp_territories_import;
+
+CREATE TABLE temp_territories_import (
   id UUID,
   name TEXT,
   state TEXT,
@@ -24,10 +25,16 @@ CREATE TEMP TABLE temp_territories_import (
   actual_pop NUMERIC,
   zip_count_child INTEGER
 );
-*/
 
--- Step 2: After importing CSV into temp_territories_import, run this script:
+-- IMPORTANT: At this point, you need to import your CSV data into temp_territories_import
+-- Go to Supabase Table Editor → temp_territories_import → Insert → Import data from CSV
+-- After importing the CSV, continue with the rest of this script below
 
+-- Step 2: Verify CSV data was imported (optional check)
+-- Uncomment the line below to see how many rows were imported
+-- SELECT COUNT(*) as imported_rows FROM temp_territories_import;
+
+-- Step 3: Process and import the territories
 -- First, ensure the territories table has the necessary columns
 -- (These should already exist from previous migrations, but checking won't hurt)
 DO $$ 
