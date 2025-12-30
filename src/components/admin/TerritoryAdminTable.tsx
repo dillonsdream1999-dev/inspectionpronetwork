@@ -13,7 +13,7 @@ interface TerritoryWithOwnership extends Tables<'territories'> {
     status: string
     price_type: string
     companies: { name: string } | null
-  }[]
+  }[] | null // Ensure it can be null or an array
 }
 
 interface TerritoryAdminTableProps {
