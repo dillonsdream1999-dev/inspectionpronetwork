@@ -60,33 +60,28 @@ export default async function AdminTerritoriesPage() {
   }
 
   // Get all active DMA ownerships with company info to check for linked territories
+  // Only get ownerships for territories that are actually DMAs
   const { data: activeDMAOwnerships } = await supabase
     .from('territory_ownership')
     .select(`
       territory_id,
       company_id,
-      companies (name)
+      companies (name),
+      territories!inner (is_dma)
     `)
     .eq('status', 'active')
+    .eq('territories.is_dma', true)
 
-  // Get all DMA territories that are actively owned
-  const { data: ownedDMAs } = await supabase
-    .from('territories')
-    .select('id')
-    .eq('is_dma', true)
-
-  const ownedDMAIds = new Set(ownedDMAs?.map(d => d.id) || [])
-  
-  // Create a map of DMA ID to owner company name
-  // Note: Supabase returns companies as an array due to the relationship
+  // Create a set of actively owned DMA IDs and a map of DMA ID to owner company name
+  const ownedDMAIds = new Set<string>()
   const dmaOwnerMap = new Map<string, string>()
+  
   activeDMAOwnerships?.forEach((ownership) => {
-    if (ownedDMAIds.has(ownership.territory_id)) {
-      // Handle companies as array (Supabase relationship)
-      const company = Array.isArray(ownership.companies) ? ownership.companies[0] : ownership.companies
-      const companyName = company?.name || 'Unknown'
-      dmaOwnerMap.set(ownership.territory_id, companyName)
-    }
+    // Handle companies as array (Supabase relationship)
+    const company = Array.isArray(ownership.companies) ? ownership.companies[0] : ownership.companies
+    const companyName = company?.name || 'Unknown'
+    ownedDMAIds.add(ownership.territory_id)
+    dmaOwnerMap.set(ownership.territory_id, companyName)
   })
 
   // Update territories to show "taken" if they're linked to an owned DMA

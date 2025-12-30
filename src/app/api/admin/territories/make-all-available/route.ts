@@ -24,7 +24,7 @@ export async function POST(_request: NextRequest) {
     // Use service client for admin operations
     const serviceClient = await createServiceClient()
 
-    // Get all territories with active ownerships
+    // Get all territories with active ownerships (direct ownership)
     const { data: activeOwnerships } = await serviceClient
       .from('territory_ownership')
       .select('territory_id')
@@ -33,6 +33,36 @@ export async function POST(_request: NextRequest) {
     const takenTerritoryIds = new Set(
       activeOwnerships?.map(o => o.territory_id) || []
     )
+
+    // Get all actively owned DMAs to check for linked territories
+    const { data: activeDMAOwnerships } = await serviceClient
+      .from('territory_ownership')
+      .select(`
+        territory_id,
+        territories!inner (is_dma)
+      `)
+      .eq('status', 'active')
+      .eq('territories.is_dma', true)
+
+    const ownedDMAIds = new Set(
+      activeDMAOwnerships?.map(o => o.territory_id) || []
+    )
+
+    // Get all territories linked to owned DMAs
+    const { data: linkedTerritories } = await serviceClient
+      .from('territories')
+      .select('id')
+      .in('dma_id', Array.from(ownedDMAIds))
+
+    const linkedTerritoryIds = new Set(
+      linkedTerritories?.map(t => t.id) || []
+    )
+
+    // Combine direct ownership and DMA-linked territories
+    const allTakenTerritoryIds = new Set([
+      ...takenTerritoryIds,
+      ...linkedTerritoryIds
+    ])
 
     // Update all territories that don't have active ownerships to 'available'
     // This will update territories with status 'taken', 'held', or any other status
@@ -45,7 +75,7 @@ export async function POST(_request: NextRequest) {
     }
 
     const territoriesToUpdate = allTerritories
-      .filter(t => !takenTerritoryIds.has(t.id))
+      .filter(t => !allTakenTerritoryIds.has(t.id))
       .map(t => t.id)
 
     if (territoriesToUpdate.length === 0) {
