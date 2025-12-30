@@ -13,9 +13,10 @@ export async function GET(request: NextRequest) {
 
     let query = supabase
       .from('territories')
-      .select('*')
+      .select('*', { count: 'exact' })
       .order('state', { ascending: true })
       .order('name', { ascending: true })
+      .limit(10000) // Set a high limit to ensure all territories are returned
 
     if (state) {
       query = query.eq('state', state)
