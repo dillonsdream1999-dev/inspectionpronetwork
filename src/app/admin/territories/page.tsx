@@ -79,30 +79,46 @@ export default async function AdminTerritoriesPage() {
     const territory = territories[0] as { is_dma?: boolean } | undefined
     
     // If this ownership is for a DMA, add it to our sets
-    if (territory?.is_dma) {
+    if (territory?.is_dma === true) {
       // Handle companies as array (Supabase relationship)
       const company = Array.isArray(ownership.companies) ? ownership.companies[0] : ownership.companies
       const companyName = company?.name || 'Unknown'
       ownedDMAIds.add(ownership.territory_id)
       dmaOwnerMap.set(ownership.territory_id, companyName)
-      console.log('Admin: Found owned DMA:', ownership.territory_id, 'by', companyName)
+      console.log('[Admin] Found owned DMA:', ownership.territory_id, 'by', companyName, 'is_dma:', territory.is_dma)
     }
   })
 
-  console.log('Admin: Owned DMA IDs:', Array.from(ownedDMAIds))
+  console.log('[Admin] Owned DMA IDs:', Array.from(ownedDMAIds))
+  console.log('[Admin] Total territories:', allTerritories.length)
+  
+  // Count territories with dma_id
+  const territoriesWithDMA = allTerritories.filter(t => t.dma_id)
+  console.log('[Admin] Territories with dma_id:', territoriesWithDMA.length)
+  if (territoriesWithDMA.length > 0) {
+    console.log('[Admin] Sample territory with dma_id:', {
+      id: territoriesWithDMA[0].id,
+      name: territoriesWithDMA[0].name,
+      dma_id: territoriesWithDMA[0].dma_id
+    })
+  }
 
   // Update territories to show "taken" if they're linked to an owned DMA
+  let markedCount = 0
   const territories: TerritoryWithOwnership[] = allTerritories.map((territory) => {
     // If territory has dma_id and that DMA is owned, mark as taken
-    // Now that dma_id is in the type, we can access it directly
     if (territory.dma_id) {
       // Convert both to strings for comparison (UUIDs might be different types)
-      const dmaIdStr = String(territory.dma_id)
-      const isLinkedToOwnedDMA = Array.from(ownedDMAIds).some(ownedId => String(ownedId) === dmaIdStr)
+      const dmaIdStr = String(territory.dma_id).toLowerCase().trim()
+      const isLinkedToOwnedDMA = Array.from(ownedDMAIds).some(ownedId => {
+        const ownedIdStr = String(ownedId).toLowerCase().trim()
+        return ownedIdStr === dmaIdStr
+      })
       
       if (isLinkedToOwnedDMA) {
-        const dmaOwnerName = dmaOwnerMap.get(dmaIdStr) || dmaOwnerMap.get(Array.from(ownedDMAIds).find(ownedId => String(ownedId) === dmaIdStr) || '')
-        console.log(`Admin: Marking territory ${territory.id} (${territory.name}) as taken - linked to DMA ${dmaIdStr}`)
+        markedCount++
+        const dmaOwnerName = dmaOwnerMap.get(territory.dma_id) || dmaOwnerMap.get(Array.from(ownedDMAIds).find(ownedId => String(ownedId).toLowerCase().trim() === dmaIdStr) || '')
+        console.log(`[Admin] Marking territory ${territory.id} (${territory.name}) as taken - linked to DMA ${dmaIdStr}`)
         return {
           ...territory,
           status: 'taken' as TerritoryStatus,
@@ -119,6 +135,8 @@ export default async function AdminTerritoriesPage() {
     }
     return territory
   })
+  
+  console.log(`[Admin] Marked ${markedCount} territories as taken due to DMA ownership`)
 
   return (
     <div className="p-8">

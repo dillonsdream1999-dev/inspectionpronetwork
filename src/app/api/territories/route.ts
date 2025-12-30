@@ -75,25 +75,41 @@ export async function GET(request: NextRequest) {
       const territory = territories[0] as { is_dma?: boolean } | undefined
       
       // If this ownership is for a DMA, add it to our set
-      if (territory?.is_dma) {
+      if (territory?.is_dma === true) {
         ownedDMAIds.add(ownership.territory_id)
-        console.log('Found owned DMA:', ownership.territory_id)
+        console.log('[Territories API] Found owned DMA:', ownership.territory_id, 'is_dma:', territory.is_dma)
       }
     })
 
-    console.log('Owned DMA IDs:', Array.from(ownedDMAIds))
+    console.log('[Territories API] Owned DMA IDs:', Array.from(ownedDMAIds))
+    console.log('[Territories API] Total territories:', allTerritories.length)
+    
+    // Count territories with dma_id
+    const territoriesWithDMA = allTerritories.filter(t => t.dma_id)
+    console.log('[Territories API] Territories with dma_id:', territoriesWithDMA.length)
+    if (territoriesWithDMA.length > 0) {
+      console.log('[Territories API] Sample territory with dma_id:', {
+        id: territoriesWithDMA[0].id,
+        name: territoriesWithDMA[0].name,
+        dma_id: territoriesWithDMA[0].dma_id
+      })
+    }
 
     // Update territories to show "taken" if they're linked to an owned DMA
+    let markedCount = 0
     const territories = allTerritories.map((territory) => {
       // Check if this territory is linked to an owned DMA
-      // Now that dma_id is in the type, we can access it directly
       if (territory.dma_id) {
         // Convert both to strings for comparison (UUIDs might be different types)
-        const dmaIdStr = String(territory.dma_id)
-        const isLinkedToOwnedDMA = Array.from(ownedDMAIds).some(ownedId => String(ownedId) === dmaIdStr)
+        const dmaIdStr = String(territory.dma_id).toLowerCase().trim()
+        const isLinkedToOwnedDMA = Array.from(ownedDMAIds).some(ownedId => {
+          const ownedIdStr = String(ownedId).toLowerCase().trim()
+          return ownedIdStr === dmaIdStr
+        })
         
         if (isLinkedToOwnedDMA) {
-          console.log(`Marking territory ${territory.id} (${territory.name}) as taken - linked to DMA ${dmaIdStr}`)
+          markedCount++
+          console.log(`[Territories API] Marking territory ${territory.id} (${territory.name}) as taken - linked to DMA ${dmaIdStr}`)
           return {
             ...territory,
             status: 'taken' as const
@@ -102,6 +118,8 @@ export async function GET(request: NextRequest) {
       }
       return territory
     })
+    
+    console.log(`[Territories API] Marked ${markedCount} territories as taken due to DMA ownership`)
 
     // Clean up expired holds
     const { data: expiredHolds } = await supabase
