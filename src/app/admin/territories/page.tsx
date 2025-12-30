@@ -76,12 +76,6 @@ export default async function AdminTerritoriesPage() {
   
   // Create a map of DMA ID to owner company name
   // Note: Supabase returns companies as an array due to the relationship
-  interface DMAOwnership {
-    territory_id: string
-    company_id: string
-    companies: { name: string }[] | null
-  }
-  
   const dmaOwnerMap = new Map<string, string>()
   activeDMAOwnerships?.forEach((ownership) => {
     if (ownedDMAIds.has(ownership.territory_id)) {
