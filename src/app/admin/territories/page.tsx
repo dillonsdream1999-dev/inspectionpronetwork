@@ -8,15 +8,14 @@ import type { Tables } from '@/types/database'
 import type { TerritoryStatus } from '@/types/database'
 
 interface TerritoryWithOwnership extends Tables<'territories'> {
-  dma_id?: string | null
-  is_dma?: boolean
+  // dma_id and is_dma are now in the base Tables<'territories'> type, so we don't need to redefine them
   territory_ownership: {
     id: string
     company_id: string
     status: string
     price_type: string
     companies: { name: string } | null
-  }[]
+  }[] | null // Ensure it can be null or an array
 }
 
 export default async function AdminTerritoriesPage() {
