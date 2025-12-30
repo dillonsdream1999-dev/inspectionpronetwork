@@ -7,6 +7,8 @@ import Link from 'next/link'
 import type { Tables } from '@/types/database'
 
 interface TerritoryWithOwnership extends Tables<'territories'> {
+  dma_id?: string | null
+  is_dma?: boolean
   territory_ownership: {
     id: string
     company_id: string
