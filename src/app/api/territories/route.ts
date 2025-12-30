@@ -58,19 +58,27 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    // Get all actively owned DMAs to check for linked territories
-    const { data: activeDMAOwnerships } = await supabase
+    // Get all active ownerships and filter to only DMAs
+    const { data: allActiveOwnerships } = await supabase
       .from('territory_ownership')
       .select(`
         territory_id,
-        territories!inner (is_dma)
+        territories (is_dma)
       `)
       .eq('status', 'active')
-      .eq('territories.is_dma', true)
 
-    const ownedDMAIds = new Set(
-      activeDMAOwnerships?.map(o => o.territory_id) || []
-    )
+    // Filter to only get DMAs
+    const ownedDMAIds = new Set<string>()
+    allActiveOwnerships?.forEach((ownership) => {
+      // Handle territories as array or single object
+      const territories = Array.isArray(ownership.territories) ? ownership.territories : ownership.territories ? [ownership.territories] : []
+      const territory = territories[0] as { is_dma?: boolean } | undefined
+      
+      // If this ownership is for a DMA, add it to our set
+      if (territory?.is_dma) {
+        ownedDMAIds.add(ownership.territory_id)
+      }
+    })
 
     // Update territories to show "taken" if they're linked to an owned DMA
     const territories = allTerritories.map((territory) => {

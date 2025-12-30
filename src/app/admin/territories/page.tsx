@@ -59,29 +59,34 @@ export default async function AdminTerritoriesPage() {
     }
   }
 
-  // Get all active DMA ownerships with company info to check for linked territories
-  // Only get ownerships for territories that are actually DMAs
-  const { data: activeDMAOwnerships } = await supabase
+  // Get all active ownerships with company info
+  const { data: allActiveOwnerships } = await supabase
     .from('territory_ownership')
     .select(`
       territory_id,
       company_id,
       companies (name),
-      territories!inner (is_dma)
+      territories (is_dma)
     `)
     .eq('status', 'active')
-    .eq('territories.is_dma', true)
 
-  // Create a set of actively owned DMA IDs and a map of DMA ID to owner company name
+  // Filter to only get DMAs and create maps
   const ownedDMAIds = new Set<string>()
   const dmaOwnerMap = new Map<string, string>()
   
-  activeDMAOwnerships?.forEach((ownership) => {
-    // Handle companies as array (Supabase relationship)
-    const company = Array.isArray(ownership.companies) ? ownership.companies[0] : ownership.companies
-    const companyName = company?.name || 'Unknown'
-    ownedDMAIds.add(ownership.territory_id)
-    dmaOwnerMap.set(ownership.territory_id, companyName)
+  allActiveOwnerships?.forEach((ownership) => {
+    // Handle territories as array or single object
+    const territories = Array.isArray(ownership.territories) ? ownership.territories : ownership.territories ? [ownership.territories] : []
+    const territory = territories[0] as { is_dma?: boolean } | undefined
+    
+    // If this ownership is for a DMA, add it to our sets
+    if (territory?.is_dma) {
+      // Handle companies as array (Supabase relationship)
+      const company = Array.isArray(ownership.companies) ? ownership.companies[0] : ownership.companies
+      const companyName = company?.name || 'Unknown'
+      ownedDMAIds.add(ownership.territory_id)
+      dmaOwnerMap.set(ownership.territory_id, companyName)
+    }
   })
 
   // Update territories to show "taken" if they're linked to an owned DMA
