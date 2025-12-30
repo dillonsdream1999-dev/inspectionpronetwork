@@ -4,12 +4,23 @@ import { TerritoryUploader } from '@/components/admin/TerritoryUploader'
 import { MakeAllAvailableButton } from '@/components/admin/MakeAllAvailableButton'
 import { MapPin, Plus, Upload } from 'lucide-react'
 import Link from 'next/link'
+import type { Tables } from '@/types/database'
+
+interface TerritoryWithOwnership extends Tables<'territories'> {
+  territory_ownership: {
+    id: string
+    company_id: string
+    status: string
+    price_type: string
+    companies: { name: string } | null
+  }[]
+}
 
 export default async function AdminTerritoriesPage() {
   const supabase = await createClient()
 
   // Fetch all territories in batches to avoid Supabase limit
-  let allTerritories: any[] = []
+  let allTerritories: TerritoryWithOwnership[] = []
   let offset = 0
   const batchSize = 1000
   let hasMore = true
@@ -64,8 +75,14 @@ export default async function AdminTerritoriesPage() {
   const ownedDMAIds = new Set(ownedDMAs?.map(d => d.id) || [])
   
   // Create a map of DMA ID to owner company name
+  interface DMAOwnership {
+    territory_id: string
+    company_id: string
+    companies: { name: string } | null
+  }
+  
   const dmaOwnerMap = new Map<string, string>()
-  activeDMAOwnerships?.forEach((ownership: any) => {
+  activeDMAOwnerships?.forEach((ownership: DMAOwnership) => {
     if (ownedDMAIds.has(ownership.territory_id)) {
       const companyName = ownership.companies?.name || 'Unknown'
       dmaOwnerMap.set(ownership.territory_id, companyName)
@@ -73,7 +90,7 @@ export default async function AdminTerritoriesPage() {
   })
 
   // Update territories to show "taken" if they're linked to an owned DMA
-  const territories = allTerritories.map((territory: any) => {
+  const territories = allTerritories.map((territory) => {
     // If territory has dma_id and that DMA is owned, mark as taken
     if (territory.dma_id && ownedDMAIds.has(territory.dma_id)) {
       const dmaOwnerName = dmaOwnerMap.get(territory.dma_id)
