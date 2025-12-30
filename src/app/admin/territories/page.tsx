@@ -95,11 +95,10 @@ export default async function AdminTerritoriesPage() {
   // Update territories to show "taken" if they're linked to an owned DMA
   const territories: TerritoryWithOwnership[] = allTerritories.map((territory) => {
     // If territory has dma_id and that DMA is owned, mark as taken
-    const territoryWithDMA = territory as TerritoryWithOwnership & { dma_id?: string | null }
-    
-    if (territoryWithDMA.dma_id) {
+    // Now that dma_id is in the type, we can access it directly
+    if (territory.dma_id) {
       // Convert both to strings for comparison (UUIDs might be different types)
-      const dmaIdStr = String(territoryWithDMA.dma_id)
+      const dmaIdStr = String(territory.dma_id)
       const isLinkedToOwnedDMA = Array.from(ownedDMAIds).some(ownedId => String(ownedId) === dmaIdStr)
       
       if (isLinkedToOwnedDMA) {
@@ -110,7 +109,7 @@ export default async function AdminTerritoriesPage() {
           status: 'taken' as TerritoryStatus,
           // Add a virtual ownership record to show the DMA owner
           territory_ownership: dmaOwnerName ? [{
-            id: `dma-${territoryWithDMA.dma_id}`,
+            id: `dma-${territory.dma_id}`,
             company_id: '',
             status: 'active',
             price_type: 'base',

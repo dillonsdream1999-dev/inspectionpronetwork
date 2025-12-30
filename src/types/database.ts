@@ -80,6 +80,8 @@ export interface Database {
           zip_codes: string[]
           adjacent_ids: string[]
           status: TerritoryStatus
+          is_dma: boolean | null
+          dma_id: string | null
           created_at: string
         }
         Insert: {
@@ -92,6 +94,8 @@ export interface Database {
           zip_codes: string[]
           adjacent_ids?: string[]
           status?: TerritoryStatus
+          is_dma?: boolean | null
+          dma_id?: string | null
           created_at?: string
         }
         Update: {
@@ -104,6 +108,8 @@ export interface Database {
           zip_codes?: string[]
           adjacent_ids?: string[]
           status?: TerritoryStatus
+          is_dma?: boolean | null
+          dma_id?: string | null
           created_at?: string
         }
       }

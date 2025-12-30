@@ -85,14 +85,11 @@ export async function GET(request: NextRequest) {
 
     // Update territories to show "taken" if they're linked to an owned DMA
     const territories = allTerritories.map((territory) => {
-      // If territory has dma_id and that DMA is owned, mark as taken
-      // Type assertion needed because dma_id may not be in the base type
-      const territoryWithDMA = territory as Tables<'territories'> & { dma_id?: string | null; is_dma?: boolean }
-      
       // Check if this territory is linked to an owned DMA
-      if (territoryWithDMA.dma_id) {
+      // Now that dma_id is in the type, we can access it directly
+      if (territory.dma_id) {
         // Convert both to strings for comparison (UUIDs might be different types)
-        const dmaIdStr = String(territoryWithDMA.dma_id)
+        const dmaIdStr = String(territory.dma_id)
         const isLinkedToOwnedDMA = Array.from(ownedDMAIds).some(ownedId => String(ownedId) === dmaIdStr)
         
         if (isLinkedToOwnedDMA) {
