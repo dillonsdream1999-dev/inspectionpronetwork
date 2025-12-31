@@ -140,6 +140,16 @@ export default function TerritoriesPage() {
     fetchTerritories()
   }, [fetchTerritories, fetchAdjacentEligible])
 
+  // Debug: Log filtered territories when ZIP search is active
+  useEffect(() => {
+    if (zipSearch && territories.length > 0) {
+      const zipMatches = filteredTerritories
+      console.log(`[Client] ZIP search "${zipSearch}" found ${zipMatches.length} territories:`, 
+        zipMatches.map(t => ({ name: t.name, status: t.status, dma_id: (t as any).dma_id }))
+      )
+    }
+  }, [zipSearch, filteredTerritories, territories.length])
+
   const handleClaimTerritory = async (territoryId: string) => {
     // Allow direct checkout without login (guest checkout)
     setIsClaimingTerritory(territoryId)
