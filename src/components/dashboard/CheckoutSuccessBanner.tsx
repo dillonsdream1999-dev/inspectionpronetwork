@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import { CheckCircle2, X, MapPin } from 'lucide-react'
 import Link from 'next/link'
 
@@ -27,7 +27,7 @@ export function CheckoutSuccessBanner() {
       
       return () => clearTimeout(timer)
     }
-  }, [checkoutStatus, router])
+  }, [checkoutStatus])
 
   if (!isVisible || checkoutStatus !== 'success') {
     return null
