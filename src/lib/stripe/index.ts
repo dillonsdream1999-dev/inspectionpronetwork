@@ -34,6 +34,7 @@ export const stripe = {
 export const PRICES = {
   BASE: process.env.STRIPE_PRICE_BASE_250!,
   ADJACENT: process.env.STRIPE_PRICE_ADJACENT_220!,
+  DMA: process.env.STRIPE_PRICE_DMA_3000 || process.env.STRIPE_PRICE_BASE_250!, // Fallback to base if DMA price not set
 }
 
 export async function createCheckoutSession({

@@ -53,20 +53,40 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Check if eligible for adjacent discount
-    const { data: ownedTerritories } = await supabase
-      .from('territory_ownership')
-      .select('territory_id')
-      .eq('company_id', company.id)
-      .eq('status', 'active')
+    // Check if territory is a DMA
+    const isDMA = (territory as { is_dma?: boolean }).is_dma === true
 
-    let isAdjacentEligible = false
-    if (ownedTerritories && ownedTerritories.length > 0) {
-      const ownedIds = ownedTerritories.map((t: { territory_id: string }) => t.territory_id)
-      isAdjacentEligible = territory.adjacent_ids?.some((id: string) => ownedIds.includes(id)) || false
+    // Determine price based on territory type and eligibility
+    let priceId: string
+    if (isDMA) {
+      // DMAs are always $3000/month
+      if (!PRICES.DMA) {
+        console.error('STRIPE_PRICE_DMA_3000 is not set')
+        return NextResponse.json({ error: 'DMA pricing not configured. Please contact support.' }, { status: 500 })
+      }
+      priceId = PRICES.DMA
+    } else {
+      // Check if eligible for adjacent discount
+      const { data: ownedTerritories } = await supabase
+        .from('territory_ownership')
+        .select('territory_id')
+        .eq('company_id', company.id)
+        .eq('status', 'active')
+
+      let isAdjacentEligible = false
+      if (ownedTerritories && ownedTerritories.length > 0) {
+        const ownedIds = ownedTerritories.map((t: { territory_id: string }) => t.territory_id)
+        isAdjacentEligible = territory.adjacent_ids?.some((id: string) => ownedIds.includes(id)) || false
+      }
+
+      const selectedPrice = isAdjacentEligible ? PRICES.ADJACENT : PRICES.BASE
+      if (!selectedPrice) {
+        const missingPrice = isAdjacentEligible ? 'STRIPE_PRICE_ADJACENT_220' : 'STRIPE_PRICE_BASE_250'
+        console.error(`${missingPrice} is not set`)
+        return NextResponse.json({ error: 'Pricing not configured. Please contact support.' }, { status: 500 })
+      }
+      priceId = selectedPrice
     }
-
-    const priceId = isAdjacentEligible ? PRICES.ADJACENT : PRICES.BASE
 
     // Create a hold on the territory
     const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString() // 10 minutes
@@ -105,14 +125,29 @@ export async function POST(request: NextRequest) {
       .limit(1)
       .single()
 
+    // Validate price ID before creating checkout session
+    if (!priceId || priceId === 'undefined') {
+      console.error('Invalid price ID:', priceId)
+      return NextResponse.json({ error: 'Invalid pricing configuration. Please contact support.' }, { status: 500 })
+    }
+
     // Create Stripe checkout session
-    const session = await createCheckoutSession({
-      companyId: company.id,
-      territoryId,
-      priceId,
-      customerEmail: company.billing_email || user.email!,
-      stripeCustomerId: existingOwnership?.stripe_customer_id,
-    })
+    let session
+    try {
+      session = await createCheckoutSession({
+        companyId: company.id,
+        territoryId,
+        priceId,
+        customerEmail: company.billing_email || user.email!,
+        stripeCustomerId: existingOwnership?.stripe_customer_id,
+      })
+    } catch (stripeError: unknown) {
+      console.error('Stripe API error:', stripeError)
+      const errorMessage = stripeError instanceof Error ? stripeError.message : 'Unknown Stripe error'
+      return NextResponse.json({ 
+        error: `Failed to create checkout session: ${errorMessage}` 
+      }, { status: 500 })
+    }
 
     // Update hold with checkout session ID
     await supabase
@@ -123,7 +158,13 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ url: session.url })
   } catch (error) {
     console.error('Checkout error:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+    const errorDetails = error instanceof Error ? error.stack : String(error)
+    console.error('Error details:', errorDetails)
+    return NextResponse.json({ 
+      error: 'Internal server error',
+      message: process.env.NODE_ENV === 'development' ? errorMessage : undefined
+    }, { status: 500 })
   }
 }
 
