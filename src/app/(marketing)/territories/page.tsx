@@ -88,10 +88,20 @@ export default function TerritoriesPage() {
       const territoriesData = data.territories || []
       setTerritories(territoriesData)
       
-      // Debug: Log DMA count
+      // Debug: Log DMA count and status breakdown
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const dmaCount = territoriesData.filter((t: any) => t.is_dma).length
-      console.log('Total territories:', territoriesData.length, 'DMAs:', dmaCount)
+      const takenCount = territoriesData.filter((t: any) => t.status === 'taken').length
+      const territoriesWithDmaId = territoriesData.filter((t: any) => t.dma_id)
+      console.log('Total territories:', territoriesData.length, 'DMAs:', dmaCount, 'Taken:', takenCount)
+      console.log('Territories with dma_id:', territoriesWithDmaId.length)
+      if (territoriesWithDmaId.length > 0) {
+        console.log('Sample territory with dma_id:', {
+          name: territoriesWithDmaId[0].name,
+          status: territoriesWithDmaId[0].status,
+          dma_id: territoriesWithDmaId[0].dma_id
+        })
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load territories')
     } finally {
