@@ -91,7 +91,11 @@ export async function GET(request: NextRequest) {
 
     console.log('[Territories API] Owned DMA IDs:', Array.from(ownedDMAIds))
     console.log('[Territories API] Total active ownerships:', ownedTerritoryIds.size)
-    console.log('[Territories API] Total territories:', allTerritories.length)
+    console.log('[Territories API] Total territories fetched:', allTerritories.length)
+    
+    if (ownedDMAIds.size === 0) {
+      console.warn('[Territories API] WARNING: No owned DMAs found! Check if any DMA territories have active ownership records.')
+    }
     
     // Count territories with dma_id
     const territoriesWithDMA = allTerritories.filter(t => t.dma_id)

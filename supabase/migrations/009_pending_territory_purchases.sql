@@ -26,3 +26,4 @@ CREATE POLICY "Service role can manage all pending purchases"
   ON pending_territory_purchases FOR ALL
   USING (true);
 
+

@@ -140,9 +140,24 @@ export default function TerritoriesPage() {
   useEffect(() => {
     if (zipSearch && territories.length > 0) {
       const zipMatches = filteredTerritories
-      console.log(`[Client] ZIP search "${zipSearch}" found ${zipMatches.length} territories:`, 
-        zipMatches.map(t => ({ name: t.name, status: t.status, dma_id: t.dma_id }))
-      )
+      console.log(`[Client] ZIP search "${zipSearch}" found ${zipMatches.length} territories`)
+      if (zipMatches.length > 0 && zipMatches.length <= 10) {
+        // Only log full details if <= 10 results to avoid console spam
+        console.table(zipMatches.map(t => ({ 
+          name: t.name, 
+          state: t.state,
+          status: t.status, 
+          dma_id: t.dma_id,
+          is_dma: t.is_dma
+        })))
+      } else if (zipMatches.length > 10) {
+        // Log first few for debugging
+        console.log('First 5 results:', zipMatches.slice(0, 5).map(t => ({ 
+          name: t.name, 
+          status: t.status, 
+          dma_id: t.dma_id 
+        })))
+      }
     }
   }, [zipSearch, filteredTerritories, territories.length])
 
