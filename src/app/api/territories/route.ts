@@ -68,23 +68,30 @@ export async function GET(request: NextRequest) {
       .select('territory_id')
       .eq('status', 'active')
 
+    console.log('[Territories API] Total active ownership records:', allActiveOwnerships?.length || 0)
+
     // Get the territory IDs from active ownerships
     const ownedTerritoryIds = new Set<string>(
       allActiveOwnerships?.map(o => o.territory_id) || []
     )
+
+    console.log('[Territories API] Unique owned territory IDs:', ownedTerritoryIds.size)
 
     // Now fetch territory details for these owned territories to find which ones are DMAs
     const ownedDMAIds = new Set<string>()
     if (ownedTerritoryIds.size > 0) {
       const { data: ownedTerritories } = await serviceClient
         .from('territories')
-        .select('id, is_dma')
+        .select('id, name, is_dma')
         .in('id', Array.from(ownedTerritoryIds))
 
+      console.log('[Territories API] Fetched territory details for owned territories:', ownedTerritories?.length || 0)
+
       ownedTerritories?.forEach((territory) => {
+        console.log(`[Territories API] Owned territory: ${territory.id} (${territory.name}), is_dma: ${territory.is_dma} (type: ${typeof territory.is_dma})`)
         if (territory.is_dma === true) {
           ownedDMAIds.add(territory.id)
-          console.log('[Territories API] Found owned DMA:', territory.id)
+          console.log('[Territories API] Found owned DMA:', territory.id, territory.name)
         }
       })
     }
