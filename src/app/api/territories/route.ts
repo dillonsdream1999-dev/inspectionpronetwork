@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
     while (hasMore) {
       let query = supabase
         .from('territories')
-        .select('*', { count: 'exact' })
+        .select('*, is_dma, dma_id', { count: 'exact' }) // Explicitly select is_dma and dma_id
         .order('state', { ascending: true })
         .order('name', { ascending: true })
         .range(offset, offset + batchSize - 1)
