@@ -95,6 +95,19 @@ export async function GET(request: NextRequest) {
         }
       })
     }
+    
+    // Also check for DMAs that have status='taken' directly (in case they don't have ownership records)
+    // This handles cases where DMAs are marked as taken in the territories table
+    const { data: takenDMAs } = await serviceClient
+      .from('territories')
+      .select('id, name')
+      .eq('is_dma', true)
+      .eq('status', 'taken')
+    
+    takenDMAs?.forEach((dma) => {
+      ownedDMAIds.add(dma.id)
+      console.log('[Territories API] Found DMA with status=taken:', dma.id, dma.name)
+    })
 
     console.log('[Territories API] Owned DMA IDs:', Array.from(ownedDMAIds))
     console.log('[Territories API] Total active ownerships:', ownedTerritoryIds.size)
