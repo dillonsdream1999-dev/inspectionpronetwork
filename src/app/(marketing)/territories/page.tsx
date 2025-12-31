@@ -193,11 +193,39 @@ export default function TerritoriesPage() {
     'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY', 'DC'
   ]
 
-  return (
-    <div className="py-12">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="text-center mb-12">
+      return (
+        <div className="py-12">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            {/* Setup Complete Banner */}
+            {showSetupComplete && (
+              <div className="mb-8 bg-gradient-to-r from-brand-50 to-accent-50 border-2 border-brand-200 rounded-xl p-4 shadow-lg animate-in slide-in-from-top duration-500">
+                <div className="flex items-start gap-4">
+                  <div className="flex-shrink-0">
+                    <div className="w-10 h-10 bg-brand-500 rounded-full flex items-center justify-center">
+                      <CheckCircle2 className="w-6 h-6 text-white" />
+                    </div>
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-lg font-bold text-brand-900 mb-1">
+                      Profile Complete! 🎉
+                    </h3>
+                    <p className="text-brand-800">
+                      Your profile is set up. Browse available territories below and start receiving leads!
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => setShowSetupComplete(false)}
+                    className="flex-shrink-0 text-brand-600 hover:text-brand-800 transition-colors"
+                    aria-label="Dismiss"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Header */}
+            <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 bg-brand-50 text-brand-700 rounded-full px-4 py-2 mb-4">
             <MapPin className="w-4 h-4" />
             <span className="text-sm font-medium">Browse Available Territories</span>

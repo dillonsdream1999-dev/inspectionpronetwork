@@ -11,6 +11,7 @@ import {
   Clock,
   Phone
 } from 'lucide-react'
+import { CheckoutSuccessBanner } from '@/components/dashboard/CheckoutSuccessBanner'
 
 export default async function DashboardPage() {
   const supabase = await createClient()
@@ -72,6 +73,9 @@ export default async function DashboardPage() {
   return (
     <div className="py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Checkout Success Banner */}
+        <CheckoutSuccessBanner />
+        
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-2xl font-bold text-slate-900">Dashboard</h1>

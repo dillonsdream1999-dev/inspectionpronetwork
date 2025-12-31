@@ -110,7 +110,10 @@ function SettingsContent() {
       setSuccess(true)
       
       if (isSetup) {
-        router.push('/dashboard')
+        // Redirect to territories page after completing setup
+        setTimeout(() => {
+          router.push('/territories?setup=complete')
+        }, 1500) // Show success message briefly before redirect
       } else {
         router.refresh()
       }
