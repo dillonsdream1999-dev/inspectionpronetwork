@@ -25,10 +25,12 @@ ORDER BY dma.name;
 DO $$
 DECLARE
   dma_record RECORD;
-  territory_record RECORD;
   primary_name TEXT;
   linked_count INTEGER;
   total_linked INTEGER := 0;
+  second_city TEXT;
+  third_city TEXT;
+  full_name TEXT;
 BEGIN
   -- Loop through all DMAs
   FOR dma_record IN 
