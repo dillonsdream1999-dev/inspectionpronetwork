@@ -37,6 +37,29 @@ export const PRICES = {
   DMA: process.env.STRIPE_PRICE_DMA_3000 || process.env.STRIPE_PRICE_BASE_250!, // Fallback to base if DMA price not set
 }
 
+// Helper function to build checkout URLs with proper validation
+function getCheckoutUrl(path: string, territoryId: string, status: string): string {
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL
+  
+  if (!baseUrl) {
+    throw new Error('NEXT_PUBLIC_APP_URL environment variable is not set')
+  }
+  
+  // Ensure URL has a scheme
+  let url = baseUrl.trim()
+  if (!url.startsWith('http://') && !url.startsWith('https://')) {
+    // Default to https if no scheme provided
+    url = `https://${url}`
+  }
+  
+  // Remove trailing slash if present
+  url = url.replace(/\/$/, '')
+  
+  // Build the full URL
+  const fullPath = path.startsWith('/') ? path : `/${path}`
+  return `${url}${fullPath}?checkout=${status}&territory=${territoryId}`
+}
+
 export async function createCheckoutSession({
   companyId,
   territoryId,
@@ -72,8 +95,8 @@ export async function createCheckoutSession({
         territory_id: territoryId,
       },
     },
-    success_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard?checkout=success&territory=${territoryId}`,
-    cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/territories?checkout=canceled&territory=${territoryId}`,
+    success_url: getCheckoutUrl('/dashboard', territoryId, 'success'),
+    cancel_url: getCheckoutUrl('/territories', territoryId, 'canceled'),
     expires_at: Math.floor(Date.now() / 1000) + 60 * 30, // 30 minutes
   })
 
