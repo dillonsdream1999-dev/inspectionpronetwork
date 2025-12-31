@@ -117,13 +117,19 @@ export async function POST(request: NextRequest) {
       .update({ status: 'held' })
       .eq('id', territoryId)
 
-    // Get or check for existing Stripe customer
+    // Get or check for existing Stripe customer (exclude 'manual' IDs from admin assignments)
     const { data: existingOwnership } = await supabase
       .from('territory_ownership')
       .select('stripe_customer_id')
       .eq('company_id', company.id)
+      .neq('stripe_customer_id', 'manual') // Exclude manual assignments
       .limit(1)
       .single()
+    
+    // Only use customer ID if it's a valid Stripe customer ID (starts with 'cus_')
+    const validCustomerId = existingOwnership?.stripe_customer_id?.startsWith('cus_') 
+      ? existingOwnership.stripe_customer_id 
+      : undefined
 
     // Validate price ID before creating checkout session
     if (!priceId || priceId === 'undefined') {
@@ -139,7 +145,7 @@ export async function POST(request: NextRequest) {
         territoryId,
         priceId,
         customerEmail: company.billing_email || user.email!,
-        stripeCustomerId: existingOwnership?.stripe_customer_id,
+        stripeCustomerId: validCustomerId, // Only use valid Stripe customer IDs
       })
     } catch (stripeError: unknown) {
       console.error('Stripe API error:', stripeError)
