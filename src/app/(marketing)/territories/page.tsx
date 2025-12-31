@@ -133,11 +133,7 @@ export default function TerritoriesPage() {
   }, [fetchTerritories, fetchAdjacentEligible])
 
   const handleClaimTerritory = async (territoryId: string) => {
-    if (!isLoggedIn) {
-      router.push(`/login?redirect=/territories&territory=${territoryId}`)
-      return
-    }
-
+    // Allow direct checkout without login (guest checkout)
     setIsClaimingTerritory(territoryId)
 
     try {

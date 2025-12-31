@@ -17,8 +17,15 @@ export async function GET(request: Request) {
         return NextResponse.redirect(`${origin}/reset-password`)
       }
       
-      // Otherwise, redirect to the specified next URL or dashboard
-      const redirectTo = next ?? '/dashboard'
+      // Check if user has a company - if not, redirect to settings setup
+      const { data: company } = await supabase
+        .from('companies')
+        .select('id')
+        .eq('owner_user_id', (await supabase.auth.getUser()).data.user?.id)
+        .single()
+      
+      // If no company, redirect to settings setup (user needs to complete profile)
+      const redirectTo = next ?? (company ? '/dashboard' : '/dashboard/settings?setup=true')
       return NextResponse.redirect(`${origin}${redirectTo}`)
     }
   }

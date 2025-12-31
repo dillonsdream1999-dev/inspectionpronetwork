@@ -93,7 +93,7 @@ function SettingsContent() {
         if (updateError) throw updateError
       } else {
         // Create new company
-        const { error: insertError } = await supabase
+        const { data: newCompany, error: insertError } = await supabase
           .from('companies')
           .insert({
             owner_user_id: user.id,
@@ -103,8 +103,34 @@ function SettingsContent() {
             billing_email: formData.billing_email || null,
             description: formData.description || null
           })
+          .select()
+          .single()
 
         if (insertError) throw insertError
+
+        // After creating company, check for and link any pending purchases
+        if (newCompany && user.email) {
+          try {
+            const linkResponse = await fetch('/api/pending-purchases/link', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                email: user.email,
+                companyId: newCompany.id,
+              }),
+            })
+
+            if (linkResponse.ok) {
+              const linkData = await linkResponse.json()
+              if (linkData.linked > 0) {
+                console.log(`Linked ${linkData.linked} pending purchase(s) to new account`)
+              }
+            }
+          } catch (linkError) {
+            console.error('Error linking pending purchases:', linkError)
+            // Don't fail the form submission if linking fails - purchases are already in pending table
+          }
+        }
       }
 
       setSuccess(true)

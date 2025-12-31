@@ -66,19 +66,26 @@ export async function createCheckoutSession({
   priceId,
   customerEmail,
   stripeCustomerId,
+  isGuestCheckout = false,
 }: {
-  companyId: string
+  companyId?: string | null
   territoryId: string
   priceId: string
-  customerEmail: string
+  customerEmail?: string
   stripeCustomerId?: string
+  isGuestCheckout?: boolean
 }) {
   const stripe = getStripe()
+  
+  // For guest checkout, redirect to signup page after payment
+  // For logged-in users, redirect to dashboard
+  const successPath = isGuestCheckout ? '/signup' : '/dashboard'
+  
   const session = await stripe.checkout.sessions.create({
     mode: 'subscription',
     payment_method_types: ['card'],
     customer: stripeCustomerId,
-    customer_email: stripeCustomerId ? undefined : customerEmail,
+    customer_email: stripeCustomerId ? undefined : customerEmail, // Required for guest checkout
     line_items: [
       {
         price: priceId,
@@ -86,16 +93,18 @@ export async function createCheckoutSession({
       },
     ],
     metadata: {
-      company_id: companyId,
       territory_id: territoryId,
+      is_guest_checkout: isGuestCheckout ? 'true' : 'false',
+      ...(companyId && { company_id: companyId }), // Only include if exists
     },
     subscription_data: {
       metadata: {
-        company_id: companyId,
         territory_id: territoryId,
+        is_guest_checkout: isGuestCheckout ? 'true' : 'false',
+        ...(companyId && { company_id: companyId }), // Only include if exists
       },
     },
-    success_url: getCheckoutUrl('/dashboard', territoryId, 'success'),
+    success_url: getCheckoutUrl(successPath, territoryId, 'success'),
     cancel_url: getCheckoutUrl('/territories', territoryId, 'canceled'),
     expires_at: Math.floor(Date.now() / 1000) + 60 * 30, // 30 minutes
   })

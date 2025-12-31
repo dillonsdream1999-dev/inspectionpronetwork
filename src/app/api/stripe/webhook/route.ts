@@ -36,71 +36,129 @@ export async function POST(request: NextRequest) {
         
         const companyId = session.metadata?.company_id
         const territoryId = session.metadata?.territory_id
+        const isGuestCheckout = session.metadata?.is_guest_checkout === 'true'
         const customerId = session.customer as string
         const subscriptionId = session.subscription as string
+        const customerEmail = session.customer_email || session.customer_details?.email
 
-        if (!companyId || !territoryId || !subscriptionId) {
-          console.error('Missing metadata in checkout session')
+        if (!territoryId || !subscriptionId) {
+          console.error('Missing required metadata in checkout session')
           break
         }
 
         // Get subscription details to determine price type
         const subscription = await stripe.subscriptions.retrieve(subscriptionId)
         const priceId = subscription.items.data[0]?.price.id
-        const priceType = priceId === PRICES.ADJACENT ? 'adjacent' : 'base'
+        const priceType = priceId === PRICES.ADJACENT ? 'adjacent' : (priceId === PRICES.DMA ? 'dma' : 'base')
 
-        // Create territory ownership record
-        const { error: ownershipError } = await supabase
-          .from('territory_ownership')
-          .insert({
-            territory_id: territoryId,
-            company_id: companyId,
-            stripe_customer_id: customerId,
-            stripe_subscription_id: subscriptionId,
-            price_type: priceType,
-            status: 'active',
-          })
+        if (isGuestCheckout || !companyId) {
+          // Guest checkout - create pending purchase record
+          if (!customerEmail) {
+            console.error('Missing customer email for guest checkout')
+            break
+          }
 
-        if (ownershipError) {
-          console.error('Failed to create ownership:', ownershipError)
-          throw ownershipError
-        }
+          // Determine price type for pending purchase (price_type enum only has 'base' and 'adjacent')
+          const pendingPriceType = priceType === 'adjacent' ? 'adjacent' : 'base'
+          
+          const { error: pendingError } = await supabase
+            .from('pending_territory_purchases')
+            .insert({
+              email: customerEmail.toLowerCase().trim(),
+              territory_id: territoryId,
+              stripe_customer_id: customerId,
+              stripe_subscription_id: subscriptionId,
+              stripe_checkout_session_id: session.id,
+              price_type: pendingPriceType,
+            })
 
-        // Get territory details to check if it's a DMA
-        const { data: territory } = await supabase
-          .from('territories')
-          .select('is_dma')
-          .eq('id', territoryId)
-          .single()
+          if (pendingError) {
+            console.error('Failed to create pending purchase:', pendingError)
+            throw pendingError
+          }
 
-        // Update territory status to taken
-        await supabase
-          .from('territories')
-          .update({ status: 'taken' })
-          .eq('id', territoryId)
-
-        // If this is a DMA purchase, mark all linked individual territories as taken
-        if (territory?.is_dma) {
-          const { error: dmaError } = await supabase
+          // Mark territory as taken (will be linked when user creates account)
+          await supabase
             .from('territories')
             .update({ status: 'taken' })
-            .eq('dma_id', territoryId)
-            .neq('is_dma', true) // Only update individual territories, not other DMAs
+            .eq('id', territoryId)
 
-          if (dmaError) {
-            console.error('Failed to update DMA-linked territories:', dmaError)
-          } else {
-            console.log(`DMA ${territoryId} claimed, linked individual territories marked as taken`)
+          // Get territory details to check if it's a DMA
+          const { data: territory } = await supabase
+            .from('territories')
+            .select('is_dma')
+            .eq('id', territoryId)
+            .single()
+
+          // If this is a DMA purchase, mark all linked individual territories as taken
+          if (territory?.is_dma) {
+            const { error: dmaError } = await supabase
+              .from('territories')
+              .update({ status: 'taken' })
+              .eq('dma_id', territoryId)
+              .neq('is_dma', true)
+
+            if (dmaError) {
+              console.error('Failed to update DMA-linked territories:', dmaError)
+            }
           }
+
+          console.log(`Guest checkout: Territory ${territoryId} purchased by ${customerEmail}, pending account creation`)
+        } else {
+          // Logged-in user checkout - create ownership record directly
+          // price_type enum only has 'base' and 'adjacent', not 'dma'
+          const ownershipPriceType = priceType === 'adjacent' ? 'adjacent' : 'base'
+          
+          const { error: ownershipError } = await supabase
+            .from('territory_ownership')
+            .insert({
+              territory_id: territoryId,
+              company_id: companyId,
+              stripe_customer_id: customerId,
+              stripe_subscription_id: subscriptionId,
+              price_type: ownershipPriceType,
+              status: 'active',
+            })
+
+          if (ownershipError) {
+            console.error('Failed to create ownership:', ownershipError)
+            throw ownershipError
+          }
+
+          // Get territory details to check if it's a DMA
+          const { data: territory } = await supabase
+            .from('territories')
+            .select('is_dma')
+            .eq('id', territoryId)
+            .single()
+
+          // Update territory status to taken
+          await supabase
+            .from('territories')
+            .update({ status: 'taken' })
+            .eq('id', territoryId)
+
+          // If this is a DMA purchase, mark all linked individual territories as taken
+          if (territory?.is_dma) {
+            const { error: dmaError } = await supabase
+              .from('territories')
+              .update({ status: 'taken' })
+              .eq('dma_id', territoryId)
+              .neq('is_dma', true)
+
+            if (dmaError) {
+              console.error('Failed to update DMA-linked territories:', dmaError)
+            }
+          }
+
+          // Delete the hold
+          await supabase
+            .from('territory_holds')
+            .delete()
+            .eq('territory_id', territoryId)
+
+          console.log(`Territory ${territoryId} claimed by company ${companyId}`)
         }
-
-        // Delete the hold
-        await supabase
-          .from('territory_holds')
-          .delete()
-          .eq('territory_id', territoryId)
-
-        console.log(`Territory ${territoryId} claimed by company ${companyId}`)
         break
       }
 

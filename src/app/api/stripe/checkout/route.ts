@@ -1,16 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { createClient, createServiceClient } from '@/lib/supabase/server'
 import { createCheckoutSession, PRICES } from '@/lib/stripe'
 
 export async function POST(request: NextRequest) {
   try {
     const supabase = await createClient()
+    const serviceClient = await createServiceClient()
     
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
-    
-    if (authError || !user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
+    // Check if user is logged in (optional for guest checkout)
+    const { data: { user } } = await supabase.auth.getUser()
+    const isLoggedIn = !!user
 
     const { territoryId } = await request.json()
     
@@ -18,19 +17,35 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Territory ID required' }, { status: 400 })
     }
 
-    // Get user's company
-    const { data: company, error: companyError } = await supabase
-      .from('companies')
-      .select('*')
-      .eq('owner_user_id', user.id)
-      .single()
+    // For logged-in users, get their company (for adjacent discount eligibility)
+    let company = null
+    let validCustomerId: string | undefined = undefined
+    if (isLoggedIn) {
+      const { data: existingCompany } = await supabase
+        .from('companies')
+        .select('*')
+        .eq('owner_user_id', user!.id)
+        .single()
+      company = existingCompany
 
-    if (companyError || !company) {
-      return NextResponse.json({ error: 'Company not found. Please complete your profile first.' }, { status: 400 })
+      // Get existing Stripe customer ID if logged in
+      if (company) {
+        const { data: existingOwnership } = await supabase
+          .from('territory_ownership')
+          .select('stripe_customer_id')
+          .eq('company_id', company.id)
+          .neq('stripe_customer_id', 'manual')
+          .limit(1)
+          .single()
+        
+        validCustomerId = existingOwnership?.stripe_customer_id?.startsWith('cus_') 
+          ? existingOwnership.stripe_customer_id 
+          : undefined
+      }
     }
 
-    // Check if territory is available
-    const { data: territory, error: territoryError } = await supabase
+    // Check if territory is available (use service client to bypass RLS)
+    const { data: territory, error: territoryError } = await serviceClient
       .from('territories')
       .select('*')
       .eq('id', territoryId)
@@ -42,7 +57,7 @@ export async function POST(request: NextRequest) {
 
     if (territory.status !== 'available') {
       // Check if there's an expired hold
-      const { data: existingHold } = await supabase
+      const { data: existingHold } = await serviceClient
         .from('territory_holds')
         .select('*')
         .eq('territory_id', territoryId)
@@ -66,17 +81,19 @@ export async function POST(request: NextRequest) {
       }
       priceId = PRICES.DMA
     } else {
-      // Check if eligible for adjacent discount
-      const { data: ownedTerritories } = await supabase
-        .from('territory_ownership')
-        .select('territory_id')
-        .eq('company_id', company.id)
-        .eq('status', 'active')
-
+      // For logged-in users with company, check adjacent discount eligibility
       let isAdjacentEligible = false
-      if (ownedTerritories && ownedTerritories.length > 0) {
-        const ownedIds = ownedTerritories.map((t: { territory_id: string }) => t.territory_id)
-        isAdjacentEligible = territory.adjacent_ids?.some((id: string) => ownedIds.includes(id)) || false
+      if (company) {
+        const { data: ownedTerritories } = await serviceClient
+          .from('territory_ownership')
+          .select('territory_id')
+          .eq('company_id', company.id)
+          .eq('status', 'active')
+
+        if (ownedTerritories && ownedTerritories.length > 0) {
+          const ownedIds = ownedTerritories.map((t: { territory_id: string }) => t.territory_id)
+          isAdjacentEligible = territory.adjacent_ids?.some((id: string) => ownedIds.includes(id)) || false
+        }
       }
 
       const selectedPrice = isAdjacentEligible ? PRICES.ADJACENT : PRICES.BASE
@@ -88,48 +105,24 @@ export async function POST(request: NextRequest) {
       priceId = selectedPrice
     }
 
-    // Create a hold on the territory
-    const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString() // 10 minutes
+    // For guest checkout, we don't create holds (they'll be handled in webhook)
+    // For logged-in users, create a hold
+    if (isLoggedIn && company) {
+      const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString() // 10 minutes
 
-    // Delete any existing expired holds first
-    await supabase
-      .from('territory_holds')
-      .delete()
-      .eq('territory_id', territoryId)
-      .lt('expires_at', new Date().toISOString())
+      // Delete any existing expired holds first
+      await serviceClient
+        .from('territory_holds')
+        .delete()
+        .eq('territory_id', territoryId)
+        .lt('expires_at', new Date().toISOString())
 
-    const { error: holdError } = await supabase
-      .from('territory_holds')
-      .upsert({
-        territory_id: territoryId,
-        company_id: company.id,
-        expires_at: expiresAt,
-      })
-
-    if (holdError) {
-      console.error('Hold error:', holdError)
-      return NextResponse.json({ error: 'Failed to hold territory' }, { status: 500 })
+      // Update territory status to held (will be updated to taken in webhook)
+      await serviceClient
+        .from('territories')
+        .update({ status: 'held' })
+        .eq('id', territoryId)
     }
-
-    // Update territory status to held
-    await supabase
-      .from('territories')
-      .update({ status: 'held' })
-      .eq('id', territoryId)
-
-    // Get or check for existing Stripe customer (exclude 'manual' IDs from admin assignments)
-    const { data: existingOwnership } = await supabase
-      .from('territory_ownership')
-      .select('stripe_customer_id')
-      .eq('company_id', company.id)
-      .neq('stripe_customer_id', 'manual') // Exclude manual assignments
-      .limit(1)
-      .single()
-    
-    // Only use customer ID if it's a valid Stripe customer ID (starts with 'cus_')
-    const validCustomerId = existingOwnership?.stripe_customer_id?.startsWith('cus_') 
-      ? existingOwnership.stripe_customer_id 
-      : undefined
 
     // Validate price ID before creating checkout session
     if (!priceId || priceId === 'undefined') {
@@ -137,15 +130,16 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Invalid pricing configuration. Please contact support.' }, { status: 500 })
     }
 
-    // Create Stripe checkout session
+    // Create Stripe checkout session (guest checkout - no company_id required)
     let session
     try {
       session = await createCheckoutSession({
-        companyId: company.id,
+        companyId: company?.id, // Optional - null for guest checkout
         territoryId,
         priceId,
-        customerEmail: company.billing_email || user.email!,
-        stripeCustomerId: validCustomerId, // Only use valid Stripe customer IDs
+        customerEmail: user?.email || undefined, // Optional for guest checkout
+        stripeCustomerId: validCustomerId,
+        isGuestCheckout: !isLoggedIn || !company, // Mark as guest checkout
       })
     } catch (stripeError: unknown) {
       console.error('Stripe API error:', stripeError)
@@ -155,11 +149,13 @@ export async function POST(request: NextRequest) {
       }, { status: 500 })
     }
 
-    // Update hold with checkout session ID
-    await supabase
-      .from('territory_holds')
-      .update({ checkout_session_id: session.id })
-      .eq('territory_id', territoryId)
+    // Update hold with checkout session ID (only if logged in)
+    if (isLoggedIn && company) {
+      await serviceClient
+        .from('territory_holds')
+        .update({ checkout_session_id: session.id })
+        .eq('territory_id', territoryId)
+    }
 
     return NextResponse.json({ url: session.url })
   } catch (error) {
