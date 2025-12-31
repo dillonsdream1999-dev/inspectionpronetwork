@@ -15,16 +15,16 @@ WITH kc_dma AS (
   LIMIT 1
 )
 SELECT 
-  to.id,
-  to.territory_id,
-  to.company_id,
-  to.status as ownership_status,
-  to.started_at,
+  ownership.id,
+  ownership.territory_id,
+  ownership.company_id,
+  ownership.status as ownership_status,
+  ownership.started_at,
   t.name as territory_name,
   t.status as territory_status
-FROM territory_ownership to
+FROM territory_ownership ownership
 CROSS JOIN kc_dma d
-JOIN territories t ON t.id = to.territory_id
-WHERE to.territory_id = d.dma_id
-  AND to.status = 'active';
+JOIN territories t ON t.id = ownership.territory_id
+WHERE ownership.territory_id = d.dma_id
+  AND ownership.status = 'active';
 
