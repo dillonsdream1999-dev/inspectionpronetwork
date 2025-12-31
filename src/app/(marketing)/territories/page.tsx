@@ -56,24 +56,21 @@ export default function TerritoriesPage() {
   const states = [...new Set(territories.map((t) => t.state))].sort()
 
   // Filter territories - separate DMAs from regular territories
-  // Handle case where is_dma might not exist yet (migration not run)
   const filteredTerritories = territories.filter((territory) => {
     if (selectedState && territory.state !== selectedState) return false
     if (metroSearch && !territory.metro_area?.toLowerCase().includes(metroSearch.toLowerCase())) return false
     if (zipSearch && !territory.zip_codes?.some(zip => zip.includes(zipSearch))) return false
     if (statusFilter && territory.status !== statusFilter) return false
-    // Exclude DMAs from regular territory list (is_dma might be undefined if migration not run)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return !(territory as any).is_dma // Exclude DMAs from regular territory list
+    // Exclude DMAs from regular territory list
+    return territory.is_dma !== true // Exclude DMAs from regular territory list
   })
   
   const filteredDMAs = territories.filter((territory) => {
     if (selectedState && territory.state !== selectedState) return false
     if (metroSearch && !territory.metro_area?.toLowerCase().includes(metroSearch.toLowerCase())) return false
     if (statusFilter && territory.status !== statusFilter) return false
-    // Only show DMAs (is_dma might be undefined if migration not run)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return !!(territory as any).is_dma // Only show DMAs
+    // Only show DMAs
+    return territory.is_dma === true // Only show DMAs
   })
 
   const fetchTerritories = useCallback(async () => {
@@ -89,10 +86,9 @@ export default function TerritoriesPage() {
       setTerritories(territoriesData)
       
       // Debug: Log DMA count and status breakdown
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const dmaCount = territoriesData.filter((t: any) => t.is_dma).length
-      const takenCount = territoriesData.filter((t: any) => t.status === 'taken').length
-      const territoriesWithDmaId = territoriesData.filter((t: any) => t.dma_id)
+      const dmaCount = territoriesData.filter((t: Tables<'territories'>) => t.is_dma === true).length
+      const takenCount = territoriesData.filter((t: Tables<'territories'>) => t.status === 'taken').length
+      const territoriesWithDmaId = territoriesData.filter((t: Tables<'territories'>) => t.dma_id !== null)
       console.log('Total territories:', territoriesData.length, 'DMAs:', dmaCount, 'Taken:', takenCount)
       console.log('Territories with dma_id:', territoriesWithDmaId.length)
       if (territoriesWithDmaId.length > 0) {
