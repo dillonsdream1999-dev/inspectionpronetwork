@@ -6,7 +6,7 @@ import { TerritoryCard } from '@/components/territories/TerritoryCard'
 import { TerritoryFilters } from '@/components/territories/TerritoryFilters'
 import { SocialProofPopup } from '@/components/marketing/SocialProofPopup'
 import { createClient } from '@/lib/supabase/client'
-import { MapPin, Loader2, AlertCircle, Send, CheckCircle2, PhoneCall, MessageSquare } from 'lucide-react'
+import { MapPin, Loader2, AlertCircle, Send, CheckCircle2, PhoneCall, MessageSquare, X } from 'lucide-react'
 import type { Tables } from '@/types/database'
 
 export default function TerritoriesPage() {
@@ -38,6 +38,21 @@ export default function TerritoriesPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitSuccess, setSubmitSuccess] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
+  const [showSetupComplete, setShowSetupComplete] = useState(false)
+
+  // Check for setup complete query parameter
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    if (params.get('setup') === 'complete') {
+      setShowSetupComplete(true)
+      // Remove query param from URL
+      const url = new URL(window.location.href)
+      url.searchParams.delete('setup')
+      window.history.replaceState({}, '', url.toString())
+      // Auto-hide after 6 seconds
+      setTimeout(() => setShowSetupComplete(false), 6000)
+    }
+  }, [])
 
   // Get unique states
   const states = [...new Set(territories.map((t) => t.state))].sort()
