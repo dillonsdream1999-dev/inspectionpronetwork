@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import { useRouter } from 'next/navigation'
 import { TerritoryCard } from '@/components/territories/TerritoryCard'
 import { TerritoryFilters } from '@/components/territories/TerritoryFilters'
 import { SocialProofPopup } from '@/components/marketing/SocialProofPopup'
@@ -10,7 +9,6 @@ import { MapPin, Loader2, AlertCircle, Send, CheckCircle2, PhoneCall, MessageSqu
 import type { Tables } from '@/types/database'
 
 export default function TerritoriesPage() {
-  const router = useRouter()
   const [territories, setTerritories] = useState<Tables<'territories'>[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)

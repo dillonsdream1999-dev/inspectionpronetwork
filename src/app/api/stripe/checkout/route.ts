@@ -108,8 +108,6 @@ export async function POST(request: NextRequest) {
     // For guest checkout, we don't create holds (they'll be handled in webhook)
     // For logged-in users, create a hold
     if (isLoggedIn && company) {
-      const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString() // 10 minutes
-
       // Delete any existing expired holds first
       await serviceClient
         .from('territory_holds')

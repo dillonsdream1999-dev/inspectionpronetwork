@@ -6,10 +6,8 @@ import { CheckCircle2, X, MapPin } from 'lucide-react'
 import Link from 'next/link'
 
 export function CheckoutSuccessBanner() {
-  const router = useRouter()
   const searchParams = useSearchParams()
   const checkoutStatus = searchParams.get('checkout')
-  const territoryId = searchParams.get('territory')
   
   const [isVisible, setIsVisible] = useState(false)
 
