@@ -141,7 +141,7 @@ export default function TerritoriesPage() {
     if (zipSearch && territories.length > 0) {
       const zipMatches = filteredTerritories
       console.log(`[Client] ZIP search "${zipSearch}" found ${zipMatches.length} territories:`, 
-        zipMatches.map(t => ({ name: t.name, status: t.status, dma_id: (t as any).dma_id }))
+        zipMatches.map(t => ({ name: t.name, status: t.status, dma_id: t.dma_id }))
       )
     }
   }, [zipSearch, filteredTerritories, territories.length])
