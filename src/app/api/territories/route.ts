@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { createClient, createServiceClient } from '@/lib/supabase/server'
 import type { Tables } from '@/types/database'
 
 export async function GET(request: NextRequest) {
   try {
     const supabase = await createClient()
+    const serviceClient = await createServiceClient()
     const { searchParams } = new URL(request.url)
     
     const state = searchParams.get('state')
@@ -39,9 +40,11 @@ export async function GET(request: NextRequest) {
         query = query.contains('zip_codes', [zip])
       }
 
-      if (status) {
-        query = query.eq('status', status)
-      }
+      // Don't filter by status at database level - we need to mark DMA-linked territories as taken first
+      // Status filtering will be done after we process DMA ownership
+      // if (status) {
+      //   query = query.eq('status', status)
+      // }
 
       const { data: batch, error: batchError } = await query
 
@@ -59,7 +62,8 @@ export async function GET(request: NextRequest) {
     }
 
     // Get all active ownerships and filter to only DMAs
-    const { data: allActiveOwnerships } = await supabase
+    // Use service client to bypass RLS and see all ownerships
+    const { data: allActiveOwnerships } = await serviceClient
       .from('territory_ownership')
       .select(`
         territory_id,
@@ -121,6 +125,11 @@ export async function GET(request: NextRequest) {
     
     console.log(`[Territories API] Marked ${markedCount} territories as taken due to DMA ownership`)
 
+    // Apply status filter AFTER marking DMA-linked territories as taken
+    const statusFilteredTerritories = status
+      ? territories.filter(t => t.status === status)
+      : territories
+
     // Clean up expired holds
     const { data: expiredHolds } = await supabase
       .from('territory_holds')
@@ -142,7 +151,7 @@ export async function GET(request: NextRequest) {
         .lt('expires_at', new Date().toISOString())
     }
 
-    return NextResponse.json({ territories })
+    return NextResponse.json({ territories: statusFilteredTerritories })
   } catch (error) {
     console.error('Territories API error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
