@@ -46,17 +46,7 @@ WHERE t.dma_id = d.dma_id
 ORDER BY t.name;
 
 -- 4. Check if there are territories in Kansas/Wichita area that might need to be linked
-SELECT 
-  id,
-  name,
-  state,
-  metro_area,
-  is_dma,
-  dma_id,
-  status
-FROM territories
-WHERE (state = 'KS' AND (name ILIKE '%wichita%' OR metro_area ILIKE '%wichita%'))
-  AND (is_dma != true OR is_dma IS NULL)
-ORDER BY name
-LIMIT 30;
+S
+
+
 

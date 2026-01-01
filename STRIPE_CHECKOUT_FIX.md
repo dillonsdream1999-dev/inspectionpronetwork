@@ -112,3 +112,4 @@ export const PRICES = {
 **Checkout redirects but subscription not created**
 - Solution: Check webhook is configured and receiving events. Check Vercel function logs for webhook errors.
 
+

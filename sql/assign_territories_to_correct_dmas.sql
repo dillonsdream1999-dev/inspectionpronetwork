@@ -114,3 +114,4 @@ WHERE t.dma_id IS NULL
 -- Clean up temporary table when done
 -- DROP TABLE IF EXISTS temp_correct_dma_mappings;
 
+

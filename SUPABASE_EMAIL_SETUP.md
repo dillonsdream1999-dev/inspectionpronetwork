@@ -121,3 +121,4 @@ If you just need emails to work for testing:
    - Just ensure Site URL is set correctly
    - Emails will come from `noreply@mail.app.supabase.io`
 
+

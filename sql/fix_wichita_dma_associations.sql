@@ -68,3 +68,4 @@ CROSS JOIN wichita_dma d
 WHERE t.dma_id = d.dma_id
 ORDER BY t.name;
 
+

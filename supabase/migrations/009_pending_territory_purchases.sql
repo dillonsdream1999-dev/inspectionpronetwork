@@ -27,3 +27,4 @@ CREATE POLICY "Service role can manage all pending purchases"
   USING (true);
 
 
+
