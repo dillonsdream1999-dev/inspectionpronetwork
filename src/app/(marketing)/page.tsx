@@ -790,14 +790,14 @@ export default function HomePage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <a 
-              href="tel:8169262111" 
+              href="tel:8169622111" 
               className="inline-flex items-center justify-center gap-2 bg-white text-brand-600 hover:bg-brand-50 text-lg px-8 py-3 rounded-lg font-semibold transition-colors"
             >
               <PhoneCall className="w-5 h-5" />
-              Call (816) 926-2111
+              Call (816) 962-2111
             </a>
             <a 
-              href="sms:8169262111" 
+              href="sms:8169622111" 
               className="inline-flex items-center justify-center gap-2 bg-brand-500 hover:bg-brand-400 text-white text-lg px-8 py-3 rounded-lg font-semibold transition-colors border border-white/20"
             >
               <MessageSquare className="w-5 h-5" />

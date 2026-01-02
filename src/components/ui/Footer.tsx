@@ -31,14 +31,14 @@ export function Footer() {
             </p>
             <div className="space-y-2">
               <a 
-                href="tel:8169262111" 
+                href="tel:8169622111" 
                 className="flex items-center gap-2 text-sm text-brand-400 hover:text-brand-300 transition-colors"
               >
                 <Phone className="w-4 h-4" />
-                (816) 926-2111
+                (816) 962-2111
               </a>
               <a 
-                href="sms:8169262111" 
+                href="sms:8169622111" 
                 className="flex items-center gap-2 text-sm text-brand-400 hover:text-brand-300 transition-colors"
               >
                 <MessageSquare className="w-4 h-4" />

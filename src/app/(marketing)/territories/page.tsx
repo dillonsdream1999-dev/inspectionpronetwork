@@ -681,14 +681,14 @@ export default function TerritoriesPage() {
                 </p>
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
                   <a 
-                    href="tel:8169262111" 
+                    href="tel:8169622111" 
                     className="inline-flex items-center justify-center gap-2 bg-white text-brand-600 hover:bg-brand-50 text-base px-6 py-2.5 rounded-lg font-semibold transition-colors"
                   >
                     <PhoneCall className="w-5 h-5" />
-                    Call (816) 926-2111
+                    Call (816) 962-2111
                   </a>
                   <a 
-                    href="sms:8169262111" 
+                    href="sms:8169622111" 
                     className="inline-flex items-center justify-center gap-2 bg-brand-500 hover:bg-brand-400 text-white text-base px-6 py-2.5 rounded-lg font-semibold transition-colors border border-white/20"
                   >
                     <MessageSquare className="w-5 h-5" />
