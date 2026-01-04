@@ -31,11 +31,8 @@ export default function TreatmentLeadsPage() {
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight mb-6">
-              Own Your City's Bed Bug Jobs
+              Stop Competing for Bed Bug Jobs. Own the Territory Instead
             </h1>
-            <p className="text-2xl sm:text-3xl text-slate-300 mb-8 font-semibold">
-              Without the Google Ads Bidding War
-            </p>
             
             <div className="bg-white/5 backdrop-blur-sm rounded-xl p-8 mb-8 max-w-3xl mx-auto border border-white/10">
               <p className="text-xl text-slate-200 mb-4">
