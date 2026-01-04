@@ -3,24 +3,17 @@ import Image from 'next/image'
 import { 
   ArrowRight, 
   CheckCircle2, 
-  XCircle,
-  MapPin,
   Users,
-  TrendingUp,
-  Smartphone,
-  Target,
   PhoneCall,
   MessageSquare,
   Shield,
-  BarChart3,
   AlertCircle,
   DollarSign,
   UserCheck,
   BookOpen,
   Route,
   Lock,
-  TrendingDown,
-  Zap
+  TrendingDown
 } from 'lucide-react'
 
 export default function TreatmentLeadsPage() {
