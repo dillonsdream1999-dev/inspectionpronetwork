@@ -477,19 +477,18 @@ export default function TreatmentLeadsPage() {
           </div>
           
           {/* Image - Full width on mobile, contained in card on desktop */}
-          <div className="relative w-screen aspect-[16/10] overflow-hidden mb-6 -mx-4 sm:mx-auto sm:w-full sm:rounded-lg sm:bg-slate-50 sm:p-8 sm:border sm:border-slate-200">
-            <Image
-              src="/lead-generation-infographic.png"
-              alt="How Inspection Pro Network Generates High-Intent Leads - Homeowners self-inspect through the app, get educated on bed bug treatment, and treatment-ready leads are routed to one operator per territory"
-              fill
-              className="object-contain"
-              priority
-            />
-          </div>
-          
-          {/* Caption - Contained on mobile, in card on desktop */}
-          <div className="bg-slate-50 rounded-2xl sm:p-8 p-4 border border-slate-200 sm:mt-0 -mt-6">
-            <p className="text-center text-slate-600 italic">
+          <div className="bg-slate-50 rounded-2xl sm:p-8 p-0 border border-slate-200 mb-6 overflow-hidden sm:overflow-visible">
+            <div className="relative w-[100vw] aspect-[3/4] sm:aspect-[16/10] overflow-hidden left-1/2 -translate-x-1/2 sm:left-0 sm:translate-x-0 sm:w-full sm:rounded-lg">
+              <Image
+                src="/lead-generation-infographic.png"
+                alt="How Inspection Pro Network Generates High-Intent Leads - Homeowners self-inspect through the app, get educated on bed bug treatment, and treatment-ready leads are routed to one operator per territory"
+                fill
+                className="object-contain bg-white"
+                priority
+                sizes="100vw"
+              />
+            </div>
+            <p className="text-center text-slate-600 italic px-4 sm:px-0 py-4 sm:py-0">
               Homeowners self-inspect → get educated → treatment-ready leads go to one operator per territory.
             </p>
           </div>
