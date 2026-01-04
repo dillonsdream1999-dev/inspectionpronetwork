@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { 
   ArrowRight, 
   CheckCircle2, 
+  XCircle,
   Users,
   PhoneCall,
   MessageSquare,
@@ -140,27 +141,160 @@ export default function TreatmentLeadsPage() {
         </div>
       </section>
 
-      {/* We Solve This Section */}
+      {/* Here's Exactly What You're Buying */}
       <section className="py-24 bg-slate-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
-              We Solve This With a Built-In Pre-Qualification Filter
+              Here's Exactly What You're Buying
             </h2>
           </div>
           
           <div className="bg-white rounded-2xl p-8 shadow-sm border border-slate-200 mb-8">
-            <p className="text-xl text-slate-900 font-semibold mb-6 text-center">
-              Inspection Pro Network is not a lead marketplace.
+            <p className="text-xl text-slate-900 font-semibold mb-6">
+              Inspection Pro Network gives you exclusive access to bed bug treatment demand in your territory.
             </p>
+            
+            <div className="space-y-3 mb-8">
+              <div className="flex items-start gap-3">
+                <XCircle className="w-5 h-5 text-red-500 shrink-0 mt-0.5" />
+                <span className="text-slate-700">Not clicks.</span>
+              </div>
+              <div className="flex items-start gap-3">
+                <XCircle className="w-5 h-5 text-red-500 shrink-0 mt-0.5" />
+                <span className="text-slate-700">Not shared leads.</span>
+              </div>
+              <div className="flex items-start gap-3">
+                <XCircle className="w-5 h-5 text-red-500 shrink-0 mt-0.5" />
+                <span className="text-slate-700">Not people "just asking questions."</span>
+              </div>
+            </div>
             
             <p className="text-lg text-slate-700 mb-6">
-              We use a <strong className="text-slate-900">free, locally promoted Bed Bug Self-Inspection App</strong> that does the filtering before a homeowner ever reaches you.
+              Homeowners are sent through our <strong className="text-slate-900">Bed Bug Self-Inspection App</strong>, where they can see what bed bugs look like, where they hide, and when professional treatment makes sense.
             </p>
             
-            <div className="bg-emerald-50 rounded-xl p-6 border-2 border-emerald-200">
-              <p className="text-lg font-semibold text-slate-900 text-center">
-                Instead of "maybe" leads, you receive confirmed, treatment-intent requests.
+            <p className="text-lg text-slate-700 mb-8">
+              Many choose to use it. Some don't.
+            </p>
+            
+            <div className="bg-brand-50 rounded-xl p-6 border border-brand-200 mb-8">
+              <p className="text-lg font-semibold text-slate-900 mb-4">
+                Either way, by the time they request help, they already believe treatment is needed.
+              </p>
+              
+              <p className="text-slate-900 font-medium mb-3">When that request comes in:</p>
+              <ul className="space-y-2 text-slate-700">
+                <li className="flex items-start gap-2">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+                  <span>It goes to one operator only</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+                  <span>There is no bidding and no sharing</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+                  <span>You're the only professional they see</span>
+                </li>
+              </ul>
+              
+              <p className="text-lg font-semibold text-slate-900 mt-6">
+                These are treatment-intent homeowners, not "maybe" calls.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Why This Beats Traditional Lead Gen */}
+      <section className="py-24 bg-white">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
+              Why This Beats Traditional Lead Gen
+            </h2>
+          </div>
+          
+          <div className="bg-white rounded-2xl p-8 shadow-sm border-2 border-slate-200">
+            <p className="text-xl text-slate-900 font-semibold mb-6">
+              Most lead companies sell access to confusion.
+            </p>
+            
+            <p className="text-lg text-slate-700 mb-6 font-medium">
+              You pay to answer:
+            </p>
+            
+            <div className="bg-red-50 rounded-xl p-6 border border-red-200 mb-8">
+              <ul className="space-y-3 text-slate-700">
+                <li className="flex items-start gap-3">
+                  <AlertCircle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
+                  <span>"I think I saw something…"</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <AlertCircle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
+                  <span>"Can you come look for free?"</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <AlertCircle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
+                  <span>"I'm calling three other companies too."</span>
+                </li>
+              </ul>
+            </div>
+            
+            <div className="bg-emerald-50 rounded-xl p-6 border-2 border-emerald-200 mb-8">
+              <p className="text-lg font-semibold text-slate-900 mb-4">
+                We remove that layer.
+              </p>
+              
+              <p className="text-lg text-slate-700 mb-4">
+                The app educates homeowners before they reach you, so your conversations start at treatment, not diagnosis.
+              </p>
+              
+              <div className="space-y-2 text-slate-700">
+                <p className="flex items-start gap-2">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+                  <span>You don't waste time qualifying.</span>
+                </p>
+                <p className="flex items-start gap-2">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+                  <span>You don't compete on price.</span>
+                </p>
+                <p className="flex items-start gap-2">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+                  <span>You just handle the job.</span>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* The Bottom Line */}
+      <section className="py-24 bg-slate-50">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
+              The Bottom Line
+            </h2>
+          </div>
+          
+          <div className="bg-white rounded-2xl p-8 shadow-sm border-2 border-brand-200">
+            <div className="space-y-4 mb-8">
+              <p className="text-lg text-slate-700">
+                You're not paying for traffic.
+              </p>
+              <p className="text-lg text-slate-700">
+                You're not buying leads by the pound.
+              </p>
+            </div>
+            
+            <div className="bg-brand-50 rounded-xl p-6 border-2 border-brand-300">
+              <p className="text-xl font-bold text-slate-900 mb-4 text-center">
+                You're securing exclusive access to bed bug treatment requests in your territory.
+              </p>
+              <p className="text-xl font-semibold text-slate-900 text-center">
+                That's the offer.
               </p>
             </div>
           </div>
