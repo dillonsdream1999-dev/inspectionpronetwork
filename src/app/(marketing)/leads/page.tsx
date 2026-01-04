@@ -559,15 +559,15 @@ export default function TreatmentLeadsPage() {
               <div className="flex items-start gap-3">
                 <Lock className="w-6 h-6 text-brand-600 shrink-0 mt-1" />
                 <div>
-                  <p className="font-semibold text-slate-900 mb-1">Once the agreement is signed:</p>
+                  <p className="font-semibold text-slate-900 mb-1">Once a territory is claimed:</p>
                   <ul className="space-y-2 text-slate-700">
                     <li className="flex items-start gap-2">
                       <span className="text-brand-600">•</span>
-                      <span>The territory is closed</span>
+                      <span>The territory is yours</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <span className="text-brand-600">•</span>
-                      <span>It remains exclusive for the term</span>
+                      <span>It remains exclusive until you cancel</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <span className="text-brand-600">•</span>
