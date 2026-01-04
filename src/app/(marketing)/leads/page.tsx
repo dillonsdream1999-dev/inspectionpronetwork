@@ -476,8 +476,8 @@ export default function TreatmentLeadsPage() {
             </h2>
           </div>
           
-          <div className="bg-slate-50 rounded-2xl p-8 border border-slate-200">
-            <div className="relative w-full aspect-[16/10] rounded-lg overflow-hidden mb-6">
+          <div className="bg-slate-50 rounded-2xl sm:p-8 p-0 border border-slate-200">
+            <div className="relative w-full aspect-[16/10] rounded-none sm:rounded-lg overflow-hidden mb-6 -mx-4 sm:mx-0">
               <Image
                 src="/lead-generation-infographic.png"
                 alt="How Inspection Pro Network Generates High-Intent Leads - Homeowners self-inspect through the app, get educated on bed bug treatment, and treatment-ready leads are routed to one operator per territory"
@@ -486,7 +486,7 @@ export default function TreatmentLeadsPage() {
                 priority
               />
             </div>
-            <p className="text-center text-slate-600 italic">
+            <p className="text-center text-slate-600 italic px-4 sm:px-0 pb-4 sm:pb-0">
               Homeowners self-inspect → get educated → treatment-ready leads go to one operator per territory.
             </p>
           </div>
