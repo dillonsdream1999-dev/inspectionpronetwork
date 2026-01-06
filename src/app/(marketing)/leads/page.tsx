@@ -6,11 +6,7 @@ import {
   XCircle,
   PhoneCall,
   Shield,
-  AlertCircle,
-  DollarSign,
-  TrendingDown,
-  Lock,
-  Users
+  AlertCircle
 } from 'lucide-react'
 
 export default function TreatmentLeadsPage() {
