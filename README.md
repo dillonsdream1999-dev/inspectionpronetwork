@@ -56,8 +56,8 @@ A B2B SaaS platform that sells exclusive territory subscriptions to pest control
 │                          Stripe                                  │
 │  ┌────────────────┐  ┌─────────────────┐                        │
 │  │ Subscriptions  │  │    Webhooks     │                        │
-│  │ $250/mo base   │  │ checkout.session│                        │
-│  │ $220/mo adj.   │  │ subscription.*  │                        │
+│  │ $99/mo base    │  │ checkout.session│                        │
+│  │ $1,000/mo DMA  │  │ subscription.*  │                        │
 │  └────────────────┘  └─────────────────┘                        │
 └─────────────────────────────────────────────────────────────────┘
 ```
@@ -195,9 +195,13 @@ STRIPE_SECRET_KEY=sk_test_...
 STRIPE_WEBHOOK_SECRET=whsec_...
 NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_...
 
-# Stripe Price IDs (create these in Stripe Dashboard)
+# Stripe Price IDs (create these in Stripe Dashboard with updated pricing)
+# Note: Variable names kept for backward compatibility, but prices should be:
+# - STRIPE_PRICE_BASE_250 should be $99/month in Stripe
+# - STRIPE_PRICE_DMA_3000 should be $1,000/month in Stripe (or use STRIPE_PRICE_DMA_1000)
+# Adjacent pricing has been removed
 STRIPE_PRICE_BASE_250=price_...
-STRIPE_PRICE_ADJACENT_220=price_...
+STRIPE_PRICE_DMA_3000=price_...  # Or use STRIPE_PRICE_DMA_1000
 
 # App URL
 NEXT_PUBLIC_APP_URL=http://localhost:3000
@@ -212,9 +216,9 @@ Run the SQL migrations in your Supabase SQL Editor:
 
 ### 4. Stripe Setup
 
-1. Create two products in Stripe Dashboard:
-   - **Territory Subscription (Base)**: $250/month recurring
-   - **Territory Subscription (Adjacent)**: $220/month recurring
+1. Create products in Stripe Dashboard:
+   - **Territory Subscription (Base)**: $99/month recurring
+   - **DMA Subscription**: $1,000/month recurring
 2. Copy the price IDs to your `.env.local`
 3. Set up webhook endpoint: `https://your-domain.com/api/stripe/webhook`
 4. Listen for these events:
@@ -244,13 +248,13 @@ Visit `http://localhost:3000`
 
 | Subscription Type | Price | Condition |
 |-------------------|-------|-----------|
-| Base Territory | $250/month | Default for any territory |
-| Adjacent Territory | $220/month | When operator already owns an adjacent territory |
+| Individual Territory | $99/month | Standard territory subscription |
+| Full DMA | $1,000/month | Entire Designated Market Area coverage |
 
-**Adjacent Discount Rules:**
-- Discount only applies at checkout if operator has an active subscription to an adjacent territory
-- If original territory is canceled, remaining adjacent territory reverts to $250/mo at next billing cycle
-- Adjacency is verified via `adjacent_ids` array on territory records
+**Pricing Notes:**
+- All territories use the same base pricing ($99/month)
+- Adjacent territory discounts have been removed
+- DMA subscriptions provide exclusive access to entire market areas
 
 ## 📊 Database Schema
 

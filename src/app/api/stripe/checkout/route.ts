@@ -71,38 +71,23 @@ export async function POST(request: NextRequest) {
     // Check if territory is a DMA
     const isDMA = (territory as { is_dma?: boolean }).is_dma === true
 
-    // Determine price based on territory type and eligibility
+    // Determine price based on territory type
     let priceId: string
     if (isDMA) {
-      // DMAs are always $3000/month
+      // DMAs are $1000/month
       if (!PRICES.DMA) {
-        console.error('STRIPE_PRICE_DMA_3000 is not set')
+        console.error('STRIPE_PRICE_DMA_1000 is not set')
         return NextResponse.json({ error: 'DMA pricing not configured. Please contact support.' }, { status: 500 })
       }
       priceId = PRICES.DMA
     } else {
-      // For logged-in users with company, check adjacent discount eligibility
-      let isAdjacentEligible = false
-      if (company) {
-        const { data: ownedTerritories } = await serviceClient
-          .from('territory_ownership')
-          .select('territory_id')
-          .eq('company_id', company.id)
-          .eq('status', 'active')
-
-        if (ownedTerritories && ownedTerritories.length > 0) {
-          const ownedIds = ownedTerritories.map((t: { territory_id: string }) => t.territory_id)
-          isAdjacentEligible = territory.adjacent_ids?.some((id: string) => ownedIds.includes(id)) || false
-        }
-      }
-
-      const selectedPrice = isAdjacentEligible ? PRICES.ADJACENT : PRICES.BASE
-      if (!selectedPrice) {
-        const missingPrice = isAdjacentEligible ? 'STRIPE_PRICE_ADJACENT_220' : 'STRIPE_PRICE_BASE_250'
-        console.error(`${missingPrice} is not set`)
+      // All individual territories use base pricing ($99/month)
+      // Adjacent territory pricing has been removed
+      if (!PRICES.BASE) {
+        console.error('STRIPE_PRICE_BASE_99 is not set')
         return NextResponse.json({ error: 'Pricing not configured. Please contact support.' }, { status: 500 })
       }
-      priceId = selectedPrice
+      priceId = PRICES.BASE
     }
 
     // For guest checkout, we don't create holds (they'll be handled in webhook)

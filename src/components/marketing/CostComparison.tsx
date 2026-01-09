@@ -3,7 +3,7 @@
 import { TrendingDown, Calculator, Target, Zap, CheckCircle2 } from 'lucide-react'
 
 export function CostComparison() {
-  const monthlyPrice = 250
+  const monthlyPrice = 99
   const typicalJobValue = 1500 // Average heat treatment
   
   // Example calculation with 10 leads/month

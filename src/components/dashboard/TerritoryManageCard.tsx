@@ -46,7 +46,8 @@ export function TerritoryManageCard({ ownership }: TerritoryManageCardProps) {
 
   const isActive = ownership.status === 'active'
   const territory = ownership.territories as (Tables<'territories'> & { is_dma?: boolean }) | null
-  const price = territory?.is_dma ? 3000 : (ownership.price_type === 'adjacent' ? 150 : 250)
+  // Pricing: $1000 for DMA, $99 for base territories (legacy adjacent: $150 for backward compatibility)
+  const price = territory?.is_dma ? 1000 : (ownership.price_type === 'adjacent' ? 150 : 99)
 
   return (
     <div className={`card p-6 ${!isActive ? 'opacity-60' : ''}`}>

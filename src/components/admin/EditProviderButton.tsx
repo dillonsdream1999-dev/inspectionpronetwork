@@ -335,8 +335,7 @@ export function EditProviderButton({
                         onChange={(e) => updatePriceType(st.territoryId, e.target.value as 'base' | 'adjacent')}
                         className="bg-slate-800 border border-slate-600 rounded px-2 py-1 text-sm text-slate-300 focus:outline-none focus:ring-1 focus:ring-brand-500"
                       >
-                        <option value="base">Base ($250/mo)</option>
-                        <option value="adjacent">Adjacent ($150/mo)</option>
+                        <option value="base">Base ($99/mo)</option>
                       </select>
                       <button
                         type="button"

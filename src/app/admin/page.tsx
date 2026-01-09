@@ -96,15 +96,16 @@ export default async function AdminDashboard() {
     const isDMA = territory.is_dma || false
 
     if (isDMA) {
-      mrr += 3000
+      mrr += 1000
       dmaSubscriptionsCount++
     } else if (!dmaCoveredTerritoryIds.has(territory.id)) {
       // Only count individual territories if they are NOT covered by a DMA subscription
       if (sub.price_type === 'adjacent') {
+        // Legacy adjacent pricing - keep for backward compatibility but count as base for new pricing
         mrr += 150
         adjacentSubscriptionsCount++
       } else {
-        mrr += 250
+        mrr += 99
         baseSubscriptionsCount++
       }
     } else {
@@ -223,21 +224,23 @@ export default async function AdminDashboard() {
           <div className="p-6">
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <span className="text-slate-400">Base subscriptions ($250)</span>
+                <span className="text-slate-400">Base subscriptions ($99)</span>
                 <span className="text-white font-medium">
-                  {baseSubscriptionsCount} (${(baseSubscriptionsCount * 250).toLocaleString()}/mo)
+                  {baseSubscriptionsCount} (${(baseSubscriptionsCount * 99).toLocaleString()}/mo)
                 </span>
               </div>
+              {adjacentSubscriptionsCount > 0 && (
+                <div className="flex items-center justify-between">
+                  <span className="text-slate-400">Legacy adjacent subscriptions ($150)</span>
+                  <span className="text-white font-medium">
+                    {adjacentSubscriptionsCount} (${(adjacentSubscriptionsCount * 150).toLocaleString()}/mo)
+                  </span>
+                </div>
+              )}
               <div className="flex items-center justify-between">
-                <span className="text-slate-400">Adjacent subscriptions ($150)</span>
+                <span className="text-slate-400">🏆 DMA subscriptions ($1,000)</span>
                 <span className="text-white font-medium">
-                  {adjacentSubscriptionsCount} (${(adjacentSubscriptionsCount * 150).toLocaleString()}/mo)
-                </span>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-slate-400">🏆 DMA subscriptions ($3,000)</span>
-                <span className="text-white font-medium">
-                  {dmaSubscriptionsCount} (${(dmaSubscriptionsCount * 3000).toLocaleString()}/mo)
+                  {dmaSubscriptionsCount} (${(dmaSubscriptionsCount * 1000).toLocaleString()}/mo)
                 </span>
               </div>
               {dmaCoveredIndividualTerritoriesCount > 0 && (

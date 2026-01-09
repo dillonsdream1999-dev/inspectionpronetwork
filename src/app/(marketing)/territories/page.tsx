@@ -281,14 +281,8 @@ export default function TerritoriesPage() {
           <div className="flex flex-wrap items-center justify-center gap-4 mb-6 text-sm">
             <div className="bg-white border-2 border-brand-200 rounded-lg px-4 py-2">
               <span className="text-slate-600">Individual Territory:</span>
-              <span className="ml-2 text-2xl font-bold text-brand-600">$250</span>
+              <span className="ml-2 text-2xl font-bold text-brand-600">$99</span>
               <span className="text-slate-500">/mo</span>
-            </div>
-            <div className="bg-emerald-50 border-2 border-emerald-200 rounded-lg px-4 py-2">
-              <span className="text-slate-700">Adjacent Territory:</span>
-              <span className="ml-2 text-2xl font-bold text-emerald-600">$150</span>
-              <span className="text-slate-500">/mo</span>
-              <span className="ml-2 text-xs text-emerald-700 font-medium">($100 savings)</span>
             </div>
           </div>
           <a 
@@ -322,7 +316,7 @@ export default function TerritoriesPage() {
                     <div className="flex flex-col items-center gap-0.5">
                       <span>Individual Territories</span>
                       <span className={`text-xs font-normal ${viewMode === 'individual' ? 'text-brand-100' : 'text-slate-500'}`}>
-                        $250/mo • $150/mo adjacent
+                        $99/mo
                       </span>
                     </div>
                   </button>
@@ -337,7 +331,7 @@ export default function TerritoriesPage() {
                     <div className="flex flex-col items-center gap-0.5">
                       <span>🏆 Full DMAs</span>
                       <span className={`text-xs font-normal ${viewMode === 'dma' ? 'text-amber-100' : 'text-slate-500'}`}>
-                        $3,000/mo • Entire Market
+                        $1,000/mo • Entire Market
                       </span>
                     </div>
                   </button>
@@ -472,7 +466,7 @@ export default function TerritoriesPage() {
                   </p>
                   <div className="bg-brand-50 border border-brand-200 rounded-lg px-4 py-3 inline-block">
                     <span className="text-sm text-slate-700">Pricing:</span>
-                    <span className="ml-2 text-xl font-bold text-brand-600">$3,000</span>
+                    <span className="ml-2 text-xl font-bold text-brand-600">$1,000</span>
                     <span className="text-slate-500">/month</span>
                   </div>
                 </div>

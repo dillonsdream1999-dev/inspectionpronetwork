@@ -426,7 +426,7 @@ export default function TreatmentLeadsPage() {
               </h3>
               
               <p className="text-4xl font-bold text-brand-600 mb-2">
-                $250
+                $99
               </p>
               <p className="text-slate-600 mb-6">per month</p>
               
@@ -437,7 +437,7 @@ export default function TreatmentLeadsPage() {
                 </li>
                 <li className="flex items-start gap-2">
                   <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
-                  <span>Adjacent territories available at a discount</span>
+                  <span>Exclusive territory access</span>
                 </li>
               </ul>
             </div>
@@ -454,7 +454,7 @@ export default function TreatmentLeadsPage() {
               
               <div className="mb-2">
                 <p className="text-2xl text-slate-400 line-through">
-                  Regular price: $3,000 per month
+                  Regular price: $1,000 per month
                 </p>
                 <p className="text-4xl font-bold text-brand-600">
                   $1,500
