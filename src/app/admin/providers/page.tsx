@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
-import { Building2, MapPin, CreditCard, AlertCircle } from 'lucide-react'
+import { Building2, MapPin, CreditCard, AlertCircle, Edit } from 'lucide-react'
 import { AddProviderForm } from '@/components/admin/AddProviderForm'
+import { EditProviderButton } from '@/components/admin/EditProviderButton'
 
 // Force dynamic rendering
 export const dynamic = 'force-dynamic'
@@ -16,6 +17,7 @@ export default async function AdminProvidersPage() {
         profiles (email),
         territory_ownership (
           id,
+          territory_id,
           status,
           price_type,
           stripe_subscription_id,
@@ -25,14 +27,13 @@ export default async function AdminProvidersPage() {
       .order('created_at', { ascending: false }),
     supabase
       .from('territories')
-      .select('id, name, state, status, metro_area')
-      .eq('status', 'available')
+      .select('id, name, state, status, metro_area, is_dma')
       .order('state')
       .order('name')
   ])
 
   const companies = companiesResult.data
-  const availableTerritories = territoriesResult.data || []
+  const allTerritories = territoriesResult.data || []
 
   return (
     <div className="p-8">
@@ -43,7 +44,7 @@ export default async function AdminProvidersPage() {
         </div>
       </div>
 
-      <AddProviderForm availableTerritories={availableTerritories} />
+      <AddProviderForm availableTerritories={allTerritories} />
 
       {!companies || companies.length === 0 ? (
         <div className="bg-slate-800 rounded-xl border border-slate-700 p-12 text-center">
@@ -83,9 +84,12 @@ export default async function AdminProvidersPage() {
                         <p className="text-sm text-slate-400">{profile?.email}</p>
                       </div>
                     </div>
-                    <div className="text-right">
-                      <p className="text-2xl font-bold text-white">${monthlySpend}</p>
-                      <p className="text-sm text-slate-400">Monthly spend</p>
+                    <div className="flex items-center gap-4">
+                      <div className="text-right">
+                        <p className="text-2xl font-bold text-white">${monthlySpend}</p>
+                        <p className="text-sm text-slate-400">Monthly spend</p>
+                      </div>
+                      <EditProviderButton company={company} allTerritories={allTerritories} />
                     </div>
                   </div>
                 </div>

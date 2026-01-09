@@ -36,7 +36,6 @@ export function AddProviderForm({
   const [territorySearch, setTerritorySearch] = useState('')
 
   const filteredTerritories = availableTerritories.filter(t => 
-    t.status === 'available' &&
     !selectedTerritories.some(st => st.territoryId === t.id) &&
     (t.name.toLowerCase().includes(territorySearch.toLowerCase()) ||
      t.state.toLowerCase().includes(territorySearch.toLowerCase()) ||
@@ -203,7 +202,7 @@ export function AddProviderForm({
             Assign Territories (Optional)
           </label>
           <p className="text-xs text-slate-500 mb-3">
-            Assign territories without requiring a Stripe subscription
+            Assign territories without requiring a Stripe subscription. You can select available territories or reassign taken territories.
           </p>
 
           {/* Selected territories */}
@@ -259,10 +258,19 @@ export function AddProviderForm({
                     className="w-full px-4 py-2.5 text-left text-sm text-slate-300 hover:bg-slate-700 hover:text-white transition-colors flex items-center gap-2 border-b border-slate-700 last:border-b-0"
                   >
                     <MapPin className="w-4 h-4 text-slate-500 shrink-0" />
-                    <span>
+                    <span className="flex-1">
                       {territory.name}, {territory.state}
                       {territory.metro_area && ` • ${territory.metro_area}`}
                     </span>
+                    {territory.status === 'available' ? (
+                      <span className="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium bg-emerald-500/20 text-emerald-400">
+                        Available
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium bg-amber-500/20 text-amber-400">
+                        {territory.status} (will reassign)
+                      </span>
+                    )}
                   </button>
                 ))}
                 <div className="px-4 py-2 text-xs text-slate-500 bg-slate-900 border-t border-slate-700">

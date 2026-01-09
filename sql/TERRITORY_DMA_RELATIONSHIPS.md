@@ -485,3 +485,5 @@ The following indexes exist to optimize queries:
 - **Use service client** when checking ownership across all companies (bypasses RLS)
 
 
+
+

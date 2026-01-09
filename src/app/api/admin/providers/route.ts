@@ -117,15 +117,33 @@ export async function POST(request: NextRequest) {
     // Assign territories if provided
     if (territories && territories.length > 0) {
       for (const t of territories) {
-        // Check territory is available
+        // Check if territory exists
         const { data: territory } = await serviceClient
           .from('territories')
-          .select('status')
+          .select('status, id')
           .eq('id', t.territoryId)
           .single()
 
-        if (!territory || territory.status !== 'available') {
-          continue // Skip unavailable territories
+        if (!territory) {
+          continue // Skip non-existent territories
+        }
+
+        // If territory is taken, remove existing ownership first
+        if (territory.status === 'taken') {
+          const { data: existingOwnership } = await serviceClient
+            .from('territory_ownership')
+            .select('id')
+            .eq('territory_id', t.territoryId)
+            .eq('status', 'active')
+            .maybeSingle()
+
+          if (existingOwnership) {
+            // Deactivate existing ownership
+            await serviceClient
+              .from('territory_ownership')
+              .update({ status: 'cancelled' })
+              .eq('id', existingOwnership.id)
+          }
         }
 
         // Create ownership with 'manual' as Stripe IDs
