@@ -23,9 +23,9 @@ interface TerritoryInDMA {
 
 export function TerritoryCard({ 
   territory, 
-  isAdjacentEligible = false,
+  isAdjacentEligible: _isAdjacentEligible = false,
   onClaim,
-  isLoggedIn = false
+  isLoggedIn: _isLoggedIn = false
 }: TerritoryCardProps) {
   // Type assertion for is_dma which may not be in the database types yet
   const territoryWithDma = territory as Tables<'territories'> & { is_dma?: boolean }
