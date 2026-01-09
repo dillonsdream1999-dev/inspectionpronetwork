@@ -27,7 +27,7 @@ interface Company {
   profiles?: { email: string } | { email: string }[]
   territory_ownership?: Array<{
     id: string
-    territory_id: string
+    territory_id?: string
     status: string
     price_type: string
     territories?: { name: string; is_dma?: boolean } | { name: string; is_dma?: boolean }[]
@@ -59,9 +59,9 @@ export function EditProviderButton({
   const [selectedTerritories, setSelectedTerritories] = useState<SelectedTerritory[]>(() => {
     // Pre-populate with existing territories
     return existingOwnerships
-      .filter(o => o.status === 'active')
+      .filter(o => o.status === 'active' && o.territory_id)
       .map(o => ({
-        territoryId: o.territory_id,
+        territoryId: o.territory_id!,
         priceType: (o.price_type as 'base' | 'adjacent') || 'base'
       }))
       .filter(t => t.territoryId)
@@ -104,9 +104,9 @@ export function EditProviderButton({
     setWebsite(company.website || '')
     setSelectedTerritories(() => {
       return existingOwnerships
-        .filter(o => o.status === 'active')
+        .filter(o => o.status === 'active' && o.territory_id)
         .map(o => ({
-          territoryId: o.territory_id,
+          territoryId: o.territory_id!,
           priceType: (o.price_type as 'base' | 'adjacent') || 'base'
         }))
         .filter(t => t.territoryId)

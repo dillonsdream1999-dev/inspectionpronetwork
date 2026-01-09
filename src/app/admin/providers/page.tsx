@@ -53,7 +53,7 @@ export default async function AdminProvidersPage() {
         </div>
       ) : (
         <div className="space-y-6">
-          {companies.map((company: { id: string; name: string; phone?: string; website?: string; billing_email?: string; created_at: string; profiles?: { email: string } | { email: string }[]; territory_ownership?: { id: string; status: string; price_type: string; territories?: { name: string; is_dma?: boolean } | { name: string; is_dma?: boolean }[] }[] }) => {
+          {companies.map((company: { id: string; name: string; phone?: string; website?: string; billing_email?: string; created_at: string; profiles?: { email: string } | { email: string }[]; territory_ownership?: { id: string; territory_id?: string; status: string; price_type: string; territories?: { name: string; is_dma?: boolean } | { name: string; is_dma?: boolean }[] }[] }) => {
             // Handle profiles as potentially array or object
             const profile = Array.isArray(company.profiles) ? company.profiles[0] : company.profiles
             const ownerships = company.territory_ownership || []
