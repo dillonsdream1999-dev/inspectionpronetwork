@@ -1,26 +1,12 @@
 import Link from 'next/link'
-import { CostComparison } from '@/components/marketing/CostComparison'
 import { 
-  MapPin, 
-  Smartphone, 
   ArrowRight, 
   CheckCircle2, 
-  Shield, 
-  Calendar,
-  Target,
-  TrendingDown,
-  Zap,
-  Users,
-  Bot,
-  Search,
-  AlertTriangle,
   PhoneCall,
-  Clock,
-  MessageSquare,
-  BadgeCheck,
-  ChevronDown,
-  XCircle,
-  Inbox
+  Shield,
+  MapPin,
+  Smartphone,
+  Target
 } from 'lucide-react'
 
 export default function HomePage() {
@@ -35,38 +21,37 @@ export default function HomePage() {
         </div>
         
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
-          <div className="max-w-3xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 mb-8 animate-fade-in">
-              <Shield className="w-4 h-4 text-brand-400" />
-              <span className="text-sm font-medium">Exclusive Territories • Month-to-Month • Cancel Anytime</span>
-            </div>
-            
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight mb-6 animate-slide-up">
-              Own Your Entire Metro Area for Bed Bug Inspections{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-400 to-accent-400">
-                — Before Your Competitors Figure This Out
-              </span>
+          <div className="max-w-4xl mx-auto text-center">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight mb-6">
+              Stop Competing for Bed Bug Jobs
             </h1>
-            
-            <p className="text-lg sm:text-xl text-slate-300 mb-8 max-w-2xl mx-auto animate-slide-up animation-delay-100">
-              Stop competing for clicks. Control the inspection demand in your market. 
-              One operator per territory gets exclusive access to high-intent homeowners who already believe they may have bed bugs—before treatment is even discussed.
+            <p className="text-2xl sm:text-3xl text-brand-200 mb-8">
+              Own the Territory Instead
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-4 justify-center animate-slide-up animation-delay-200 relative z-10">
+            <div className="bg-white/5 backdrop-blur-sm rounded-xl p-8 mb-8 max-w-3xl mx-auto border border-white/10">
+              <p className="text-lg text-slate-300">
+                Get exclusive bed bug treatment leads from homeowners
+              </p>
+              <p className="text-lg text-slate-300 mt-2">
+                who already checked their home and want professional help.
+              </p>
+            </div>
+            
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link 
                 href="/territories" 
-                className="inline-flex items-center justify-center gap-2 bg-accent-500 hover:bg-accent-600 text-white text-lg px-8 py-3 rounded-lg font-semibold transition-colors cursor-pointer"
+                className="inline-flex items-center justify-center gap-2 bg-accent-500 hover:bg-accent-600 text-white text-lg px-8 py-3 rounded-lg font-semibold transition-colors"
               >
                 Check Territory Availability
                 <ArrowRight className="w-5 h-5" />
               </Link>
               <a 
-                href="#what-is-ipn" 
-                className="inline-flex items-center justify-center gap-2 text-white hover:bg-white/10 text-lg px-8 py-3 rounded-lg font-semibold transition-colors cursor-pointer border border-white/20"
+                href="tel:8169622111" 
+                className="inline-flex items-center justify-center gap-2 text-white hover:bg-white/10 text-lg px-8 py-3 rounded-lg font-semibold transition-colors border border-white/20"
               >
-                Learn More
-                <ChevronDown className="w-5 h-5" />
+                <PhoneCall className="w-5 h-5" />
+                Call (816) 962-2111
               </a>
             </div>
           </div>
@@ -89,147 +74,167 @@ export default function HomePage() {
               <span className="font-medium text-slate-700">Exclusive Territory Access</span>
             </div>
             <div className="flex items-center justify-center gap-3">
-              <Calendar className="w-6 h-6 text-brand-500" />
+              <Shield className="w-6 h-6 text-brand-500" />
               <span className="font-medium text-slate-700">Month-to-Month Subscription</span>
             </div>
             <div className="flex items-center justify-center gap-3">
-              <Shield className="w-6 h-6 text-accent-500" />
+              <CheckCircle2 className="w-6 h-6 text-accent-500" />
               <span className="font-medium text-slate-700">Cancel Anytime</span>
             </div>
           </div>
         </div>
       </section>
 
-      {/* What is Inspection Pro Network */}
-      <section id="what-is-ipn" className="py-24 bg-slate-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl mx-auto text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-6">
-              What is Inspection Pro Network?
+      {/* What This Is (Very Simple) */}
+      <section className="py-24 bg-white">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
+              What This Is (Very Simple)
             </h2>
-            <p className="text-xl text-slate-600">
-              A private referral network that routes high-intent bed bug inspection requests 
-              to <strong className="text-slate-900">one exclusive operator per territory</strong>.
-            </p>
           </div>
           
-          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            <div className="bg-white rounded-2xl p-8 shadow-sm border border-slate-200">
-              <div className="w-12 h-12 rounded-xl bg-brand-100 flex items-center justify-center mb-6">
-                <Inbox className="w-6 h-6 text-brand-600" />
-              </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-3">Where Leads Come From</h3>
-              <p className="text-slate-600 mb-4">
-                Requests come from homeowners who used the <strong>Bed Bug Inspection Pro</strong> app 
-                to inspect their home and believe they may have bed bug indicators.
-              </p>
-              <ul className="space-y-2 text-sm text-slate-600">
-                <li className="flex items-start gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-500 mt-0.5 shrink-0" />
-                  <span>Completed a structured inspection process</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-500 mt-0.5 shrink-0" />
-                  <span>Found signs consistent with bed bugs</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-500 mt-0.5 shrink-0" />
-                  <span>Requested professional confirmation</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-500 mt-0.5 shrink-0" />
-                  <span>Entered contact details and location</span>
-                </li>
-              </ul>
-            </div>
+          <div className="bg-white rounded-2xl p-8 shadow-sm border-2 border-slate-200 mb-8">
+            <p className="text-xl font-bold text-slate-900 mb-6">
+              Inspection Pro Network sends you bed bug treatment leads.
+            </p>
             
-            <div className="bg-white rounded-2xl p-8 shadow-sm border border-slate-200">
-              <div className="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center mb-6">
-                <BadgeCheck className="w-6 h-6 text-emerald-600" />
-              </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-3">What Makes Them High-Intent</h3>
-              <p className="text-slate-600 mb-4">
-                These homeowners have already taken action. They're not just Googling—they're preparing 
-                to solve a problem.
-              </p>
-              <ul className="space-y-2 text-sm text-slate-600">
-                <li className="flex items-start gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-500 mt-0.5 shrink-0" />
-                  <span>Spent time inspecting instead of guessing</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-500 mt-0.5 shrink-0" />
-                  <span>Moved past "do I have bed bugs?" panic-searching</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-500 mt-0.5 shrink-0" />
-                  <span>Decided they want professional confirmation</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-500 mt-0.5 shrink-0" />
-                  <span>Prepared to schedule an inspection</span>
-                </li>
-              </ul>
-            </div>
-          </div>
-          
-          <div className="mt-12 bg-brand-50 rounded-2xl p-8 max-w-3xl mx-auto border border-brand-200">
-            <p className="text-center text-brand-900 text-lg">
-              <strong>You're not buying cold scraped contacts.</strong> You're receiving inbound requests 
-              from homeowners who are typically further along than standard Google or directory leads.
+            <p className="text-lg text-slate-700 mb-6">
+              These are not random calls. These are homeowners who:
             </p>
+            
+            <ul className="space-y-3 mb-8">
+              <li className="flex items-start gap-3">
+                <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+                <span className="text-slate-700">Used our free bed bug inspection app</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+                <span className="text-slate-700">Checked their home for bed bugs</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+                <span className="text-slate-700">Learned what bed bugs look like</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+                <span className="text-slate-700">Decided they need professional treatment</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+                <span className="text-slate-700">Requested help from a local expert</span>
+              </li>
+            </ul>
+            
+            <div className="bg-brand-50 rounded-xl p-6 border-2 border-brand-200">
+              <p className="text-lg font-bold text-slate-900">
+                That expert is you. And you are the only one in your territory.
+              </p>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Not a Typical Lead Network */}
-      <section className="py-24 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+      {/* How It Works */}
+      <section className="py-24 bg-slate-50">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
-              Not a Typical Lead Network
+              How It Works
             </h2>
-            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-              Yes, it's a lead network—but it behaves like an exclusive referral channel, 
-              not a shared lead marketplace.
-            </p>
           </div>
           
-          <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-            {/* Typical Lead Networks */}
-            <div className="bg-red-50 rounded-2xl p-8 border-2 border-red-200">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center">
-                  <XCircle className="w-5 h-5 text-red-600" />
-                </div>
-                <h3 className="text-xl font-bold text-slate-900">Typical Lead Networks</h3>
+          <div className="grid md:grid-cols-3 gap-8">
+            {/* Step 1 */}
+            <div className="bg-white rounded-2xl p-8 shadow-sm border-2 border-slate-200">
+              <div className="w-14 h-14 rounded-2xl bg-brand-100 flex items-center justify-center mb-6 mx-auto">
+                <Smartphone className="w-7 h-7 text-brand-600" />
               </div>
+              <div className="text-center mb-4">
+                <div className="inline-flex w-8 h-8 rounded-full bg-brand-600 text-white items-center justify-center font-bold text-sm mb-3">
+                  1
+                </div>
+              </div>
+              <h3 className="text-xl font-bold text-slate-900 mb-3 text-center">
+                Homeowner Uses App
+              </h3>
+              <p className="text-slate-600 text-center">
+                They download the free app and check their home for bed bugs.
+              </p>
+            </div>
+            
+            {/* Step 2 */}
+            <div className="bg-white rounded-2xl p-8 shadow-sm border-2 border-slate-200">
+              <div className="w-14 h-14 rounded-2xl bg-accent-100 flex items-center justify-center mb-6 mx-auto">
+                <Target className="w-7 h-7 text-accent-600" />
+              </div>
+              <div className="text-center mb-4">
+                <div className="inline-flex w-8 h-8 rounded-full bg-accent-500 text-white items-center justify-center font-bold text-sm mb-3">
+                  2
+                </div>
+              </div>
+              <h3 className="text-xl font-bold text-slate-900 mb-3 text-center">
+                They Request Help
+              </h3>
+              <p className="text-slate-600 text-center">
+                After finding signs, they ask for professional treatment.
+              </p>
+            </div>
+            
+            {/* Step 3 */}
+            <div className="bg-white rounded-2xl p-8 shadow-sm border-2 border-slate-200">
+              <div className="w-14 h-14 rounded-2xl bg-emerald-100 flex items-center justify-center mb-6 mx-auto">
+                <MapPin className="w-7 h-7 text-emerald-600" />
+              </div>
+              <div className="text-center mb-4">
+                <div className="inline-flex w-8 h-8 rounded-full bg-emerald-500 text-white items-center justify-center font-bold text-sm mb-3">
+                  3
+                </div>
+              </div>
+              <h3 className="text-xl font-bold text-slate-900 mb-3 text-center">
+                Lead Goes to You
+              </h3>
+              <p className="text-slate-600 text-center">
+                The request comes to you. Only you. No competition.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Why This Is Different */}
+      <section className="py-24 bg-white">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
+              Why This Is Different
+            </h2>
+          </div>
+          
+          <div className="grid md:grid-cols-2 gap-8 mb-8">
+            {/* Typical Lead Companies */}
+            <div className="bg-red-50 rounded-2xl p-8 border-2 border-red-200">
+              <h3 className="text-xl font-bold text-slate-900 mb-6">Typical Lead Companies</h3>
               <ul className="space-y-4">
                 <li className="flex items-start gap-3">
-                  <div className="w-6 h-6 rounded-full bg-red-200 flex items-center justify-center shrink-0 mt-0.5">
-                    <span className="text-red-700 text-xs font-bold">✕</span>
-                  </div>
+                  <span className="text-red-600 font-bold text-xl">✕</span>
                   <div>
-                    <p className="font-medium text-slate-900">Sell leads to multiple companies</p>
-                    <p className="text-sm text-slate-600">You're racing against 3-5 other operators for every lead</p>
+                    <p className="font-semibold text-slate-900">Sell to multiple companies</p>
+                    <p className="text-sm text-slate-600">You race 3-5 others for every lead</p>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
-                  <div className="w-6 h-6 rounded-full bg-red-200 flex items-center justify-center shrink-0 mt-0.5">
-                    <span className="text-red-700 text-xs font-bold">✕</span>
-                  </div>
+                  <span className="text-red-600 font-bold text-xl">✕</span>
                   <div>
-                    <p className="font-medium text-slate-900">Create price-shopping behavior</p>
-                    <p className="text-sm text-slate-600">Homeowners learn to pit companies against each other</p>
+                    <p className="font-semibold text-slate-900">Create price wars</p>
+                    <p className="text-sm text-slate-600">Homeowners shop you against competitors</p>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
-                  <div className="w-6 h-6 rounded-full bg-red-200 flex items-center justify-center shrink-0 mt-0.5">
-                    <span className="text-red-700 text-xs font-bold">✕</span>
-                  </div>
+                  <span className="text-red-600 font-bold text-xl">✕</span>
                   <div>
-                    <p className="font-medium text-slate-900">Attract low-intent inquiries</p>
-                    <p className="text-sm text-slate-600">Many leads are just shopping around or not serious</p>
+                    <p className="font-semibold text-slate-900">Low-intent calls</p>
+                    <p className="text-sm text-slate-600">Many just want free advice</p>
                   </div>
                 </li>
               </ul>
@@ -237,374 +242,105 @@ export default function HomePage() {
             
             {/* Inspection Pro Network */}
             <div className="bg-emerald-50 rounded-2xl p-8 border-2 border-emerald-200">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center">
-                  <CheckCircle2 className="w-5 h-5 text-emerald-600" />
-                </div>
-                <h3 className="text-xl font-bold text-slate-900">Inspection Pro Network</h3>
-              </div>
+              <h3 className="text-xl font-bold text-slate-900 mb-6">Inspection Pro Network</h3>
               <ul className="space-y-4">
                 <li className="flex items-start gap-3">
-                  <div className="w-6 h-6 rounded-full bg-emerald-200 flex items-center justify-center shrink-0 mt-0.5">
-                    <span className="text-emerald-700 text-xs font-bold">✓</span>
-                  </div>
+                  <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
                   <div>
-                    <p className="font-medium text-slate-900">Routes exclusively (one operator per territory)</p>
-                    <p className="text-sm text-slate-600">You're not competing—requests in your area go to you</p>
+                    <p className="font-semibold text-slate-900">One operator per territory</p>
+                    <p className="text-sm text-slate-600">No competition. Leads go to you only.</p>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
-                  <div className="w-6 h-6 rounded-full bg-emerald-200 flex items-center justify-center shrink-0 mt-0.5">
-                    <span className="text-emerald-700 text-xs font-bold">✓</span>
-                  </div>
+                  <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
                   <div>
-                    <p className="font-medium text-slate-900">Generates inspection-intent requests</p>
-                    <p className="text-sm text-slate-600">Not general pest calls—specific bed bug inspection needs</p>
+                    <p className="font-semibold text-slate-900">Treatment-ready leads</p>
+                    <p className="text-sm text-slate-600">Homeowners already checked and want help</p>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
-                  <div className="w-6 h-6 rounded-full bg-emerald-200 flex items-center justify-center shrink-0 mt-0.5">
-                    <span className="text-emerald-700 text-xs font-bold">✓</span>
-                  </div>
+                  <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
                   <div>
-                    <p className="font-medium text-slate-900">Uses the app as a filter</p>
-                    <p className="text-sm text-slate-600">Reduces tire-kickers and education time</p>
+                    <p className="font-semibold text-slate-900">No bidding wars</p>
+                    <p className="text-sm text-slate-600">You set your price. No race to the bottom.</p>
                   </div>
                 </li>
               </ul>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* How It Works */}
-      <section id="how-it-works" className="py-24 bg-slate-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
-              How It Works
-            </h2>
-            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-              Our inspection-driven platform connects you with homeowners who have already 
-              taken action to investigate a potential problem.
-            </p>
-          </div>
           
-          <div className="grid md:grid-cols-3 gap-8">
-            {/* Step 1 */}
-            <div className="relative">
-              <div className="bg-white rounded-2xl p-8 h-full shadow-sm border border-slate-200 hover:shadow-lg transition-shadow">
-                <div className="w-14 h-14 rounded-2xl bg-brand-100 flex items-center justify-center mb-6">
-                  <Smartphone className="w-7 h-7 text-brand-600" />
-                </div>
-                <div className="absolute -top-3 -left-3 w-8 h-8 rounded-full bg-brand-600 text-white flex items-center justify-center font-bold text-sm">
-                  1
-                </div>
-                <h3 className="text-xl font-bold text-slate-900 mb-3">
-                  Homeowners Use the App
-                </h3>
-                <p className="text-slate-600">
-                  Concerned homeowners download Bed Bug Inspection Pro and complete a guided 
-                  self-inspection—checking mattress seams, headboards, furniture, and more.
-                </p>
-              </div>
-            </div>
-            
-            {/* Step 2 */}
-            <div className="relative">
-              <div className="bg-white rounded-2xl p-8 h-full shadow-sm border border-slate-200 hover:shadow-lg transition-shadow">
-                <div className="w-14 h-14 rounded-2xl bg-accent-100 flex items-center justify-center mb-6">
-                  <Target className="w-7 h-7 text-accent-600" />
-                </div>
-                <div className="absolute -top-3 -left-3 w-8 h-8 rounded-full bg-accent-500 text-white flex items-center justify-center font-bold text-sm">
-                  2
-                </div>
-                <h3 className="text-xl font-bold text-slate-900 mb-3">
-                  They Request Professional Help
-                </h3>
-                <p className="text-slate-600">
-                  After finding signs (or strong suspicion), they request professional confirmation 
-                  and next steps—entering their contact details and location.
-                </p>
-              </div>
-            </div>
-            
-            {/* Step 3 */}
-            <div className="relative">
-              <div className="bg-white rounded-2xl p-8 h-full shadow-sm border border-slate-200 hover:shadow-lg transition-shadow">
-                <div className="w-14 h-14 rounded-2xl bg-emerald-100 flex items-center justify-center mb-6">
-                  <MapPin className="w-7 h-7 text-emerald-600" />
-                </div>
-                <div className="absolute -top-3 -left-3 w-8 h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold text-sm">
-                  3
-                </div>
-                <h3 className="text-xl font-bold text-slate-900 mb-3">
-                  Routed Exclusively to You
-                </h3>
-                <p className="text-slate-600">
-                  Requests are routed exclusively to the territory owner. No competing with 
-                  other companies—you receive the lead and handle outreach directly.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Why Not Google Ads */}
-      <section className="py-24 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div>
-              <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-6">
-                Why Not Google Ads?
-              </h2>
-              <p className="text-lg text-slate-600 mb-8">
-                Digital advertising for pest control is notoriously expensive and unpredictable. 
-                Territory access offers a different approach.
-              </p>
-              
-              <div className="space-y-4">
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-lg bg-red-100 flex items-center justify-center shrink-0">
-                    <TrendingDown className="w-5 h-5 text-red-600 rotate-180" />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-slate-900">Expensive</h4>
-                    <p className="text-slate-600 text-sm">High CPCs for pest control keywords, often $20-50+ per click</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-lg bg-red-100 flex items-center justify-center shrink-0">
-                    <Users className="w-5 h-5 text-red-600" />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-slate-900">Competitive</h4>
-                    <p className="text-slate-600 text-sm">Bidding against national franchises and aggregators</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-lg bg-red-100 flex items-center justify-center shrink-0">
-                    <Zap className="w-5 h-5 text-red-600" />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-slate-900">Volatile</h4>
-                    <p className="text-slate-600 text-sm">Costs fluctuate with season and competition</p>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="mt-8 p-6 bg-brand-50 rounded-xl border border-brand-200">
-                <p className="text-brand-900 font-medium">
-                  Compare predictable territory access vs. bidding wars. 
-                  <span className="block mt-2 text-brand-700 text-sm">
-                    $250/month for exclusive access—designed so one inspection/treatment covers the month.
-                  </span>
-                </p>
-              </div>
-            </div>
-            
-            <div>
-              <CostComparison />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Google AI Overview Impact */}
-      <section className="py-24 bg-slate-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-2 bg-amber-100 text-amber-800 rounded-full px-4 py-2 mb-6">
-              <AlertTriangle className="w-4 h-4" />
-              <span className="text-sm font-medium">Industry Shift</span>
-            </div>
-            <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
-              Google AI Overviews Changed Everything
-            </h2>
-            <p className="text-lg text-slate-600 max-w-3xl mx-auto">
-              The bed bug industry is experiencing a fundamental shift in how homeowners 
-              find and contact pest control professionals.
+          <div className="bg-slate-900 text-white rounded-2xl p-8 text-center">
+            <p className="text-2xl font-bold mb-2">
+              One territory. One operator. No competition.
             </p>
-          </div>
-          
-          <div className="grid lg:grid-cols-2 gap-12 items-start">
-            {/* The Problem */}
-            <div className="bg-white rounded-2xl p-8 border-2 border-red-200">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-12 h-12 rounded-xl bg-red-100 flex items-center justify-center">
-                  <Bot className="w-6 h-6 text-red-600" />
-                </div>
-                <h3 className="text-xl font-bold text-slate-900">The AI Overview Problem</h3>
-              </div>
-              
-              <div className="space-y-4 text-slate-700">
-                <p>
-                  When homeowners Google "do I have bed bugs?" or "bed bug signs," Google's AI now 
-                  provides instant answers directly in search results. Users get their questions 
-                  answered without ever clicking through to your website.
-                </p>
-                <p>
-                  <strong className="text-red-700">The result?</strong> Fewer clicks, fewer calls, 
-                  and dramatically reduced organic traffic for pest control companies—even those 
-                  who invested heavily in SEO.
-                </p>
-                
-                <div className="bg-red-50 rounded-lg p-4 border border-red-200 mt-6">
-                  <div className="flex items-start gap-3">
-                    <Search className="w-5 h-5 text-red-500 mt-1 shrink-0" />
-                    <div>
-                      <p className="font-medium text-slate-900 mb-1">Zero-Click Searches</p>
-                      <p className="text-sm text-slate-600">
-                        AI Overviews satisfy user queries instantly, meaning homeowners 
-                        never reach your site—even if you rank #1.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            {/* The Opportunity */}
-            <div className="bg-white rounded-2xl p-8 border-2 border-emerald-200">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center">
-                  <PhoneCall className="w-6 h-6 text-emerald-600" />
-                </div>
-                <h3 className="text-xl font-bold text-slate-900">The High-Intent Opportunity</h3>
-              </div>
-              
-              <div className="space-y-4 text-slate-700">
-                <p>
-                  Here's what Google can't replace: <strong className="text-emerald-700">the moment 
-                  a homeowner decides they need professional help.</strong>
-                </p>
-                <p>
-                  Bed Bug Inspection Pro captures users at exactly this inflection point. After 
-                  completing a guided self-inspection—checking mattress seams, headboards, and 
-                  furniture—many users realize they need expert eyes on the situation.
-                </p>
-                <p>
-                  <strong className="text-emerald-700">These aren't casual researchers.</strong> They've 
-                  already invested 10-15 minutes inspecting their home. They're concerned, motivated, 
-                  and ready to take action.
-                </p>
-                
-                <div className="bg-emerald-50 rounded-lg p-4 border border-emerald-200 mt-6">
-                  <div className="flex items-start gap-3">
-                    <Target className="w-5 h-5 text-emerald-500 mt-1 shrink-0" />
-                    <div>
-                      <p className="font-medium text-slate-900 mb-1">Action-Ready Homeowners</p>
-                      <p className="text-sm text-slate-600">
-                        Users who complete an inspection and request help have demonstrated 
-                        genuine concern and intent to solve their problem.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          {/* Bottom callout */}
-          <div className="mt-12 bg-gradient-to-r from-brand-600 to-brand-700 rounded-2xl p-8 text-white text-center">
-            <h3 className="text-2xl font-bold mb-3">
-              Bypass Google Ads. Connect Directly with Homeowners.
-            </h3>
-            <p className="text-brand-100 max-w-2xl mx-auto mb-6">
-              While your competitors burn money on expensive clicks and bidding wars, you'll have 
-              exclusive access to high-intent leads generated through our inspection app.
-            </p>
-            <Link href="/territories" className="inline-flex items-center gap-2 bg-white text-brand-700 hover:bg-brand-50 font-semibold px-6 py-3 rounded-lg transition-colors">
-              Claim Your Territory
-              <ArrowRight className="w-5 h-5" />
-            </Link>
           </div>
         </div>
       </section>
 
       {/* What You Get */}
-      <section className="py-24 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+      <section className="py-24 bg-slate-50">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
-              What You Receive With Each Lead
+              What You Get
             </h2>
-            <p className="text-lg text-slate-600">
-              Everything you need to make contact and close the inspection.
-            </p>
           </div>
           
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
-            <div className="bg-slate-50 rounded-xl p-6 text-center">
-              <div className="w-12 h-12 rounded-full bg-brand-100 flex items-center justify-center mx-auto mb-4">
-                <Users className="w-6 h-6 text-brand-600" />
-              </div>
-              <h4 className="font-semibold text-slate-900 mb-1">Contact Name</h4>
-              <p className="text-sm text-slate-600">Homeowner's name for personalized outreach</p>
-            </div>
+          <div className="bg-white rounded-2xl p-8 shadow-sm border-2 border-slate-200">
+            <ul className="space-y-4 mb-6">
+              <li className="flex items-start gap-3">
+                <CheckCircle2 className="w-6 h-6 text-emerald-600 shrink-0 mt-0.5" />
+                <span className="text-lg text-slate-900 font-semibold">Exclusive territory access</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <CheckCircle2 className="w-6 h-6 text-emerald-600 shrink-0 mt-0.5" />
+                <span className="text-lg text-slate-900 font-semibold">Treatment-ready bed bug leads</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <CheckCircle2 className="w-6 h-6 text-emerald-600 shrink-0 mt-0.5" />
+                <span className="text-lg text-slate-900 font-semibold">No shared leads</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <CheckCircle2 className="w-6 h-6 text-emerald-600 shrink-0 mt-0.5" />
+                <span className="text-lg text-slate-900 font-semibold">No Google Ads needed</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <CheckCircle2 className="w-6 h-6 text-emerald-600 shrink-0 mt-0.5" />
+                <span className="text-lg text-slate-900 font-semibold">No bidding wars</span>
+              </li>
+              <li className="flex items-start gap-3">
+                <CheckCircle2 className="w-6 h-6 text-emerald-600 shrink-0 mt-0.5" />
+                <span className="text-lg text-slate-900 font-semibold">Month-to-month. Cancel anytime.</span>
+              </li>
+            </ul>
             
-            <div className="bg-slate-50 rounded-xl p-6 text-center">
-              <div className="w-12 h-12 rounded-full bg-brand-100 flex items-center justify-center mx-auto mb-4">
-                <PhoneCall className="w-6 h-6 text-brand-600" />
-              </div>
-              <h4 className="font-semibold text-slate-900 mb-1">Phone / Email</h4>
-              <p className="text-sm text-slate-600">Direct contact information</p>
-            </div>
-            
-            <div className="bg-slate-50 rounded-xl p-6 text-center">
-              <div className="w-12 h-12 rounded-full bg-brand-100 flex items-center justify-center mx-auto mb-4">
-                <MapPin className="w-6 h-6 text-brand-600" />
-              </div>
-              <h4 className="font-semibold text-slate-900 mb-1">Service Address</h4>
-              <p className="text-sm text-slate-600">ZIP/city or full address</p>
-            </div>
-            
-            <div className="bg-slate-50 rounded-xl p-6 text-center">
-              <div className="w-12 h-12 rounded-full bg-brand-100 flex items-center justify-center mx-auto mb-4">
-                <MessageSquare className="w-6 h-6 text-brand-600" />
-              </div>
-              <h4 className="font-semibold text-slate-900 mb-1">Context</h4>
-              <p className="text-sm text-slate-600">What they found and where they looked</p>
-            </div>
-          </div>
-          
-          <div className="mt-12 bg-amber-50 rounded-xl p-6 max-w-2xl mx-auto border border-amber-200">
-            <div className="flex items-start gap-3">
-              <Clock className="w-5 h-5 text-amber-600 mt-1 shrink-0" />
-              <div>
-                <p className="font-semibold text-slate-900 mb-1">Speed Matters</p>
-                <p className="text-sm text-slate-700">
-                  Fast response = higher close rate. We recommend initial contact within 5-15 minutes, 
-                  with same-day scheduling options whenever possible. Operators who win treat these 
-                  like inbound emergency work.
-                </p>
-              </div>
+            <div className="bg-emerald-50 rounded-xl p-6 border-2 border-emerald-300 mt-6">
+              <p className="text-lg font-bold text-slate-900 text-center">
+                You own your territory. No one else can claim it.
+              </p>
             </div>
           </div>
         </div>
       </section>
 
       {/* Pricing */}
-      <section className="py-24 bg-slate-50">
+      <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
-              Simple, Transparent Pricing
+              Simple Pricing
             </h2>
             <p className="text-lg text-slate-600">
               Flat monthly fee. No per-lead charges. No long-term contracts.
             </p>
           </div>
           
-          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
             {/* Individual Territory */}
             <div className="bg-white rounded-2xl p-8 border-2 border-brand-200 relative shadow-lg">
               <div className="text-center mb-6">
                 <div className="text-4xl font-bold text-slate-900 mb-2">
-                  $250<span className="text-xl font-normal text-slate-500">/mo</span>
+                  $99<span className="text-xl font-normal text-slate-500">/mo</span>
                 </div>
                 <p className="text-sm text-slate-600 font-medium">Individual Territory</p>
               </div>
@@ -616,11 +352,11 @@ export default function HomePage() {
                 </li>
                 <li className="flex items-start gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
-                  <span className="text-slate-700">All inbound inspection requests routed to you</span>
+                  <span className="text-slate-700">All treatment requests routed to you</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
-                  <span className="text-slate-700">Increased marketing push in active territories</span>
+                  <span className="text-slate-700">Marketing support in your territory</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
@@ -629,40 +365,6 @@ export default function HomePage() {
                 <li className="flex items-start gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
                   <span className="text-slate-700">Cancel anytime—no long-term commitment</span>
-                </li>
-              </ul>
-            </div>
-
-            {/* Adjacent Territory */}
-            <div className="bg-emerald-50 rounded-2xl p-8 border-2 border-emerald-300 relative shadow-lg">
-              <div className="text-center mb-6">
-                <div className="text-4xl font-bold text-slate-900 mb-2">
-                  $150<span className="text-xl font-normal text-slate-500">/mo</span>
-                </div>
-                <p className="text-sm text-slate-600 font-medium">Adjacent Territory</p>
-                <p className="text-xs text-emerald-700 mt-1 font-medium">$100 savings per month</p>
-              </div>
-              
-              <ul className="space-y-3 mb-6 text-sm">
-                <li className="flex items-start gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                  <span className="text-slate-700">All Individual Territory benefits</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                  <span className="text-slate-700">Available when you own adjacent territory</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                  <span className="text-slate-700">Increased marketing push in active territories</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                  <span className="text-slate-700">Email or phone support</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                  <span className="text-slate-700">Perfect for market expansion</span>
                 </li>
               </ul>
             </div>
@@ -677,7 +379,7 @@ export default function HomePage() {
               
               <div className="text-center mb-6">
                 <div className="text-4xl font-bold text-slate-900 mb-2">
-                  $3,000<span className="text-xl font-normal text-slate-500">/mo</span>
+                  $1,000<span className="text-xl font-normal text-slate-500">/mo</span>
                 </div>
                 <p className="text-sm text-slate-600 font-medium">Full DMA Ownership</p>
                 <p className="text-xs text-amber-700 mt-1 font-medium">Entire Market Coverage</p>
@@ -690,11 +392,11 @@ export default function HomePage() {
                 </li>
                 <li className="flex items-start gap-2">
                   <CheckCircle2 className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
-                  <span className="text-slate-700"><strong>Marketing Spend Included</strong> - We drive users to the inspection app in your DMA via Facebook, Instagram, TikTok, and more</span>
+                  <span className="text-slate-700"><strong>Marketing Spend Included</strong> - We drive users to the inspection app in your DMA</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <CheckCircle2 className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
-                  <span className="text-slate-700"><strong>More Leads</strong> - Increased app usage = more inspection requests routed to you</span>
+                  <span className="text-slate-700"><strong>More Leads</strong> - Increased app usage = more treatment requests</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <CheckCircle2 className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
@@ -710,14 +412,14 @@ export default function HomePage() {
               <ArrowRight className="w-5 h-5" />
             </Link>
             <p className="text-center text-sm text-slate-500 mt-4">
-              Designed so one inspection/treatment covers the month.
+              One bed bug job covers the monthly cost.
             </p>
           </div>
         </div>
       </section>
 
       {/* FAQ Section */}
-      <section className="py-24 bg-white">
+      <section className="py-24 bg-slate-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
@@ -726,52 +428,45 @@ export default function HomePage() {
           </div>
           
           <div className="space-y-6">
-            {/* FAQ Item */}
-            <div className="bg-slate-50 rounded-xl p-6">
+            <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
               <h3 className="font-bold text-slate-900 mb-2">Are the leads shared with other companies?</h3>
               <p className="text-slate-600">
-                <strong>No.</strong> Inspection Pro Network is exclusive by territory. You're not competing 
-                with 3 other companies for the same request. If your territory is assigned to you, 
-                requests in that area route to you only.
+                <strong>No.</strong> Each territory has one operator only. You are not competing with anyone else for the same leads.
               </p>
             </div>
             
-            <div className="bg-slate-50 rounded-xl p-6">
+            <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
               <h3 className="font-bold text-slate-900 mb-2">What do you mean by "territory"?</h3>
               <p className="text-slate-600">
-                A territory is typically defined by a metro area, county grouping, or set of zip codes 
-                (depending on density). The goal is simple: no overlap and no bidding wars. As the 
-                network grows, territory definitions can tighten to stay fair and profitable for operators.
+                A territory is a specific area (like a metro area or set of zip codes). When you own a territory, all bed bug treatment requests from that area go to you. No one else can claim it.
               </p>
             </div>
             
-            <div className="bg-slate-50 rounded-xl p-6">
+            <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
               <h3 className="font-bold text-slate-900 mb-2">How many leads will I get per month?</h3>
               <p className="text-slate-600">
-                Lead volume depends on population density, seasonality, local demand, and territory size. 
-                We will not promise a fixed number of leads—that's how lead networks overpromise and underdeliver. 
-                The pitch is: <strong>inspection-ready opportunities routed exclusively</strong>. Early on, 
-                we focus on quality and exclusivity while refining what converts best.
+                It depends on your territory size and population. We don't promise a fixed number. We promise exclusive, treatment-ready leads. Quality over quantity.
               </p>
             </div>
             
-            <div className="bg-slate-50 rounded-xl p-6">
+            <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
               <h3 className="font-bold text-slate-900 mb-2">Do I pay per lead?</h3>
               <p className="text-slate-600">
-                <strong>No.</strong> We use a flat monthly model because operators want predictable cost, 
-                we want operator feedback (not transactional churn), and it avoids the "lead seller" feel. 
-                If we ever introduce optional pay-per-lead add-ons later, founding operators will be 
-                notified first and protected.
+                <strong>No.</strong> You pay a flat monthly fee. No per-lead charges. No surprises.
               </p>
             </div>
             
-            <div className="bg-slate-50 rounded-xl p-6">
+            <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
               <h3 className="font-bold text-slate-900 mb-2">What if a homeowner doesn't actually have bed bugs?</h3>
               <p className="text-slate-600">
-                That happens in real life. These are high-intent suspicion leads, not guaranteed infestations. 
-                But even false positives are valuable—you can charge for inspection/confirmation, build trust 
-                and referral potential, and become their go-to if the problem appears later. Your close rate 
-                depends on whether you sell inspection as a service.
+                That happens. These are high-intent suspicion leads. Even if they don't have bed bugs, you can charge for the inspection and become their go-to if the problem appears later.
+              </p>
+            </div>
+            
+            <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
+              <h3 className="font-bold text-slate-900 mb-2">Is there a long-term contract?</h3>
+              <p className="text-slate-600">
+                <strong>No.</strong> Month-to-month. Cancel anytime. Stay because it works.
               </p>
             </div>
           </div>
@@ -779,14 +474,14 @@ export default function HomePage() {
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="py-24 bg-gradient-to-br from-brand-600 to-brand-700 text-white scroll-mt-20">
+      <section className="py-24 bg-gradient-to-br from-brand-600 to-brand-700 text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <PhoneCall className="w-12 h-12 mx-auto mb-6 opacity-90" />
           <h2 className="text-3xl sm:text-4xl font-bold mb-4">
             Questions? We're Here to Help
           </h2>
           <p className="text-xl text-brand-100 mb-8 max-w-2xl mx-auto">
-            Investing in a territory is a big decision. We're available to answer any questions about territories, pricing, or how the platform works.
+            Want to know more about territories, pricing, or how it works? Give us a call or text.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <a 
@@ -800,88 +495,22 @@ export default function HomePage() {
               href="sms:8169622111" 
               className="inline-flex items-center justify-center gap-2 bg-brand-500 hover:bg-brand-400 text-white text-lg px-8 py-3 rounded-lg font-semibold transition-colors border border-white/20"
             >
-              <MessageSquare className="w-5 h-5" />
               Text Us
             </a>
           </div>
-          <p className="text-sm text-brand-100 mt-6 opacity-90">
-            Available Monday - Friday, 9am - 5pm CT
-          </p>
         </div>
       </section>
 
-      {/* FAQ Section - Continued */}
+      {/* Final CTA */}
       <section className="py-24 bg-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="space-y-6">
-            <div className="bg-slate-50 rounded-xl p-6">
-              <h3 className="font-bold text-slate-900 mb-2">Will you list multiple operators in my territory?</h3>
-              <p className="text-slate-600">
-                <strong>No, not during the founding model.</strong> Exclusivity is the whole point. If the 
-                network grows to where demand exceeds one operator's capacity, we expand territories or 
-                create adjacent territories—we don't stack competitors on top of you.
-              </p>
-            </div>
-            
-            <div className="bg-slate-50 rounded-xl p-6">
-              <h3 className="font-bold text-slate-900 mb-2">Do you require a specific inspection price or treatment method?</h3>
-              <p className="text-slate-600">
-                <strong>No.</strong> You run your business—you set pricing, decide treatment methods, 
-                and manage scheduling and customer experience. We are the referral and qualification layer, 
-                not your operations manager.
-              </p>
-            </div>
-            
-            <div className="bg-slate-50 rounded-xl p-6">
-              <h3 className="font-bold text-slate-900 mb-2">What are the requirements to join?</h3>
-              <p className="text-slate-600 mb-3">
-                Baseline expectations: you actively offer bed bug inspections and/or treatment, 
-                you can respond quickly to inbound requests, you have basic professionalism and follow-through, 
-                and you agree not to misrepresent the network or app to homeowners.
-              </p>
-              <p className="text-slate-600">
-                <em>Optional but helpful:</em> Reviews and proof of experience, K9 inspection capability, 
-                heat treatment capability.
-              </p>
-            </div>
-            
-            <div className="bg-slate-50 rounded-xl p-6">
-              <h3 className="font-bold text-slate-900 mb-2">Can I buy additional territories?</h3>
-              <p className="text-slate-600">
-                <strong>Yes</strong> (if available). We can structure add-on territories as adjacent 
-                territories at a discount ($150/mo), radius expansion, or secondary markets you already serve.
-              </p>
-            </div>
-            
-            <div className="bg-slate-50 rounded-xl p-6">
-              <h3 className="font-bold text-slate-900 mb-2">What should I say when I call the lead?</h3>
-              <p className="text-slate-600 mb-3">
-                Simple is best:
-              </p>
-              <p className="text-slate-800 italic bg-white p-4 rounded-lg border border-slate-200">
-                "Hi — this is [Name] with [Company]. You requested a bed bug inspection follow-up after 
-                using the Inspection Pro app. I'm local in your area. When can we schedule a professional 
-                inspection to confirm what you found?"
-              </p>
-              <p className="text-slate-600 mt-3">
-                Then stop talking and let them answer.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="py-24 bg-gradient-to-br from-brand-600 to-brand-800 text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl sm:text-4xl font-bold mb-6">
+          <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-6">
             Ready to Claim Your Territory?
           </h2>
-          <p className="text-xl text-brand-100 mb-8">
-            Check availability in your area and secure exclusive access to 
-            inspection-driven homeowner demand.
+          <p className="text-xl text-slate-600 mb-8">
+            Check availability in your area and secure exclusive access to treatment-ready bed bug leads.
           </p>
-          <Link href="/territories" className="inline-flex items-center gap-2 bg-white text-brand-700 hover:bg-brand-50 text-lg px-8 py-3 rounded-lg font-semibold transition-colors">
+          <Link href="/territories" className="inline-flex items-center gap-2 bg-brand-600 hover:bg-brand-700 text-white text-lg px-8 py-3 rounded-lg font-semibold transition-colors">
             Check Territory Availability
             <ArrowRight className="w-5 h-5" />
           </Link>
