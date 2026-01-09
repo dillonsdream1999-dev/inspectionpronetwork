@@ -40,6 +40,7 @@ export default async function AdminProvidersPage() {
   let offset = 0
   const batchSize = 1000
   let hasMore = true
+  let batchCount = 0
 
   while (hasMore) {
     const { data: batch, error } = await supabase
@@ -56,12 +57,19 @@ export default async function AdminProvidersPage() {
 
     if (batch && batch.length > 0) {
       allTerritories = [...allTerritories, ...batch]
+      batchCount++
       offset += batchSize
       hasMore = batch.length === batchSize
     } else {
       hasMore = false
     }
   }
+
+  // Debug logging
+  const coloradoCount = allTerritories.filter(t => t.state === 'CO').length
+  const utahCount = allTerritories.filter(t => t.state === 'UT').length
+  console.log(`[Admin Providers] Fetched ${allTerritories.length} total territories in ${batchCount} batches`)
+  console.log(`[Admin Providers] Colorado: ${coloradoCount}, Utah: ${utahCount}`)
 
   return (
     <div className="p-8">

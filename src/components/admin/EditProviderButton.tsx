@@ -67,13 +67,62 @@ export function EditProviderButton({
       .filter(t => t.territoryId)
   })
   const [territorySearch, setTerritorySearch] = useState('')
+  const [selectedState, setSelectedState] = useState<string>('')
 
-  const filteredTerritories = allTerritories.filter(t => 
-    !selectedTerritories.some(st => st.territoryId === t.id) &&
-    (t.name.toLowerCase().includes(territorySearch.toLowerCase()) ||
-     t.state.toLowerCase().includes(territorySearch.toLowerCase()) ||
-     (t.metro_area && t.metro_area.toLowerCase().includes(territorySearch.toLowerCase())))
-  )
+  // State name mappings for better search
+  const stateNameMap: Record<string, string> = {
+    'colorado': 'CO',
+    'utah': 'UT',
+    'california': 'CA',
+    'texas': 'TX',
+    'florida': 'FL',
+    'new york': 'NY',
+    'pennsylvania': 'PA',
+    'illinois': 'IL',
+    'ohio': 'OH',
+    'georgia': 'GA',
+    'north carolina': 'NC',
+    'michigan': 'MI',
+    'new jersey': 'NJ',
+    'virginia': 'VA',
+    'washington': 'WA',
+    'arizona': 'AZ',
+    'massachusetts': 'MA',
+    'tennessee': 'TN',
+    'indiana': 'IN',
+    'missouri': 'MO',
+  }
+
+  // Get unique states for filter dropdown
+  const uniqueStates = [...new Set(allTerritories.map(t => t.state))].sort()
+
+  const filteredTerritories = allTerritories.filter(t => {
+    // Filter by selected state
+    if (selectedState && t.state !== selectedState) return false
+    
+    // Filter out already selected territories
+    if (selectedTerritories.some(st => st.territoryId === t.id)) return false
+    
+    // If no search term, show all (filtered by state if selected)
+    if (!territorySearch) return true
+    
+    const searchLower = territorySearch.toLowerCase()
+    
+    // Check state abbreviation
+    if (t.state.toLowerCase().includes(searchLower)) return true
+    
+    // Check state name mapping
+    const mappedState = stateNameMap[searchLower]
+    if (mappedState && t.state === mappedState) return true
+    
+    // Check territory name
+    if (t.name.toLowerCase().includes(searchLower)) return true
+    
+    // Check metro area
+    if (t.metro_area && t.metro_area.toLowerCase().includes(searchLower)) return true
+    
+    return false
+  })
 
   const addTerritory = (territory: Territory) => {
     setSelectedTerritories([...selectedTerritories, {
@@ -246,6 +295,28 @@ export function EditProviderButton({
               Update territory assignments. Territories will be reassigned if they're currently taken by another provider.
             </p>
 
+            {/* State filter */}
+            <div className="mb-3">
+              <label className="block text-xs font-medium text-slate-400 mb-1">
+                Filter by State
+              </label>
+              <select
+                value={selectedState}
+                onChange={(e) => setSelectedState(e.target.value)}
+                className="w-full px-4 py-2 bg-slate-900 border border-slate-700 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent"
+              >
+                <option value="">All States ({allTerritories.length} territories)</option>
+                {uniqueStates.map(state => {
+                  const count = allTerritories.filter(t => t.state === state).length
+                  return (
+                    <option key={state} value={state}>
+                      {state} ({count} territories)
+                    </option>
+                  )
+                })}
+              </select>
+            </div>
+
             {/* Selected territories */}
             {selectedTerritories.length > 0 && (
               <div className="space-y-2 mb-4">
@@ -326,7 +397,9 @@ export function EditProviderButton({
               )}
               {!territorySearch && (
                 <p className="mt-2 text-xs text-slate-500">
-                  {allTerritories.length} total territories. Type to search by name or state.
+                  {selectedState 
+                    ? `Showing ${filteredTerritories.length} ${selectedState} territories. Type to search by name or state.`
+                    : `${allTerritories.length} total territories. Type to search by name or state.`}
                 </p>
               )}
             </div>
