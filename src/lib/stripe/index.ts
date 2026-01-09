@@ -37,7 +37,7 @@ export const PRICES = {
   // Adjacent pricing deprecated - kept for backward compatibility only
   ADJACENT: process.env.STRIPE_PRICE_ADJACENT_220!,
   // DMA pricing: $1,000/month (update STRIPE_PRICE_DMA_3000 in Stripe to $1,000, or create new STRIPE_PRICE_DMA_1000)
-  DMA: process.env.STRIPE_PRICE_DMA_3000 || process.env.STRIPE_PRICE_DMA_1000 || process.env.STRIPE_PRICE_BASE_250!, // Fallback to base if DMA price not set
+  DMA: process.env.STRIPE_PRICE_DMA_1000 || process.env.STRIPE_PRICE_DMA_3000 || process.env.STRIPE_PRICE_BASE_250!, // Fallback to base if DMA price not set
 }
 
 // Helper function to build checkout URLs with proper validation

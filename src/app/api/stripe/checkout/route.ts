@@ -76,7 +76,7 @@ export async function POST(request: NextRequest) {
     if (isDMA) {
       // DMAs are $1000/month
       if (!PRICES.DMA) {
-        console.error('STRIPE_PRICE_DMA_1000 is not set')
+        console.error('STRIPE_PRICE_DMA_1000 or STRIPE_PRICE_DMA_3000 is not set')
         return NextResponse.json({ error: 'DMA pricing not configured. Please contact support.' }, { status: 500 })
       }
       priceId = PRICES.DMA

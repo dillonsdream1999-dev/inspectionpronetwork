@@ -54,10 +54,10 @@ export function TerritoryCard({
   const status = statusConfig[territory.status]
   const StatusIcon = status.icon
 
-  const basePrice = 250
-  const adjacentPrice = 150
-  const dmaPrice = 3000
-  const price = territoryWithDma.is_dma ? dmaPrice : (isAdjacentEligible ? adjacentPrice : basePrice)
+  const basePrice = 99
+  const dmaPrice = 1000
+  // Adjacent territory pricing removed - all territories use base pricing
+  const price = territoryWithDma.is_dma ? dmaPrice : basePrice
 
   // Calculate accurate DMA population from individual territories
   const dmaPopulation = territoryWithDma.is_dma && dmaTerritories.length > 0
@@ -274,11 +274,6 @@ export function TerritoryCard({
               <span className="text-2xl font-bold text-slate-900">${price}</span>
               <span className="text-slate-500">/mo</span>
             </div>
-            {isAdjacentEligible && isLoggedIn && !territoryWithDma.is_dma && (
-              <span className="text-xs text-emerald-600 font-medium">
-                Adjacent discount applied (-$100)
-              </span>
-            )}
           </div>
 
           {territory.status === 'available' && (
