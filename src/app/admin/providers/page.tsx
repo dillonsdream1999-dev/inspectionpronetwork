@@ -9,31 +9,59 @@ export const dynamic = 'force-dynamic'
 export default async function AdminProvidersPage() {
   const supabase = await createClient()
 
-  const [companiesResult, territoriesResult] = await Promise.all([
-    supabase
-      .from('companies')
-      .select(`
-        *,
-        profiles (email),
-        territory_ownership (
-          id,
-          territory_id,
-          status,
-          price_type,
-          stripe_subscription_id,
-          territories (name, is_dma)
-        )
-      `)
-      .order('created_at', { ascending: false }),
-    supabase
-      .from('territories')
-      .select('id, name, state, status, metro_area, is_dma')
-      .order('state')
-      .order('name')
-  ])
+  // Fetch companies
+  const companiesResult = await supabase
+    .from('companies')
+    .select(`
+      *,
+      profiles (email),
+      territory_ownership (
+        id,
+        territory_id,
+        status,
+        price_type,
+        stripe_subscription_id,
+        territories (name, is_dma)
+      )
+    `)
+    .order('created_at', { ascending: false })
 
   const companies = companiesResult.data
-  const allTerritories = territoriesResult.data || []
+
+  // Fetch all territories in batches to avoid Supabase limit
+  let allTerritories: Array<{
+    id: string
+    name: string
+    state: string
+    status: string
+    metro_area: string | null
+    is_dma?: boolean
+  }> = []
+  let offset = 0
+  const batchSize = 1000
+  let hasMore = true
+
+  while (hasMore) {
+    const { data: batch, error } = await supabase
+      .from('territories')
+      .select('id, name, state, status, metro_area, is_dma')
+      .order('state', { ascending: true })
+      .order('name', { ascending: true })
+      .range(offset, offset + batchSize - 1)
+
+    if (error) {
+      console.error('Error fetching territories:', error)
+      break
+    }
+
+    if (batch && batch.length > 0) {
+      allTerritories = [...allTerritories, ...batch]
+      offset += batchSize
+      hasMore = batch.length === batchSize
+    } else {
+      hasMore = false
+    }
+  }
 
   return (
     <div className="p-8">
