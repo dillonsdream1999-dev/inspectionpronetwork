@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
-import { Building2, MapPin, CreditCard, AlertCircle, Edit } from 'lucide-react'
+import { Building2, MapPin, CreditCard, AlertCircle } from 'lucide-react'
 import { AddProviderForm } from '@/components/admin/AddProviderForm'
 import { EditProviderButton } from '@/components/admin/EditProviderButton'
 

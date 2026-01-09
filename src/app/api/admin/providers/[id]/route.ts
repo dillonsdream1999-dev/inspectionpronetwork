@@ -114,9 +114,6 @@ export async function PUT(
         .eq('company_id', id)
         .eq('status', 'active')
 
-      const currentTerritoryIds = new Set(
-        (currentOwnerships || []).map(o => o.territory_id)
-      )
       const newTerritoryIds = new Set(
         territories.map(t => t.territoryId)
       )
