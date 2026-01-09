@@ -3,7 +3,6 @@ import Image from 'next/image'
 import { 
   ArrowRight, 
   CheckCircle2, 
-  XCircle,
   PhoneCall
 } from 'lucide-react'
 
