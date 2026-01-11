@@ -13,7 +13,6 @@ export default function TerritoriesPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [isLoggedIn, setIsLoggedIn] = useState(false)
-  const [adjacentEligible, setAdjacentEligible] = useState<string[]>([])
   const [isClaimingTerritory, setIsClaimingTerritory] = useState<string | null>(null)
   const [viewMode, setViewMode] = useState<'individual' | 'dma'>('individual') // Default to individual territories
 
@@ -105,17 +104,6 @@ export default function TerritoriesPage() {
     }
   }, [])
 
-  const fetchAdjacentEligible = useCallback(async () => {
-    try {
-      const response = await fetch('/api/territories/adjacent-eligible')
-      const data = await response.json()
-      console.log('Adjacent eligible territories:', data.eligible)
-      setAdjacentEligible(data.eligible || [])
-    } catch (err) {
-      console.error('Failed to fetch adjacent eligible:', err)
-      // Ignore errors, just means no adjacent discounts
-    }
-  }, [])
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -123,9 +111,6 @@ export default function TerritoriesPage() {
         const supabase = createClient()
         const { data: { user } } = await supabase.auth.getUser()
         setIsLoggedIn(!!user)
-        if (user) {
-          fetchAdjacentEligible()
-        }
       } catch (error) {
         console.error('Failed to check auth:', error)
         // Continue without auth - user can still browse territories
@@ -134,7 +119,7 @@ export default function TerritoriesPage() {
 
     checkAuth()
     fetchTerritories()
-  }, [fetchTerritories, fetchAdjacentEligible])
+  }, [fetchTerritories])
 
   // Debug: Log filtered territories when ZIP search is active
   useEffect(() => {
@@ -413,14 +398,6 @@ export default function TerritoriesPage() {
                       }).length} territories
                     </p>
                   </div>
-                  {isLoggedIn && adjacentEligible.length > 0 && (
-                    <div className="bg-emerald-50 border border-emerald-200 rounded-lg px-4 py-2">
-                      <p className="text-sm text-emerald-700 font-medium">
-                        {adjacentEligible.length} adjacent discount{adjacentEligible.length > 1 ? 's' : ''} available
-                      </p>
-                      <p className="text-xs text-emerald-600 mt-1">Save $100/month on each</p>
-                    </div>
-                  )}
                 </div>
 
                 {filteredTerritories.length === 0 ? (
@@ -443,7 +420,6 @@ export default function TerritoriesPage() {
                         )}
                         <TerritoryCard
                           territory={territory}
-                          isAdjacentEligible={adjacentEligible.includes(territory.id)}
                           isLoggedIn={isLoggedIn}
                           onClaim={() => handleClaimTerritory(territory.id)}
                         />

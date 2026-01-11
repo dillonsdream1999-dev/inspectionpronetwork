@@ -199,7 +199,7 @@ NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_...
 # - STRIPE_PRICE_BASE_99: $99/month for individual territories
 # - STRIPE_PRICE_DMA_1000: $1,000/month for DMA territories (or use STRIPE_PRICE_DMA_3000 for backward compatibility)
 # Adjacent pricing has been removed
-STRIPE_PRICE_BASE_99=price_1SoFhrAJ5xLvZkcGpoqLaUsC
+STRIPE_PRICE_BASE_99=price_1SnoZ0AJ5xLvZkcG6Zuclcve
 STRIPE_PRICE_DMA_1000=price_...  # Or use STRIPE_PRICE_DMA_3000 for backward compatibility
 # Legacy (backward compatibility - optional):
 STRIPE_PRICE_BASE_250=price_...  # Deprecated, use STRIPE_PRICE_BASE_99 instead
